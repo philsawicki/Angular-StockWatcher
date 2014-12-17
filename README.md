@@ -5,7 +5,7 @@ website to retrieve live stock quotes for selected stocks.
 
 ### Prerequisites
 
-You must have node.js and its package manager (npm) installed.  You can get them from 
+You must have node.js and its package manager (npm) installed. You can get them from 
 [http://nodejs.org/](http://nodejs.org/).
 
 ### Install Application

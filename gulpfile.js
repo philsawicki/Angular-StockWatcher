@@ -15,7 +15,7 @@ var gulp = require('gulp'),
     minifyCSS = require('gulp-minify-css'),
     minifyHTML = require('gulp-minify-html');
 
-	
+
 /**
  * Package up the Views into a single initial download.
  */
@@ -52,7 +52,7 @@ gulp.task('minify-js', ['package-partials'], function() {
     return jsStream
         .pipe(concat('scripts.js'))
         .pipe(uglify({ preserveComments: 'some' }))
-        .pipe(gulp.dest('./dist/'));
+        .pipe(gulp.dest('./dist/js/'));
 });
 
 /**
@@ -70,20 +70,20 @@ gulp.task('minify-css', function() {
     combinedCss = combinedStream.pipe(concat('css.css'));
 
     return es.concat(combinedCss, fontFiles)
-        .pipe(gulp.dest('./dist/'));
+        .pipe(gulp.dest('./dist/css/'));
 });
 
 /**
  * Copy index.html, replacing "<script>" and "<link>" tags to reference production URLs.
  */
 gulp.task('minify-html', function() {
-    return gulp.src('./app/index.html')
-        .pipe(htmlreplace({
-            'css': 'css.css',
-            'js': 'scripts.js'
-        }))
-        .pipe(minifyHTML({ comments: true, empty: true, quotes: true }))
-        .pipe(gulp.dest('./dist/'));
+	return gulp.src('./app/index.html')
+		.pipe(htmlreplace({
+			'css': 'css/css.css',
+			'js': 'js/scripts.js'
+		}))
+		.pipe(minifyHTML({ comments: true, empty: true, quotes: true }))
+		.pipe(gulp.dest('./dist/'));
 });
 
 /**
