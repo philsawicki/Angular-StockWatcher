@@ -32,11 +32,11 @@ gulp.task('package-partials', function() {
 gulp.task('minify-js', ['package-partials'], function() {
     // Library references (order-dependent):
     var libs = [
-		'./app/bower_components/html5-boilerplate/js/vendor/modernizr-2.6.2.min.js',
-        './app/bower_components/jquery/dist/jquery.js',
-        './app/bower_components/angular/angular.js',
-        './app/bower_components/angular-route/angular-route.js',
-        './app/bower_components/bootstrap/dist/js/bootstrap.min.js',
+		//'./app/bower_components/html5-boilerplate/js/vendor/modernizr-2.6.2.min.js',
+        //'./app/bower_components/jquery/dist/jquery.js',
+        //'./app/bower_components/angular/angular.js',
+        //'./app/bower_components/angular-route/angular-route.js',
+        //'./app/bower_components/bootstrap/dist/js/bootstrap.min.js',
         //'./app/bower_components/globalize/lib/globalize.js',
         //'./app/bower_components/globalize/lib/cultures/globalize.culture.en-GB.js',
         //'./app/bower_components/d3/d3.min.js',
