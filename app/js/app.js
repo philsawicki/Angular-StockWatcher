@@ -6,7 +6,10 @@ angular.module('myApp', [
 	'myApp.HomePageController',
 	'myApp.AboutPageController',
 	'myApp.NavigationBarDirective',
-	'myApp.RouteController'
+	'myApp.RouteController',
+	'myApp.StockService',
+	'myApp.StockListDirective',
+	'myApp.StockListController'
 ])
 	.config(['$routeProvider', function($routeProvider) {
 		$routeProvider
