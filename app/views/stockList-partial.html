@@ -2,31 +2,19 @@
 	<h2>Stock List Partial</h2>
 </div>
 
+
 <div class="row">
 	<table class="table table-striped">
 		<thead>
 			<tr>
 				<th>Symbol</th>
-				<th>Date</th>
-				<th>Open</th>
-				<th>Close</th>
-				<th>Adj. Close</th>
-				<th>High</th>
-				<th>Low</th>
-				<th>Volume</th>
+				<th>Exchange</th>
+				<th>Refresh Interval (sec.)</th>
+				<th>Period (days)</th>
 			</tr>
 		</thead>
 		<tbody>
-			<tr ng-repeat="quote in quotes">
-				<td>{{ quote.Symbol }}</td>
-				<td>{{ quote.Date }}</td>
-				<td>{{ quote.Open | currency }}</td>
-				<td>{{ quote.Close | currency }}</td>
-				<td>{{ quote.Adj_Close | currency }}</td>
-				<td>{{ quote.High | currency }}</td>
-				<td>{{ quote.Low | currency }}</td>
-				<td>{{ quote.Volume }}</td>
-			</tr>
+			<tr stock-list-item ng-repeat="quote in stockQuotes" quote="quote"></tr>
 		</tbody>
 	</table>
 </div>

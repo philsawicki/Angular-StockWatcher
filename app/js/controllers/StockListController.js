@@ -3,11 +3,11 @@
 /* Stock List Controller */
 angular.module('myApp.StockListController', [])
 	.controller('StockListController', ['$scope', 'stockService', function($scope, stockService) {
+		/*
 		var symbol    = 'GOOG';
 		var startDate = '2014-12-08';
 		var endDate   = '2014-12-12';
 		
-		$scope.quotes = [];
 		
 		var getHistoricalData = function() {
 			var promise = stockService.getHistoricalData(symbol, startDate, endDate);
@@ -16,9 +16,27 @@ angular.module('myApp.StockListController', [])
 			});
 		};
 		getHistoricalData();
+		*/
+		
+		var stockQuotes = [
+			{
+				symbol: 'T',
+				exchange: 'TSE',
+				interval: 60*15,
+				period: '1d'
+			},
+			{
+				symbol: 'FTS',
+				exchange: 'TSE',
+				interval: 60*15,
+				period: '1d'
+			}
+		];
+		
+		$scope.stockQuotes = stockQuotes;
 		
 		
-		symbol = 'T';
+		var symbol = 'T';
 		var exchange = 'TSE';
 		var interval = 60*15;
 		var period = '1d';

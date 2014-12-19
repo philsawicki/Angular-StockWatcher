@@ -9,7 +9,9 @@ angular.module('myApp', [
 	'myApp.RouteController',
 	'myApp.StockService',
 	'myApp.StockListDirective',
-	'myApp.StockListController'
+	'myApp.StockListController',
+	'myApp.StockListItemDirective',
+	'myApp.StockListItemController'
 ])
 	.config(['$routeProvider', function($routeProvider) {
 		$routeProvider
