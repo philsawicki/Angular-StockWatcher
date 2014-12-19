@@ -2,7 +2,7 @@
 
 /* Stock List Controller */
 angular.module('myApp.StockListController', [])
-	.controller('StockListController', ['$scope', 'stockService', function($scope, stockService) {
+	.controller('StockListController', ['$scope', '$interval', 'stockService', function($scope, $interval, stockService) {
 		/*
 		var symbol    = 'GOOG';
 		var startDate = '2014-12-08';
@@ -20,16 +20,84 @@ angular.module('myApp.StockListController', [])
 		
 		var stockQuotes = [
 			{
+				symbol: 'PG',
+				yahooSymbol: 'PG',
+				exchange: 'NYSE',
+				interval: 60*15,
+				period: '10d',
+				liveData: {}
+			},
+			{
 				symbol: 'T',
+				yahooSymbol: 'T.TO',
 				exchange: 'TSE',
 				interval: 60*15,
-				period: '1d'
+				period: '1d',
+				liveData: {}
+			},
+			{
+				symbol: 'BNS',
+				yahooSymbol: 'BNS.TO',
+				exchange: 'TSE',
+				interval: 60*15,
+				period: '1d',
+				liveData: {}
+			},
+			{
+				symbol: 'TD',
+				yahooSymbol: 'TD.TO',
+				exchange: 'TSE',
+				interval: 60*15,
+				period: '1d',
+				liveData: {}
+			},
+			{
+				symbol: 'PWF',
+				yahooSymbol: 'PWF.TO',
+				exchange: 'TSE',
+				interval: 60*15,
+				period: '1d',
+				liveData: {}
 			},
 			{
 				symbol: 'FTS',
+				yahooSymbol: 'FTS.TO',
 				exchange: 'TSE',
 				interval: 60*15,
-				period: '1d'
+				period: '1d',
+				liveData: {}
+			},
+			{
+				symbol: 'BEP',
+				yahooSymbol: 'BEP-UN.TO',
+				exchange: 'TSE',
+				interval: 60*15,
+				period: '1d',
+				liveData: {}
+			},
+			{
+				symbol: 'EMA',
+				yahooSymbol: 'EMA.TO',
+				exchange: 'TSE',
+				interval: 60*15,
+				period: '1d',
+				liveData: {}
+			},
+			{
+				symbol: 'XIC',
+				yahooSymbol: 'XIC.TO',
+				exchange: 'TSE',
+				interval: 60*15,
+				period: '1d',
+				liveData: {}
+			},
+			{
+				symbol: 'XSP',
+				yahooSymbol: 'XSP.TO',
+				exchange: 'TSE',
+				interval: 60*15,
+				period: '1d',
+				liveData: {}
 			}
 		];
 		
@@ -50,4 +118,44 @@ angular.module('myApp.StockListController', [])
 			});
 		};
 		getLiveData();
+		
+		
+		
+		
+		var allYahooSymbols = [];
+		for (var i = 0, nbStocks = stockQuotes.length; i < nbStocks; i++) {
+			allYahooSymbols.push(stockQuotes[i].yahooSymbol);
+		}
+		
+		var getCurrentData = function() {
+			var promise = stockService.getCurrentData(allYahooSymbols);
+			promise.then(function(data) {
+				console.log(data);
+				
+				for (var i = 0, count = data.length; i < count; i++) {
+					var stockData = data[i];
+					$scope.stockQuotes[i].liveData = stockData;
+				}
+			});
+		};
+		getCurrentData();
+		
+		
+		
+		
+		var refresher = $interval(function() {
+			getCurrentData();
+		}, 30*1000);
+		
+		$scope.destroyRefresher = function() {
+			if (angular.isDefined(refresher)) {
+				$interval.cancel(refresher);
+				refresher = undefined;
+			}
+		};
+		
+		$scope.$on('$destroy', function() {
+			// Make sure that the "refresher" $interval is destroyed:
+			$scope.destroyRefresher();
+        });
 	}]);

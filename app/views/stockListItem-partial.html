@@ -1,4 +1,13 @@
 <td>{{ quote.symbol }}</td>
-<td>{{ quote.exchange }}</td>
-<td>{{ quote.interval }}</td>
-<td>{{ quote.period }}</td>
+
+<td>{{ quote.liveData.Name }}</td>
+<td>{{ quote.liveData.LastTradePriceOnly | currency }}</td>
+<td>{{ quote.liveData.Change | currency }}</td>
+<td>{{ quote.liveData.DaysHigh | currency }}</td>
+<td>{{ quote.liveData.DaysLow | currency }}</td>
+<td>{{ quote.liveData.YearHigh | currency }}</td>
+<td>{{ quote.liveData.YearLow | currency }}</td>
+<td>{{ quote.liveData.StockExchange }}</td>
+<td>{{ quote.liveData.Volume }}</td>
+<td>{{ quote.liveData.MarketCapitalization }}</td>
+<td>{{ quote.liveData.AverageDailyVolume }}</td>
