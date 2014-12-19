@@ -10,4 +10,20 @@ angular.module('myApp.StockListItemController', [])
 			});
 		};
 		getLiveData();
+		
+		$scope.isGain = function(input) {
+			if (typeof $scope.quote.liveData.Change !== 'undefined') {
+				var changeIsPositive = $scope.quote.liveData.Change[0] === '+';
+				return changeIsPositive;
+			}
+			return false;
+		};
+		
+		$scope.isLoss = function(input) {
+			if (typeof $scope.quote.liveData.Change !== 'undefined') {
+				var changeIsNegative = $scope.quote.liveData.Change[0] === '-';
+				return changeIsNegative;
+			}
+			return false;
+		};
 	}]);

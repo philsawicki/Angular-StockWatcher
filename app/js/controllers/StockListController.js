@@ -134,6 +134,11 @@ angular.module('myApp.StockListController', [])
 				
 				for (var i = 0, count = data.length; i < count; i++) {
 					var stockData = data[i];
+					
+					var yesterdayClose = data[i].LastTradePriceOnly - data[i].Change;
+					var changePercentage = data[i].Change / yesterdayClose;
+					stockData.ChangePercentage = changePercentage;
+					
 					$scope.stockQuotes[i].liveData = stockData;
 				}
 			});

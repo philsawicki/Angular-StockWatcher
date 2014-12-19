@@ -11,7 +11,8 @@ angular.module('myApp', [
 	'myApp.StockListDirective',
 	'myApp.StockListController',
 	'myApp.StockListItemDirective',
-	'myApp.StockListItemController'
+	'myApp.StockListItemController',
+	'myApp.StockListPercentageFilter'
 ])
 	.config(['$routeProvider', function($routeProvider) {
 		$routeProvider
