@@ -12,7 +12,8 @@ angular.module('myApp', [
 	'myApp.StockListController',
 	'myApp.StockListItemDirective',
 	'myApp.StockListItemController',
-	'myApp.StockListPercentageFilter'
+	'myApp.StockListPercentageFilter',
+	'myApp.QuoteDetailsPageController'
 ])
 	.config(['$routeProvider', function($routeProvider) {
 		$routeProvider
@@ -23,6 +24,10 @@ angular.module('myApp', [
 			.when('/about', {
 				templateUrl: 'views/about-page.html',
 				controller: 'AboutPageController'
+			})
+			.when('/quote/:stockSymbol', {
+				templateUrl: 'views/quoteDetails-page.html',
+				controller: 'QuoteDetailsPageController'
 			})
 			.otherwise({
 				redirectTo: '/'

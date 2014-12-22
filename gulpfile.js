@@ -101,7 +101,7 @@ gulp.task('watch', function() {
     gulp.watch(['app/js/**/*.js'], ['minify-js']);
     gulp.watch(['app/css/**/*.css'], ['minify-css']);
     gulp.watch(['app/*.html'], ['minify-html']);
-    gulp.watch(['app/views/*.html'], ['package-partials']);
+    gulp.watch(['app/views/*.html'], ['minify-js']); // Calls "package-partials" then "minify-js" (for templateCache)
 });
 
 /**
