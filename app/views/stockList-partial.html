@@ -1,7 +1,26 @@
 <div class="page-header">
-	<h2>Portfolio</h2>
+	<div class="row">
+		<div class="col-sm-8">
+			<h2>Portfolio</h2>
+		</div>
+		<div class="col-sm-4">
+			<form class="form-horizontal" role="form">
+				<div class="form-group form-group-sm">
+					<label class="col-sm-8 control-label" for="refreshInterval">Refresh interval:</label>
+					<div class="col-sm-4">
+						<select id="refreshInterval" class="form-control" ng-model="refreshInterval" ng-change="refreshIntervalChanged()">
+							<option value="30">30 sec</option>
+							<option value="60">60 sec</option>
+							<option value="300">5 min</option>
+							<option value="900">15 min</option>
+						</select>
+					</div>
+				</div>
+			</form>
+			
+		</div>
+	</div>
 </div>
-
 
 <div class="row">
 	<table class="table table-striped table-condensed">

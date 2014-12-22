@@ -18,6 +18,9 @@ angular.module('myApp.StockListController', [])
 		getHistoricalData();
 		*/
 		
+		// Set the default refresh interval for the table:
+		$scope.refreshInterval = 30;
+		
 		var stockQuotes = [
 			{
 				symbol: 'PG',
@@ -148,9 +151,12 @@ angular.module('myApp.StockListController', [])
 		
 		
 		
-		var refresher = $interval(function() {
-			getCurrentData();
-		}, 30*1000);
+		
+		$scope.createRefresher = function() {
+			return $interval(function() {
+				getCurrentData();
+			}, $scope.refreshInterval*1000);
+		};
 		
 		$scope.destroyRefresher = function() {
 			if (angular.isDefined(refresher)) {
@@ -158,6 +164,13 @@ angular.module('myApp.StockListController', [])
 				refresher = undefined;
 			}
 		};
+		
+		$scope.refreshIntervalChanged = function() {
+			$scope.destroyRefresher();
+			$scope.createRefresher();
+		};
+		
+		var refresher = $scope.createRefresher();
 		
 		$scope.$on('$destroy', function() {
 			// Make sure that the "refresher" $interval is destroyed:
