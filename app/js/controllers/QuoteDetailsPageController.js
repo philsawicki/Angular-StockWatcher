@@ -17,19 +17,10 @@ angular.module('myApp.QuoteDetailsPageController', [])
 
 			var promise = stockService.getCurrentDataWithDetails(stockSymbols);
 			promise.then(function(data) {
-				console.log(data);
-
-				var dataLines = [];
-				var keys = Object.keys(data);
-				for (var i = 0, nbKeys = keys.length; i < nbKeys; i++) {
-					var key = keys[i];
-					var dataLine = [key, data[key]];
-					dataLines.push(dataLine);
-				}
-				
-				$scope.stockData = dataLines;
+				$scope.stockData = data.query.results.row;
 			});
 		};
+		getDetailedData();
 
 		$scope.createRefresher = function() {
 			return $interval(function() {

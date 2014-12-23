@@ -2,6 +2,8 @@
 
 angular.module('myApp.StockService', [])
 	.factory('stockService', ['$q', '$http', function($q, $http) {
+		// See note about known Yahoo! Finance API bugs:
+		// https://developer.yahoo.com/forum/General-Discussion-at-YDN/Stock-Quote-API-returning-commas-in/1234765072000-6036c128-a7e0-3aa5-9e72-1af1871e1b41/
 		var yahooAPITags = [
 			['a',  'Ask'],                                  // Ask
 			['a2', 'AverageDailyVolume'],                   // Average Daily Volume
@@ -24,11 +26,11 @@ angular.module('myApp.StockService', [])
 			['e7', 'EPSEstimateCurrentYear'],               // EPS Estimate Current Year
 			['e8', 'EPSEstimateNextYear'],                  // EPS Estimate Next Year
 			['e9', 'EPSEstimateNextQuarter'],               // EPS Estimate Next Quarter
-			['f6', 'FloatShares'],                          // Float Shares
+			//['f6', 'FloatShares'],                        // Float Shares
 			['g',  'DaysLow'],                              // Day's Low
 			['h',  'DaysHigh'],                             // Day's High
-			['j',  '52WeekLow'],                            // 52-week Low
-			['k',  '52WeekHigh'],                           // 52-week High
+			['j',  '_52WeekLow'],                           // 52-week Low
+			['k',  '_52WeekHigh'],                          // 52-week High
 			['g1', 'HoldingsGainPercent'],                  // Holdings Gain Percent
 			['g3', 'AnnualizedGain'],                       // Annualized Gain
 			['g4', 'HoldingsGain'],                         // Holdings Gain
@@ -52,8 +54,8 @@ angular.module('myApp.StockService', [])
 			['l3', 'LowLimit'],                             // Low Limit
 			['m',  'DaysRange'],                            // Day's Range
 			['m2', 'DaysRangeRealTime'],                    // Day's Range (Real-time)
-			['m3', '50DayMovingAverage'],                   // 50-day Moving Average
-			['m4', '200DayMovingAverage'],                  // 200-day Moving Average
+			['m3', '_50DayMovingAverage'],                  // 50-day Moving Average
+			['m4', '_200DayMovingAverage'],                 // 200-day Moving Average
 			['m5', 'ChangeFrom200DayMovingAverage'],        // Change From 200-day Moving Average
 			['m6', 'PercentChangeFrom200DayMovingAverage'], // Percent Change From 200-day Moving Average
 			['m7', 'ChangeFrom50DayMovingAverage'],         // Change From 50-day Moving Average
@@ -79,7 +81,7 @@ angular.module('myApp.StockService', [])
 			['t1', 'LastTradeTime'],                        // Last Trade Time
 			['t6', 'TradeLinks'],                           // Trade Links
 			['t7', 'TickerTrend'],                          // Ticker Trend
-			['t8', '1YearTargetPrice'],                     // 1-year Target Price
+			['t8', '_1YearTargetPrice'],                    // 1-year Target Price
 			['v',  'Volume'],                               // Volume
 			['v1', 'HoldingsValue'],                        // Holdings Value
 			['v7', 'HoldingsValueRealTime'],                // Holdings Value (Real-time)
@@ -162,17 +164,23 @@ angular.module('myApp.StockService', [])
 
 			var formattedSymbols = symbols.join(',');
 			var formattedYahooAPITags = [];
+			var formattedYahooColumns = [];
 			for (var i = 0, nbTags = yahooAPITags.length; i < nbTags; i++) {
-				formattedYahooAPITags.push( yahooAPITags[i][0] );
+				var yahooAPITag = yahooAPITags[i];
+				formattedYahooAPITags.push( yahooAPITag[0] );
+				formattedYahooColumns.push( yahooAPITag[1] );
 			}
 			formattedYahooAPITags = formattedYahooAPITags.join('');
+			formattedYahooColumns = formattedYahooColumns.join(',');
 
 			var csvUrl = 'http://download.finance.yahoo.com/d/quotes.csv?s=' + formattedSymbols + '&f=' + formattedYahooAPITags + '&e=.csv';
-			var query = "select * from csv where url='" + csvUrl + "'"; // and columns='symbol,price,date,time,change,col1,high,low,col2'";
+			var query = "select * from csv where url='" + csvUrl + "' and columns='" + formattedYahooColumns + "'"; // and columns='symbol,price,date,time,change,col1,high,low,col2'";
 			var format = '&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&callback=JSON_CALLBACK';
 			var url = 'http://query.yahooapis.com/v1/public/yql?q=' + encodeURIComponent(query) + format;
 			
 			$http.jsonp(url).success(function(csv) {
+				console.log(csv);
+/*
 				var data = {};
 				for (var i = yahooAPITags.length - 1; i >= 0; i--) {
 					var columnName = yahooAPITags[i][1];
@@ -180,8 +188,10 @@ angular.module('myApp.StockService', [])
 
 					data[columnName] = columnValue;
 				}
-				
-				deferred.resolve(data);
+
+				console.log(data);*/
+
+				deferred.resolve(csv);
 			});
 
 			return deferred.promise;
