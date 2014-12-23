@@ -138,8 +138,8 @@ angular.module('myApp.StockListController', [])
 				for (var i = 0, count = data.length; i < count; i++) {
 					var stockData = data[i];
 					
-					var yesterdayClose = data[i].LastTradePriceOnly - data[i].Change;
-					var changePercentage = data[i].Change / yesterdayClose;
+					var yesterdayClose = stockData.LastTradePriceOnly - stockData.Change;
+					var changePercentage = stockData.Change / yesterdayClose;
 					stockData.ChangePercentage = changePercentage;
 					
 					$scope.stockQuotes[i].liveData = stockData;
@@ -147,6 +147,17 @@ angular.module('myApp.StockListController', [])
 			});
 		};
 		getCurrentData();
+
+
+
+
+		var getCurrentDataWithDetails = function() {
+			var promise = stockService.getCurrentDataWithDetails(['PG']);
+			promise.then(function(data) {
+				console.log(data);
+			});
+		}
+		getCurrentDataWithDetails();
 		
 		
 		

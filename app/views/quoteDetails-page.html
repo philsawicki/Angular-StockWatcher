@@ -3,3 +3,11 @@
 <div>
 	Quote Details Page for <em>Angular StockWatcher</em> (Controller v.{{ controllerVersion }})
 </div>
+
+<div>
+	<ul>
+		<li ng-repeat="data in stockData">
+			<strong>{{ data[0] }}</strong>: {{ data[1] }}
+		</li>
+	</ul>
+</div>

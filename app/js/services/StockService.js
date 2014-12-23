@@ -3,93 +3,101 @@
 angular.module('myApp.StockService', [])
 	.factory('stockService', ['$q', '$http', function($q, $http) {
 		var yahooAPITags = [
-			'a',  // Ask
-			'a2', // Average Daily Volume
-			'a5', // Ask Size
-			'b',  // Bid
-			'b2', // Ask (Real-time)
-			'b3', // Bid (Real-time)
-			'b4', // Book Value
-			'b6', // Bid Size
-			'c',  // Change & Percent Change
-			'c1', // Change
-			'c3', // Commission
-			'c6', // Change (Real-time)
-			'c8', // After Hours Change (Real-time)
-			'd',  // Dividend/Share
-			'd1', // Last Trade Date
-			'd2', // Trade Date
-			'e',  // Earnings/Share
-			'e1', // Error Indication (returned for symbol changed/invalid)
-			'e7', // EPS Estimate Current Year
-			'e8', // EPS Estimate Next Year
-			'e9', // EPS Estimate Next Quarter
-			'f6', // Float Shares
-			'g',  // Day's Low
-			'h',  // Day's High
-			'j',  // 52-week Low
-			'k',  // 52-week High
-			'g1', // Holdings Gain Percent
-			'g3', // Annualized Gain
-			'g4', // Holdings Gain
-			'g5', // Holdings Gain Percent (Real-time)
-			'g6', // Holdings Gain (Real-time)
-			'i',  // More Info
-			'i5', // Order Book (Real-time)
-			'j1', // Market Capitalization
-			'j3', // Market Cap (Real-time)
-			'j4', // EBITDA
-			'j5', // Change From 52-week Low
-			'j6', // Percent Change From 52-week Low
-			'k1', // Last Trade (Real-time) With Time
-			'k2', // Change Percent (Real-time)
-			'k3', // Last Trade Size
-			'k4', // Change From 52-week High
-			'k5', // Percent Change from 52-week High
-			'l',  // Last Trade (With Time)
-			'l1', // Last Trade (Price Only)
-			'l2', // High Limit
-			'l3', // Low Limit
-			'm',  // Day's Range
-			'm2', // Day's Range (Real-time)
-			'm3', // 50-day Moving Average
-			'm4', // 200-day Moving Average
-			'm5', // Change From 200-day Moving Average
-			'm6', // Percent Change From 200-day Moving Average
-			'm7', // Change From 50-day Moving Average
-			'm8', // Percent Change From 50-day Moving Average
-			'n',  // Name
-			'n4', // Notes
-			'o',  // Open
-			'p',  // Previous Close
-			'p1', // Price Paid
-			'p2', // Change in Percent
-			'p5', // Price/Sales
-			'p6', // Price/Book
-			'q',  // Ex-Dividend Date
-			'r',  // P/E Ratio
-			'r1', // Dividend Pay Date
-			'r2', // P/E Ratio (Real-time)
-			'r5', // PEG Ratio
-			'r6', // Price/EPS Estimate Current Year
-			'r7', // Price/EPS Estimate Next Year
-			's',  // Symbol
-			's1', // Shares Owned
-			's7', // Short Ratio
-			't1', // Last Trade Time
-			't6', // Trade Links
-			't7', // Ticker Trend
-			't8', // 1-year Target Price
-			'v',  // Volume
-			'v1', // Holdings Value
-			'v7', // Holdings Value (Real-time)
-			'w',  // 52-week Range
-			'w1', // Day's Value Change
-			'w4', // Day's Value Change (Real-time)
-			'x',  // Stock Exchange
-			'y'   // Dividend Yield
+			['a',  'Ask'],                                  // Ask
+			['a2', 'AverageDailyVolume'],                   // Average Daily Volume
+			['a5', 'AskSize'],                              // Ask Size
+			['b',  'Bid'],                                  // Bid
+			['b2', 'AskRealTime'],                          // Ask (Real-time)
+			['b3', 'BidRealTime'],                          // Bid (Real-time)
+			['b4', 'BookValue'],                            // Book Value
+			['b6', 'BidSize'],                              // Bid Size
+			['c',  'ChangeAndPercentChange'],               // Change & Percent Change
+			['c1', 'Change'],                               // Change
+			['c3', 'Commission'],                           // Commission
+			['c6', 'ChangeRealTime'],                       // Change (Real-time)
+			['c8', 'AfterHoursChangeRealTime'],             // After Hours Change (Real-time)
+			['d',  'DividendPerShare'],                     // Dividend/Share
+			['d1', 'LastTradeDate'],                        // Last Trade Date
+			['d2', 'TradeDate'],                            // Trade Date
+			['e',  'EarningsPerShare'],                     // Earnings/Share
+			['e1', 'ErrorIndication'],                      // Error Indication (returned for symbol changed/invalid)
+			['e7', 'EPSEstimateCurrentYear'],               // EPS Estimate Current Year
+			['e8', 'EPSEstimateNextYear'],                  // EPS Estimate Next Year
+			['e9', 'EPSEstimateNextQuarter'],               // EPS Estimate Next Quarter
+			['f6', 'FloatShares'],                          // Float Shares
+			['g',  'DaysLow'],                              // Day's Low
+			['h',  'DaysHigh'],                             // Day's High
+			['j',  '52WeekLow'],                            // 52-week Low
+			['k',  '52WeekHigh'],                           // 52-week High
+			['g1', 'HoldingsGainPercent'],                  // Holdings Gain Percent
+			['g3', 'AnnualizedGain'],                       // Annualized Gain
+			['g4', 'HoldingsGain'],                         // Holdings Gain
+			['g5', 'HoldingsGainPercentRealTime'],          // Holdings Gain Percent (Real-time)
+			['g6', 'HoldingsGainRealTime'],                 // Holdings Gain (Real-time)
+			['i',  'MoreInfo'],                             // More Info
+			['i5', 'OrderBookRealTime'],                    // Order Book (Real-time)
+			['j1', 'MarketCapitalization'],                 // Market Capitalization
+			['j3', 'MarketCapRealTime'],                    // Market Cap (Real-time)
+			['j4', 'EBITDA'],                               // EBITDA
+			['j5', 'ChangeFrom52WeekLow'],                  // Change From 52-week Low
+			['j6', 'PercentChangeFrom52WeekLow'],           // Percent Change From 52-week Low
+			['k1', 'LastTradeRealTimeWithTime'],            // Last Trade (Real-time) With Time
+			['k2', 'ChangePercentRealTime'],                // Change Percent (Real-time)
+			['k3', 'LastTradeSize'],                        // Last Trade Size
+			['k4', 'ChangeFrom52WeekHigh'],                 // Change From 52-week High
+			['k5', 'PercentChangeFrom52WeekHigh'],          // Percent Change from 52-week High
+			['l',  'LastTradeWithTime'],                    // Last Trade (With Time)
+			['l1', 'LastTradePriceOnly'],                   // Last Trade (Price Only)
+			['l2', 'HighLimit'],                            // High Limit
+			['l3', 'LowLimit'],                             // Low Limit
+			['m',  'DaysRange'],                            // Day's Range
+			['m2', 'DaysRangeRealTime'],                    // Day's Range (Real-time)
+			['m3', '50DayMovingAverage'],                   // 50-day Moving Average
+			['m4', '200DayMovingAverage'],                  // 200-day Moving Average
+			['m5', 'ChangeFrom200DayMovingAverage'],        // Change From 200-day Moving Average
+			['m6', 'PercentChangeFrom200DayMovingAverage'], // Percent Change From 200-day Moving Average
+			['m7', 'ChangeFrom50DayMovingAverage'],         // Change From 50-day Moving Average
+			['m8', 'PercentChangeFrom50DayMovingAverage'],  // Percent Change From 50-day Moving Average
+			['n',  'Name'],                                 // Name
+			['n4', 'Notes'],                                // Notes
+			['o',  'Open'],                                 // Open
+			['p',  'PreviousClose'],                        // Previous Close
+			['p1', 'PricePaid'],                            // Price Paid
+			['p2', 'ChangeInPercent'],                      // Change in Percent
+			['p5', 'PricePerSales'],                        // Price/Sales
+			['p6', 'PricePerBook'],                         // Price/Book
+			['q',  'ExDividendDate'],                       // Ex-Dividend Date
+			['r',  'PERatio'],                              // P/E Ratio
+			['r1', 'DividendPayDate'],                      // Dividend Pay Date
+			['r2', 'PERatioRealTime'],                      // P/E Ratio (Real-time)
+			['r5', 'PEGRatio'],                             // PEG Ratio
+			['r6', 'PricePerEPSEstimateCurrentYear'],       // Price/EPS Estimate Current Year
+			['r7', 'PricePerEPSEstimateNextYear'],          // Price/EPS Estimate Next Year
+			['s',  'Symbol'],                               // Symbol
+			['s1', 'SharesOwned'],                          // Shares Owned
+			['s7', 'ShortRatio'],                           // Short Ratio
+			['t1', 'LastTradeTime'],                        // Last Trade Time
+			['t6', 'TradeLinks'],                           // Trade Links
+			['t7', 'TickerTrend'],                          // Ticker Trend
+			['t8', '1YearTargetPrice'],                     // 1-year Target Price
+			['v',  'Volume'],                               // Volume
+			['v1', 'HoldingsValue'],                        // Holdings Value
+			['v7', 'HoldingsValueRealTime'],                // Holdings Value (Real-time)
+			['w',  '52WeekRange'],                          // 52-week Range
+			['w1', 'DaysValueChange'],                      // Day's Value Change
+			['w4', 'DaysValueChangeRealTime'],              // Day's Value Change (Real-time)
+			['x',  'StockExchange'],                        // Stock Exchange
+			['y',  'DividendYield']                         // Dividend Yield
 		];
 		
+
+		/**
+		 * Gets historical data about the given symbol, between the given dates.
+		 * @param  {string}  symbol    The stock quote symbol (eg: "PG").
+		 * @param  {string}  startDate The start date for historical data (eg: "2014-12-01").
+		 * @param  {string}  endDate   The end date for historical data (eg: "2014-12-07").
+		 * @return {Promise}           A promise to be resolved when the request is successfully received.
+		 */
 		var getHistoricalData = function(symbol, startDate, endDate) {
 			var deferred = $q.defer();
 			
@@ -111,6 +119,11 @@ angular.module('myApp.StockService', [])
 			return deferred.promise;
 		};
 		
+		/**
+		 * Gets current data for the given symbols.
+		 * @param  {Array<string>} symbols An array of symbols for which to get current data.
+		 * @return {Promise}               A promise to be resolved when the request is successfully received.
+		 */
 		var getCurrentData = function(symbols) {
 			var deferred = $q.defer();
 			
@@ -138,7 +151,50 @@ angular.module('myApp.StockService', [])
 			
 			return deferred.promise;
 		};
+
+		/**
+		 * Gets stock details for the given symbols.
+		 * @param  {Array<string>} symbols The stock symbols for which to get the stock details.
+		 * @return {Promise}               A promise to be resolved when the request is successfully received.
+		 */
+		var getCurrentDataWithDetails = function(symbols) {
+			var deferred = $q.defer();
+
+			var formattedSymbols = symbols.join(',');
+			var formattedYahooAPITags = [];
+			for (var i = 0, nbTags = yahooAPITags.length; i < nbTags; i++) {
+				formattedYahooAPITags.push( yahooAPITags[i][0] );
+			}
+			formattedYahooAPITags = formattedYahooAPITags.join('');
+
+			var csvUrl = 'http://download.finance.yahoo.com/d/quotes.csv?s=' + formattedSymbols + '&f=' + formattedYahooAPITags + '&e=.csv';
+			var query = "select * from csv where url='" + csvUrl + "'"; // and columns='symbol,price,date,time,change,col1,high,low,col2'";
+			var format = '&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&callback=JSON_CALLBACK';
+			var url = 'http://query.yahooapis.com/v1/public/yql?q=' + encodeURIComponent(query) + format;
+			
+			$http.jsonp(url).success(function(csv) {
+				var data = {};
+				for (var i = yahooAPITags.length - 1; i >= 0; i--) {
+					var columnName = yahooAPITags[i][1];
+					var columnValue = csv.query.results.row['col' + (i+3)];
+
+					data[columnName] = columnValue;
+				}
+				
+				deferred.resolve(data);
+			});
+
+			return deferred.promise;
+		};
 		
+		/**
+		 * Gets live, streaming stock data for the given symbol.
+		 * @param  {string}  symbol   The stock symbol for which to get streaming data (eg: "PG").
+		 * @param  {string}  exchange The exchange market for the given stock (eg: "NYSE").
+		 * @param  {int}     interval The refresh interval, in seconds (eg: 60).
+		 * @param  {string}  period   The duration for which to get data, up to 10 days (eg: "1d", "1h", etc.).
+		 * @return {Promise}          A promise to be resolved when the request is successfully received.
+		 */
 		var getLiveData = function(symbol, exchange, interval, period) {
 			var deferred = $q.defer();
 			
@@ -155,12 +211,12 @@ angular.module('myApp.StockService', [])
 			//    "x" is the stock exchange market
 			//    "i" is the interval
 			//    "p" is the period
-			
+
 			$http.jsonp(yqlURL).success(function(data) {
 				var quotes = [];
 				var now = new Date();
 				
-				var process = data.query.results.row.length >= 7; // TODO: Some results do not have a "TIMEZONE_OFFSET=" line, parse data until "DATA=" line is found...
+				var process = data.query.results !== null && data.query.results.row.length >= 7; // TODO: Some results do not have a "TIMEZONE_OFFSET=" line, parse data until "DATA=" line is found...
 				if (data.query && data.query.count > 0 && process) {
 					var timezoneOffset = 0;
 					if (data.query.results.row[6]) {
@@ -201,6 +257,7 @@ angular.module('myApp.StockService', [])
 		return {
 			getHistoricalData: getHistoricalData,
 			getLiveData: getLiveData,
-			getCurrentData: getCurrentData
+			getCurrentData: getCurrentData,
+			getCurrentDataWithDetails: getCurrentDataWithDetails
 		};
 	}]);
