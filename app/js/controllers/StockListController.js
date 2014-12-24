@@ -25,81 +25,81 @@ angular.module('myApp.StockListController', [])
 			{
 				symbol: 'PG',
 				yahooSymbol: 'PG',
-				exchange: 'NYSE',
-				interval: 60*15,
-				period: '10d',
+				//exchange: 'NYSE',
+				//interval: 60*15,
+				//period: '10d',
 				liveData: {}
 			},
 			{
 				symbol: 'T',
 				yahooSymbol: 'T.TO',
-				exchange: 'TSE',
-				interval: 60*15,
-				period: '1d',
+				//exchange: 'TSE',
+				//interval: 60*15,
+				//period: '1d',
 				liveData: {}
 			},
 			{
 				symbol: 'BNS',
 				yahooSymbol: 'BNS.TO',
-				exchange: 'TSE',
-				interval: 60*15,
-				period: '1d',
+				//exchange: 'TSE',
+				//interval: 60*15,
+				//period: '1d',
 				liveData: {}
 			},
 			{
 				symbol: 'TD',
 				yahooSymbol: 'TD.TO',
-				exchange: 'TSE',
-				interval: 60*15,
-				period: '1d',
+				//exchange: 'TSE',
+				//interval: 60*15,
+				//period: '1d',
 				liveData: {}
 			},
 			{
 				symbol: 'PWF',
 				yahooSymbol: 'PWF.TO',
-				exchange: 'TSE',
-				interval: 60*15,
-				period: '1d',
+				//exchange: 'TSE',
+				//interval: 60*15,
+				//period: '1d',
 				liveData: {}
 			},
 			{
 				symbol: 'FTS',
 				yahooSymbol: 'FTS.TO',
-				exchange: 'TSE',
-				interval: 60*15,
-				period: '1d',
+				//exchange: 'TSE',
+				//interval: 60*15,
+				//period: '1d',
 				liveData: {}
 			},
 			{
 				symbol: 'BEP',
 				yahooSymbol: 'BEP-UN.TO',
-				exchange: 'TSE',
-				interval: 60*15,
-				period: '1d',
+				//exchange: 'TSE',
+				//interval: 60*15,
+				//period: '1d',
 				liveData: {}
 			},
 			{
 				symbol: 'EMA',
 				yahooSymbol: 'EMA.TO',
-				exchange: 'TSE',
-				interval: 60*15,
-				period: '1d',
+				//exchange: 'TSE',
+				//interval: 60*15,
+				//period: '1d',
 				liveData: {}
 			},
 			{
 				symbol: 'XIC',
 				yahooSymbol: 'XIC.TO',
-				exchange: 'TSE',
-				interval: 60*15,
-				period: '1d',
+				//exchange: 'TSE',
+				//interval: 60*15,
+				//period: '1d',
 				liveData: {}
 			},
 			{
 				symbol: 'XSP',
 				yahooSymbol: 'XSP.TO',
-				exchange: 'TSE',
-				interval: 60*15,
-				period: '1d',
+				//exchange: 'TSE',
+				//interval: 60*15,
+				//period: '1d',
 				liveData: {}
 			}
 		];
@@ -107,24 +107,8 @@ angular.module('myApp.StockListController', [])
 		$scope.stockQuotes = stockQuotes;
 		
 		
-		var symbol = 'T';
-		var exchange = 'TSE';
-		var interval = 60*15;
-		var period = '1d';
-		// Google Finance URL for this stock would be:
-		// http://www.google.com/finance/getprices?q=T&x=TSE&i=60&p=10d&f=d,c,v,k,o,h,l&df=cpct&auto=0&ei=Ef6XUYDfCqSTiAKEMg
-		
-		var getLiveData = function() {
-			var promise = stockService.getLiveData(symbol, exchange, interval, period);
-			promise.then(function(data) {
-				$scope.liveQuotes = data;
-			});
-		};
-		getLiveData();
-		
-		
-		
-		
+
+
 		var allYahooSymbols = [];
 		for (var i = 0, nbStocks = stockQuotes.length; i < nbStocks; i++) {
 			allYahooSymbols.push(stockQuotes[i].yahooSymbol);

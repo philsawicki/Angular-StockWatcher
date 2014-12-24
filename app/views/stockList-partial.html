@@ -47,20 +47,3 @@
 		</tbody>
 	</table>
 </div>
-
-<div class="row">
-	<table class="table table-striped">
-		<thead>
-			<tr>
-				<th>Date</th>
-				<th>Value</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr ng-repeat="quote in liveQuotes">
-				<td>{{ quote[0] | date:"MM/dd/yyyy @ hh:mma" }}</td>
-				<td>{{ quote[1] | currency  }}</td>
-			</tr>
-		</tbody>
-	</table>
-</div>
