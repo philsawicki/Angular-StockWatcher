@@ -5,7 +5,7 @@ angular.module('myApp.StockChartController', [])
 	.controller('StockChartController', ['$scope', '$interval', 'stockService', function($scope, $interval, stockService) {
 		// Set the default refresh interval for the table:
 		$scope.refreshInterval = 60;
-
+		
 		// Set the ID of the <div> containing the chart (to be used by HighStocks library for drawing graph):
 		var containerID = 'container' + $scope.symbol.replace('.', '');
 		$scope.containerID = containerID;

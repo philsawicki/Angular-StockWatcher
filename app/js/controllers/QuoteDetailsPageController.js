@@ -2,8 +2,9 @@
 
 /* Quote Details Page Controller */
 angular.module('myApp.QuoteDetailsPageController', [])
-	.controller('QuoteDetailsPageController', ['$scope', '$interval', '$routeParams', 'stockService', function($scope, $interval, $routeParams, stockService) {
+	.controller('QuoteDetailsPageController', ['$scope', '$interval', '$routeParams', '$location', 'stockService', function($scope, $interval, $routeParams, $location, stockService) {
 		$scope.controllerVersion = '0.0.1';
+		$scope.$location = $location;
 
 		$scope.stockSymbol = $routeParams.stockSymbol;
 

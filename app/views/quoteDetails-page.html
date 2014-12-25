@@ -21,12 +21,16 @@
 					<td class="text-right">{{ stockData.Open | currency }}</td>
 				</tr>
 				<tr>
-					<td><strong>Bid:</strong></td>
-					<td class="text-right">{{ stockData.Bid }}</td>
+					<td><strong>Currency:</strong></td>
+					<td class="text-right">{{ stockData.Currency }}</td>
 				</tr>
 				<tr>
-					<td><strong>Ask:</strong></td>
-					<td class="text-right">{{ stockData.Ask }}</td>
+					<td><strong>Bid (Real-time):</strong></td>
+					<td class="text-right">{{ stockData.BidRealTime | currency }}</td>
+				</tr>
+				<tr>
+					<td><strong>Ask (Real-time):</strong></td>
+					<td class="text-right">{{ stockData.AskRealTime | currency }}</td>
 				</tr>
 				<tr>
 					<td><strong>1-Year Target Estimate:</strong></td>
@@ -63,8 +67,8 @@
 					<td class="text-right">{{ stockData.MarketCapitalization }}</td>
 				</tr>
 				<tr>
-					<td><strong>P/E (ttm):</strong></td>
-					<td class="text-right">{{ stockData.PERatio }}</td>
+					<td><strong>P/E (ttm) (Real-time):</strong></td>
+					<td class="text-right">{{ stockData.PERatioRealTime }}</td>
 				</tr>
 				<tr>
 					<td><strong>EPS (ttm):</strong></td>
@@ -76,7 +80,24 @@
 					<td class="text-right">{{ stockData.DividendYield }}</td>
 				</tr>
 				-->
+				<tr>
+					<td><strong>Last Trade Date:</strong></td>
+					<td class="text-right">{{ stockData.LastTradeDate }}</td>
+				</tr>
+				<tr>
+					<td><strong>Ex-Dividend Date:</strong></td>
+					<td class="text-right">{{ stockData.ExDividendDate }}</td>
+				</tr>
+				<tr>
+					<td><strong>Dividend Yield:</strong></td>
+					<td class="text-right">{{ stockData.DividendYield }}</td>
+				</tr>
 			</tbody>
 		</table>
+	</div>
+
+
+	<div class="col-sm-8">
+		<stock-chart symbol="{{ $location.path().replace('/quote/', '') }}"></stock-chart>
 	</div>
 </div>
