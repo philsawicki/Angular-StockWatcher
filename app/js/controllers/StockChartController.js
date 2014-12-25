@@ -4,7 +4,7 @@
 angular.module('myApp.StockChartController', [])
 	.controller('StockChartController', ['$scope', '$interval', 'stockService', function($scope, $interval, stockService) {
 		// Set the default refresh interval for the table:
-		$scope.refreshInterval = 30;
+		$scope.refreshInterval = 60;
 
 		// Set the ID of the <div> containing the chart (to be used by HighStocks library for drawing graph):
 		var containerID = 'container' + $scope.symbol.replace('.', '');
@@ -19,10 +19,11 @@ angular.module('myApp.StockChartController', [])
 
 
 		/**
-		 * Fetches the "Open" price for the current stock.
+		 * Fetches the "Previous Day's Close" price for the current stock.
 		 * @return {void} Executes a promise that, when resolved, sets the "yesterdayClosePrice" for the current stock.
+		 * @todo Add a timed "$interval" for this to be called regularly (i.e. at least at opening time each trade day).
 		 */
-		var fetchOpenPrice = function() {
+		var fetchPreviousDayClosePrice = function() {
 			var symbols = [$scope.symbol];
 
 			var promise = stockService.getCurrentDataWithDetails(symbols);
@@ -39,7 +40,7 @@ angular.module('myApp.StockChartController', [])
 				}
 			});
 		};
-		fetchOpenPrice();
+		fetchPreviousDayClosePrice();
 
 
 		/**
@@ -170,16 +171,31 @@ angular.module('myApp.StockChartController', [])
 		var initGraph = function() {
 			var promise = stockService.getLiveData(symbol, exchange, interval, period);
 			promise.then(function(data) {
-				createGraph(data);
+				if (data && data.length > 0) {
+					createGraph(data);
+				} else {
+					console.warn('"' + symbol + '" init did not receive data, refreshing it.');
+					initGraph();
+				}
 			});
 		};
 		initGraph();
 
+		/**
+		 * Updates the chart with new data.
+		 * @return {void}
+		 */
 		var updateGraph = function() {
 			var promise = stockService.getLiveData(symbol, exchange, interval, period);
 			promise.then(function(data) {
 				//console.log('Updating graph for "' + symbol + '"');
-				setGraphData(data);
+				
+				if (data && data.length > 0) {
+					setGraphData(data);
+				} else {
+					console.warn('"' + symbol + '" update did not receive data, refreshing it.');
+					updateGraph();
+				}
 			});
 		}
 
