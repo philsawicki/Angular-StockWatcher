@@ -27,7 +27,7 @@ angular.module('myApp.StockService', [])
 			['e7', 'EPSEstimateCurrentYear'],               // EPS Estimate Current Year
 			['e8', 'EPSEstimateNextYear'],                  // EPS Estimate Next Year
 			['e9', 'EPSEstimateNextQuarter'],               // EPS Estimate Next Quarter
-			['f0', 'TradeLinksAdditional'],                 // Trade Links Additional
+			//['f0', 'TradeLinksAdditional'],               // Trade Links Additional --> not available for all stocks outside of the US.
 			//['f6', 'FloatShares'],                        // Float Shares --> Comma-related bug in Yahoo! Finance API
 			['h0', 'DaysHigh'],                             // Day's High
 			['j0', '_52WeekLow'],                           // 52-week Low
@@ -85,7 +85,7 @@ angular.module('myApp.StockService', [])
 			['s6', 'Revenue'],                              // Revenue
 			['s7', 'ShortRatio'],                           // Short Ratio
 			['t1', 'LastTradeTime'],                        // Last Trade Time
-			['t6', 'TradeLinks'],                           // Trade Links
+			//['t6', 'TradeLinks'],                         // Trade Links --> not available for all stocks outside of the US.
 			['t7', 'TickerTrend'],                          // Ticker Trend
 			['t8', '_1YearTargetPrice'],                    // 1-year Target Price
 			['v0', 'Volume'],                               // Volume

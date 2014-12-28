@@ -117,8 +117,6 @@ angular.module('myApp.StockListController', [])
 		var getCurrentData = function() {
 			var promise = stockService.getCurrentData(allYahooSymbols);
 			promise.then(function(data) {
-				console.log(data);
-				
 				for (var i = 0, count = data.length; i < count; i++) {
 					var stockData = data[i];
 					
@@ -130,15 +128,17 @@ angular.module('myApp.StockListController', [])
 				}
 			});
 		};
-		getCurrentData();
+		//getCurrentData();
 
 
 
 
 		var getCurrentDataWithDetails = function() {
-			var promise = stockService.getCurrentDataWithDetails(['PG']);
+			var promise = stockService.getCurrentDataWithDetails(allYahooSymbols);
 			promise.then(function(data) {
-				console.log(data);
+				for (var i = 0, count = data.query.count; i < count; i++) {
+					$scope.stockQuotes[i].liveData = data.query.results.row[i];
+				}
 			});
 		}
 		getCurrentDataWithDetails();
@@ -149,7 +149,7 @@ angular.module('myApp.StockListController', [])
 		
 		$scope.createRefresher = function() {
 			return $interval(function() {
-				getCurrentData();
+				getCurrentDataWithDetails();
 			}, $scope.refreshInterval*1000);
 		};
 		

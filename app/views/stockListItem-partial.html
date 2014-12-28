@@ -3,7 +3,7 @@
 <td>{{ quote.liveData.Name }}</td>
 <td class="text-right">{{ quote.liveData.LastTradePriceOnly | currency }}</td>
 <td class="text-right" ng-class="isGain() ? 'text-success' : (isLoss() ? 'text-danger' : '')">{{ quote.liveData.Change | currency }}</td>
-<td class="text-right" ng-class="isGain() ? 'text-success' : (isLoss() ? 'text-danger' : '')">{{ quote.liveData.ChangePercentage | percentage:2 }}</td>
+<td class="text-right" ng-class="isGain() ? 'text-success' : (isLoss() ? 'text-danger' : '')">{{ quote.liveData.ChangeInPercent | percentage:2 }}</td>
 <td class="text-right">{{ quote.liveData.DaysHigh | currency }}</td>
 <td class="text-right">{{ quote.liveData.DaysLow | currency }}</td>
 <td class="text-right">{{ quote.liveData.YearHigh | currency }}</td>
