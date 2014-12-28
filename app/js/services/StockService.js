@@ -185,7 +185,7 @@ angular.module('myApp.StockService', [])
 			var url = 'http://query.yahooapis.com/v1/public/yql?q=' + encodeURIComponent(query) + format;
 			
 			$http.jsonp(url).success(function(csv) {
-				console.log(csv);
+				//console.log(csv);
 				/*
 				var data = {};
 				for (var i = yahooAPITags.length - 1; i >= 0; i--) {

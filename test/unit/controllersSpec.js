@@ -79,6 +79,20 @@ describe('StockListController', function() {
 		expect($rootScope.refreshInterval).toEqual(30);
 	});
 
+	it('should have a default "Sort Field"', function() {
+		var controller = createController();
+
+		expect($rootScope.sortOrder).toBeDefined();
+		expect($rootScope.sortOrder).toBe('index');
+	});
+
+	it('should have a default "Sort Direction"', function() {
+		var controller = createController();
+
+		expect($rootScope.sortReversed).toBeDefined();
+		expect($rootScope.sortReversed).toBe(false);
+	});
+
 	it('should have default Portfolio entries', function() {
 		var controller = createController();
 

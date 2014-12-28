@@ -28,7 +28,8 @@ angular.module('myApp.StockListController', [])
 				//exchange: 'NYSE',
 				//interval: 60*15,
 				//period: '10d',
-				liveData: {}
+				liveData: {},
+				index: 0
 			},
 			{
 				symbol: 'T',
@@ -36,7 +37,8 @@ angular.module('myApp.StockListController', [])
 				//exchange: 'TSE',
 				//interval: 60*15,
 				//period: '1d',
-				liveData: {}
+				liveData: {},
+				index: 1
 			},
 			{
 				symbol: 'BNS',
@@ -44,7 +46,8 @@ angular.module('myApp.StockListController', [])
 				//exchange: 'TSE',
 				//interval: 60*15,
 				//period: '1d',
-				liveData: {}
+				liveData: {},
+				index: 2
 			},
 			{
 				symbol: 'TD',
@@ -52,7 +55,8 @@ angular.module('myApp.StockListController', [])
 				//exchange: 'TSE',
 				//interval: 60*15,
 				//period: '1d',
-				liveData: {}
+				liveData: {},
+				index: 3
 			},
 			{
 				symbol: 'PWF',
@@ -60,7 +64,8 @@ angular.module('myApp.StockListController', [])
 				//exchange: 'TSE',
 				//interval: 60*15,
 				//period: '1d',
-				liveData: {}
+				liveData: {},
+				index: 4
 			},
 			{
 				symbol: 'FTS',
@@ -68,7 +73,8 @@ angular.module('myApp.StockListController', [])
 				//exchange: 'TSE',
 				//interval: 60*15,
 				//period: '1d',
-				liveData: {}
+				liveData: {},
+				index: 5
 			},
 			{
 				symbol: 'BEP',
@@ -76,7 +82,8 @@ angular.module('myApp.StockListController', [])
 				//exchange: 'TSE',
 				//interval: 60*15,
 				//period: '1d',
-				liveData: {}
+				liveData: {},
+				index: 6
 			},
 			{
 				symbol: 'EMA',
@@ -84,7 +91,8 @@ angular.module('myApp.StockListController', [])
 				//exchange: 'TSE',
 				//interval: 60*15,
 				//period: '1d',
-				liveData: {}
+				liveData: {},
+				index: 7
 			},
 			{
 				symbol: 'XIC',
@@ -92,7 +100,8 @@ angular.module('myApp.StockListController', [])
 				//exchange: 'TSE',
 				//interval: 60*15,
 				//period: '1d',
-				liveData: {}
+				liveData: {},
+				index: 8
 			},
 			{
 				symbol: 'XSP',
@@ -100,7 +109,8 @@ angular.module('myApp.StockListController', [])
 				//exchange: 'TSE',
 				//interval: 60*15,
 				//period: '1d',
-				liveData: {}
+				liveData: {},
+				index: 9
 			}
 		];
 		
@@ -171,4 +181,12 @@ angular.module('myApp.StockListController', [])
 			// Make sure that the "refresher" $interval is destroyed:
 			$scope.destroyRefresher();
         });
+
+
+
+
+
+
+		$scope.sortOrder = 'index';
+		$scope.sortReversed = false;
 	}]);
