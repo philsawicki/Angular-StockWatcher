@@ -114,20 +114,20 @@ angular.module('myApp.StockListController', [])
 			allYahooSymbols.push(stockQuotes[i].yahooSymbol);
 		}
 		
-		var getCurrentData = function() {
-			var promise = stockService.getCurrentData(allYahooSymbols);
-			promise.then(function(data) {
-				for (var i = 0, count = data.length; i < count; i++) {
-					var stockData = data[i];
-					
-					var yesterdayClose = stockData.LastTradePriceOnly - stockData.Change;
-					var changePercentage = stockData.Change / yesterdayClose;
-					stockData.ChangePercentage = changePercentage;
-					
-					$scope.stockQuotes[i].liveData = stockData;
-				}
-			});
-		};
+		//var getCurrentData = function() {
+		//	var promise = stockService.getCurrentData(allYahooSymbols);
+		//	promise.then(function(data) {
+		//		for (var i = 0, count = data.length; i < count; i++) {
+		//			var stockData = data[i];
+		//			
+		//			var yesterdayClose = stockData.LastTradePriceOnly - stockData.Change;
+		//			var changePercentage = stockData.Change / yesterdayClose;
+		//			stockData.ChangePercentage = changePercentage;
+		//			
+		//			$scope.stockQuotes[i].liveData = stockData;
+		//		}
+		//	});
+		//};
 		//getCurrentData();
 
 

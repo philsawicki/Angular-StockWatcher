@@ -1,17 +1,15 @@
-<td>{{ quote.symbol }}</td>
+<td>{{ quote.liveData.Symbol }}</td>
 
 <td>{{ quote.liveData.Name }}</td>
-<td class="text-right">{{ quote.liveData.LastTradePriceOnly | currency }}</td>
+<td class="text-right">{{ quote.liveData.LastTradePriceOnly | currency }} {{ quote.liveData.Currency }}</td>
 <td class="text-right" ng-class="isGain() ? 'text-success' : (isLoss() ? 'text-danger' : '')">{{ quote.liveData.Change | currency }}</td>
 <td class="text-right" ng-class="isGain() ? 'text-success' : (isLoss() ? 'text-danger' : '')">{{ quote.liveData.ChangeInPercent | percentage:2 }}</td>
-<td class="text-right">{{ quote.liveData.DaysHigh | currency }}</td>
-<td class="text-right">{{ quote.liveData.DaysLow | currency }}</td>
-<td class="text-right">{{ quote.liveData.YearHigh | currency }}</td>
-<td class="text-right">{{ quote.liveData.YearLow | currency }}</td>
+<td class="text-right">{{ quote.liveData.DividendYield }}</td>
+<td class="text-right">{{ quote.liveData.PERatio }}</td>
+<td class="text-right">{{ quote.liveData.EarningsPerShare | number:2 }}</td>
+<td class="text-right">{{ quote.liveData._52WeekLow | currency }}</td>
+<td class="text-right">{{ quote.liveData._52WeekHigh | currency }}</td>
 <td>{{ quote.liveData.StockExchange }}</td>
-<td class="text-right">{{ quote.liveData.Volume | number }}</td>
-<td class="text-right">{{ quote.liveData.MarketCapitalization }}</td>
-<td class="text-right">{{ quote.liveData.AverageDailyVolume | number }}</td>
 <td>
 	<a href="#/quote/{{ quote.yahooSymbol }}" class="btn btn-default btn-xs" role="button" title="See details about {{ quote.symbol }}">
 		<span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> Details
