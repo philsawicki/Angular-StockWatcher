@@ -18,3 +18,7 @@ body {
 .theme-showcase .navbar .container {
 	width: auto;
 }
+
+.glyphicon-lighter {
+	color: darkgray;
+}

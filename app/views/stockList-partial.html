@@ -26,16 +26,50 @@
 	<table class="table table-striped table-condensed">
 		<thead>
 			<tr>
-				<th ng-click="sortOrder = 'liveData.Symbol'; sortReversed = !sortReversed;">Symbol</th>
-				<th ng-click="sortOrder = 'liveData.Name'; sortReversed = !sortReversed;">Name</th>
-				<th ng-click="sortOrder = 'liveData.LastTradePriceOnly'; sortReversed = !sortReversed;">Trade</th>
-				<th ng-click="sortOrder = 'liveData.Change'; sortReversed = !sortReversed;">Change</th>
-				<th ng-click="sortOrder = 'liveData.ChangeInPercent'; sortReversed = !sortReversed;">% Change</th>
-				<th ng-click="sortOrder = 'liveData.DividendYield'; sortReversed = !sortReversed;">Yield</th>
-				<th ng-click="sortOrder = 'liveData.PERatio'; sortReversed = !sortReversed;">P/E</th>
-				<th ng-click="sortOrder = 'liveData.EarningsPerShare'; sortReversed = !sortReversed;">EPS</th>
-				<th colspan="2" ng-click="sortOrder = 'liveData.DividendYield'; sortReversed = !sortReversed;">52 week-Range</th>
-				<th ng-click="sortOrder = 'liveData.StockExchange'; sortReversed = !sortReversed;">Ex</th>
+				<th ng-click="sortOrder = 'index'; sortReversed = !sortReversed;">
+					#
+					<span class="glyphicon-lighter small" ng-class="{'glyphicon glyphicon-chevron-up' : sortOrder === 'index' && sortReversed === false, 'glyphicon glyphicon-chevron-down' : sortOrder === 'index' && sortReversed === true}" aria-hidden="true"></span>
+				</th>
+				<th ng-click="sortOrder = 'liveData.Symbol'; sortReversed = !sortReversed;">
+					Symbol
+					<span class="glyphicon-lighter small" ng-class="{'glyphicon glyphicon-chevron-up' : sortOrder === 'liveData.Symbol' && sortReversed === false, 'glyphicon glyphicon-chevron-down' : sortOrder === 'liveData.Symbol' && sortReversed === true}" aria-hidden="true"></span>
+				</th>
+				<th ng-click="sortOrder = 'liveData.Name'; sortReversed = !sortReversed;">
+					Name
+					<span class="glyphicon-lighter small" ng-class="{'glyphicon glyphicon-chevron-up' : sortOrder === 'liveData.Name' && sortReversed === false, 'glyphicon glyphicon-chevron-down' : sortOrder === 'liveData.Name' && sortReversed === true}" aria-hidden="true"></span>
+				</th>
+				<th ng-click="sortOrder = 'liveData.LastTradePriceOnly'; sortReversed = !sortReversed;">
+					Trade
+					<span class="glyphicon-lighter small" ng-class="{'glyphicon glyphicon-chevron-up' : sortOrder === 'liveData.LastTradePriceOnly' && sortReversed === false, 'glyphicon glyphicon-chevron-down' : sortOrder === 'liveData.LastTradePriceOnly' && sortReversed === true}" aria-hidden="true"></span>
+				</th>
+				<th ng-click="sortOrder = 'liveData.Change'; sortReversed = !sortReversed;">
+					Change
+					<span class="glyphicon-lighter small" ng-class="{'glyphicon glyphicon-chevron-up' : sortOrder === 'liveData.Change' && sortReversed === false, 'glyphicon glyphicon-chevron-down' : sortOrder === 'liveData.Change' && sortReversed === true}" aria-hidden="true"></span>
+				</th>
+				<th ng-click="sortOrder = 'liveData.ChangeInPercent'; sortReversed = !sortReversed;">
+					% Change
+					<span class="glyphicon-lighter small" ng-class="{'glyphicon glyphicon-chevron-up' : sortOrder === 'liveData.ChangeInPercent' && sortReversed === false, 'glyphicon glyphicon-chevron-down' : sortOrder === 'liveData.ChangeInPercent' && sortReversed === true}" aria-hidden="true"></span>
+				</th>
+				<th ng-click="sortOrder = 'liveData.DividendYield'; sortReversed = !sortReversed;">
+					Yield
+					<span class="glyphicon-lighter small" ng-class="{'glyphicon glyphicon-chevron-up' : sortOrder === 'liveData.DividendYield' && sortReversed === false, 'glyphicon glyphicon-chevron-down' : sortOrder === 'liveData.DividendYield' && sortReversed === true}" aria-hidden="true"></span>
+				</th>
+				<th ng-click="sortOrder = 'liveData.PERatio'; sortReversed = !sortReversed;">
+					P/E
+					<span class="glyphicon-lighter small" ng-class="{'glyphicon glyphicon-chevron-up' : sortOrder === 'liveData.PERatio' && sortReversed === false, 'glyphicon glyphicon-chevron-down' : sortOrder === 'liveData.PERatio' && sortReversed === true}" aria-hidden="true"></span>
+				</th>
+				<th ng-click="sortOrder = 'liveData.EarningsPerShare'; sortReversed = !sortReversed;">
+					EPS
+					<span class="glyphicon-lighter small" ng-class="{'glyphicon glyphicon-chevron-up' : sortOrder === 'liveData.EarningsPerShare' && sortReversed === false, 'glyphicon glyphicon-chevron-down' : sortOrder === 'liveData.EarningsPerShare' && sortReversed === true}" aria-hidden="true"></span>
+				</th>
+				<th colspan="2" ng-click="sortOrder = 'liveData._52WeekLow'; sortReversed = !sortReversed;">
+					52 week-Range
+					<span class="glyphicon-lighter small" ng-class="{'glyphicon glyphicon-chevron-up' : sortOrder === 'liveData._52WeekLow' && sortReversed === false, 'glyphicon glyphicon-chevron-down' : sortOrder === 'liveData._52WeekLow' && sortReversed === true}" aria-hidden="true"></span>
+				</th>
+				<th ng-click="sortOrder = 'liveData.StockExchange'; sortReversed = !sortReversed;">
+					Ex
+					<span class="glyphicon-lighter small" ng-class="{'glyphicon glyphicon-chevron-up' : sortOrder === 'liveData.StockExchange' && sortReversed === false, 'glyphicon glyphicon-chevron-down' : sortOrder === 'liveData.StockExchange' && sortReversed === true}" aria-hidden="true"></span>
+				</th>
 				<th>See more</th>
 			</tr>
 		</thead>
