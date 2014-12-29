@@ -23,21 +23,28 @@
 <body role="document">
 
 	<navigation-bar></navigation-bar>
-	
+
 	
 	<div class="container theme-showcase" role="main">
 		<!--[if lt IE 7]>
 			<p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
 		<![endif]-->
 		
+
+		<!-- Show message is the app is offline (hide container by default): -->
+		<div class="alert alert-warning fade-in fade-out ng-hide" role="alert" ng-hide="applicationIsOnline">
+			<strong>Application is offline.</strong> Data is not up to date.
+		</div>
+
 		<div ng-view></div>
 	</div>  <!-- /container -->
 	
 	
-	<script src="http:////cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js"></script>
+	<script src="http://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js"></script>
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 	<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.27/angular.min.js"></script>
 	<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.27/angular-route.min.js"></script>
+	<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.27/angular-animate.min.js"></script>
 	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
 
 

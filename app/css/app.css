@@ -22,3 +22,28 @@ body {
 .glyphicon-lighter {
 	color: darkgray;
 }
+
+
+
+/**
+ * CSS Animations for fading elements in and out.
+ */
+.fade-in,
+.fade-out {
+	-webkit-transition: all cubic-bezier(0.250, 0.460, 0.450, 0.940) 1.0s;
+	   -moz-transition: all cubic-bezier(0.250, 0.460, 0.450, 0.940) 1.0s;
+	     -o-transition: all cubic-bezier(0.250, 0.460, 0.450, 0.940) 1.0s;
+	        transition: all cubic-bezier(0.250, 0.460, 0.450, 0.940) 1.0s;
+}
+
+ .fade-in.ng-hide-remove,
+.fade-out.ng-hide-add.ng-hide-add-active {
+	opacity: 0;
+	display: block !important;
+}
+
+.fade-out.ng-hide-add,
+ .fade-in.ng-hide-remove.ng-hide-remove-active {
+	opacity: 1;
+	display: block !important;
+}
