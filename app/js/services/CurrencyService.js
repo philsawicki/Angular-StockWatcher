@@ -42,12 +42,14 @@ angular.module('stockWatcher.Services')
 		 * @param  {string}  endDate      The end date for historical data (eg: "2014-12-07").
 		 * @return {Deferred.promise}     A promise to be resolved when the request is successfully received.
 		 */
+		/*
 		var getCurrencyExchangeRateHistory = function(fromCurrency, toCurrency, startDate, endDate) {
 			var deferred = $q.defer();
 
-			var query = '';
-			var format = '';
-			var url = '';
+			var currencySymbol = toCurrency + '=X';
+			var query = 'select * from yahoo.finance.historicaldata where symbol in ("' + currencySymbol + '") and startDate = "' + startDate + '" and endDate ="' + endDate + '"';
+			var format = '&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&callback=JSON_CALLBACK';
+			var url = 'http://query.yahooapis.com/v1/public/yql?q=' + encodeURIComponent(query) + format;
 
 			$http.jsonp(url).success(function(json) {
 				var data = [];
@@ -59,6 +61,75 @@ angular.module('stockWatcher.Services')
 				deferred.resolved(data);
 			});
 
+			return deferred.promise;
+		};
+		*/
+
+
+		/**
+		 * Gets live, streaming currency exchange rates for the given symbol.
+		 * @param  {string}  symbol   The stock symbol for which to get streaming data (eg: "PG").
+		 * @param  {string}  exchange The exchange market for the given stock (eg: "NYSE").
+		 * @param  {int}     interval The refresh interval, in seconds (eg: 60).
+		 * @param  {string}  period   The duration for which to get data, up to 10 days (eg: "1d", "1h", etc.).
+		 * @return {Deferred.promise} A promise to be resolved when the request is successfully received.
+		 */
+		var getCurrencyExchangeRateHistory = function(fromCurrency, toCurrency, interval, period) {
+			var deferred = $q.defer();
+			
+			var maxTimestamp = 0;
+			
+			var googleFinanceURL = 'http://www.google.com/finance/getprices?q=' + fromCurrency + toCurrency + '&i=' + interval + '&p=' + period + '&f=d,c,v,k,o,h,l&df=cpct&auto=0&ei=Ef6XUYDfCqSTiAKEMg';
+			var yqlQuery = 'SELECT * FROM csv WHERE url="' + googleFinanceURL + '"';
+			var yqlURL = 'http://query.yahooapis.com/v1/public/yql?q=' + encodeURIComponent(yqlQuery) + '&format=json&callback=JSON_CALLBACK';
+			
+			// Format of the Google Finance URL:
+			//    http://www.google.com/finance/getprices?q=T&x=TSE&i=60&p=10d&f=d,c,v,k,o,h,l&df=cpct&auto=0&ei=Ef6XUYDfCqSTiAKEMg
+			// Where:
+			//    "q" is the stock symbol
+			//    "x" is the stock exchange market
+			//    "i" is the interval
+			//    "p" is the period
+
+			$http.jsonp(yqlURL).success(function(data) {
+				var quotes = [];
+				var now = new Date();
+				
+				var process = data.query.results !== null && data.query.results.row.length >= 7; // TODO: Some results do not have a "TIMEZONE_OFFSET=" line, parse data until "DATA=" line is found...
+				if (data.query && data.query.count > 0 && process) {
+					var timezoneOffset = 0;
+					if (data.query.results.row[6]) {
+						timezoneOffset = parseInt(data.query.results.row[6].col0.replace('TIMEZONE_OFFSET=', ''), 10); // in minutes
+					}
+					
+					var startTimestamp = parseInt(data.query.results.row[7].col0.replace('a', ''), 10) + timezoneOffset * 60;
+					var offset = 0;
+					
+					var chartNeedsRedraw = false;
+					for (var i = 7; i < data.query.count; i++) {
+						if (data.query.results.row[i].col0[0] === 'a') {
+							startTimestamp = parseInt(data.query.results.row[i].col0.replace('a', ''), 10) + timezoneOffset * 60;
+							offset = 0;
+						} else {
+							offset = parseInt(data.query.results.row[i].col0, 10);
+						}
+						//var date = new Date(startTimestamp + offset * interval).getTime()*1000;
+						var date = new Date((startTimestamp + offset * interval + now.getTimezoneOffset() * 60)*1000);
+						
+						if (date > maxTimestamp) {
+							var close = parseFloat(data.query.results.row[i].col1);
+							var dataRow = [date, close];
+							
+							maxTimestamp = date;
+							
+							quotes.push(dataRow);
+						}
+					}
+				}
+				
+				deferred.resolve(quotes);
+			});
+			
 			return deferred.promise;
 		};
 
