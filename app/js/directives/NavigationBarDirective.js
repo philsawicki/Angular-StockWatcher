@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('myApp.NavigationBarDirective', [])
+angular.module('stockWatcher.Directives')
 	.directive('navigationBar', function() {
 		return {
 			restrict: 'E',

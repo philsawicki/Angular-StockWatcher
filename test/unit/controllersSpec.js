@@ -5,7 +5,7 @@
  */
 
 describe('HomePageController', function() {
-	beforeEach(module('myApp'));
+	beforeEach(module('stockWatcher'));
 
 	it('should display an introduction message with controller version', inject(function($controller) {
 		var scope = {},
@@ -17,7 +17,7 @@ describe('HomePageController', function() {
 
 
 describe('AboutPageController', function() {
-	beforeEach(module('myApp'));
+	beforeEach(module('stockWatcher'));
 
 	it('should display an introduction message with controller version', inject(function($controller) {
 		var scope = {},
@@ -40,7 +40,7 @@ describe('StockListController', function() {
 
 
 	// Set up the module:
-	beforeEach(module('myApp'));
+	beforeEach(module('stockWatcher'));
 
 	beforeEach(inject(function($injector) {
 		// Set up the mock http service responses:

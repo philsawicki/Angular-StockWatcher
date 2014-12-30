@@ -1,22 +1,24 @@
 'use strict';
 
+
+// Declare "Controllers" module for the app:
+angular.module('stockWatcher.Controllers', []);
+// Declare "Directives" module for the app:
+angular.module('stockWatcher.Directives', []);
+// Declare "Filters" module for the app:
+angular.module('stockWatcher.Filters', []);
+// Declare "Services" module for the app:
+angular.module('stockWatcher.Services', []);
+
+
 // Declare app-level module which depends on views, and components:
-angular.module('myApp', [
+angular.module('stockWatcher', [
 	'ngRoute',
 	'ngAnimate',
-	'myApp.HomePageController',
-	'myApp.AboutPageController',
-	'myApp.NavigationBarDirective',
-	'myApp.RouteController',
-	'myApp.StockService',
-	'myApp.StockListDirective',
-	'myApp.StockListController',
-	'myApp.StockListItemDirective',
-	'myApp.StockListItemController',
-	'myApp.StockListPercentageFilter',
-	'myApp.QuoteDetailsPageController',
-	'myApp.StockChartDirective',
-	'myApp.StockChartController'
+	'stockWatcher.Controllers',
+	'stockWatcher.Directives',
+	'stockWatcher.Services',
+	'stockWatcher.Filters'
 ])
 	.config(['$routeProvider', function($routeProvider) {
 		$routeProvider

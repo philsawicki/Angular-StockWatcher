@@ -22,7 +22,7 @@ var gulp = require('gulp'),
 gulp.task('package-partials', function() {
     return gulp.src(['./app/views/**/*.html'])
         .pipe(minifyHTML({ empty: true, quotes: true }))
-        .pipe(templateCache('templates.js', { root: 'views/', module: 'myApp' }))
+        .pipe(templateCache('templates.js', { root: 'views/', module: 'stockWatcher' }))
         .pipe(gulp.dest('./tmp'));
 });
 

@@ -1,10 +1,9 @@
 'use strict';
 
-angular.module('myApp.StockListItemDirective', [])
+angular.module('stockWatcher.Directives')
 	.directive('stockListItem', function() {
 		return {
 			restrict: 'A',
-			//replace: true,
 			scope: {
 				quote: '='
 			},

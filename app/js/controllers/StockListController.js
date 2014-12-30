@@ -1,7 +1,7 @@
 'use strict';
 
 /* Stock List Controller */
-angular.module('myApp.StockListController', [])
+angular.module('stockWatcher.Controllers')
 	.controller('StockListController', ['$scope', '$interval', 'stockService', function($scope, $interval, stockService) {
 		/*
 		var symbol    = 'GOOG';

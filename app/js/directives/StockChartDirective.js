@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('myApp.StockChartDirective', [])
+angular.module('stockWatcher.Directives')
 	.directive('stockChart', function() {
 		return {
 			restrict: 'E',

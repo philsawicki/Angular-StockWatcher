@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('myApp.StockService', [])
+angular.module('stockWatcher.Services')
 	.factory('stockService', ['$q', '$http', function($q, $http) {
 		// See note about known Yahoo! Finance API bugs:
 		// https://developer.yahoo.com/forum/General-Discussion-at-YDN/Stock-Quote-API-returning-commas-in/1234765072000-6036c128-a7e0-3aa5-9e72-1af1871e1b41/

@@ -1,7 +1,7 @@
 'use strict';
 
 /* Stock Chart Controller */
-angular.module('myApp.StockChartController', [])
+angular.module('stockWatcher.Controllers')
 	.controller('StockChartController', ['$scope', '$interval', 'stockService', function($scope, $interval, stockService) {
 		// Set the default refresh interval for the table:
 		$scope.refreshInterval = 60;

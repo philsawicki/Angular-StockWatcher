@@ -32,7 +32,7 @@ describe('PageController', function() {
 		});
 	});
 
-	beforeEach(module('myApp'));
+	beforeEach(module('stockWatcher'));
 
 	beforeEach(function() {
 		// Inject $rootScope:

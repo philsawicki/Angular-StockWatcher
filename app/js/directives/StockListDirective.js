@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('myApp.StockListDirective', [])
+angular.module('stockWatcher.Directives')
 	.directive('stockList', function() {
 		return {
 			restrict: 'E',
