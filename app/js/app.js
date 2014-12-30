@@ -34,6 +34,10 @@ angular.module('stockWatcher', [
 				templateUrl: 'views/quoteDetails-page.html',
 				controller: 'QuoteDetailsPageController'
 			})
+			.when('/currency', {
+				templateUrl: 'views/currency-page.html',
+				controller: 'CurrencyPageController'
+			})
 			.otherwise({
 				redirectTo: '/'
 			});
