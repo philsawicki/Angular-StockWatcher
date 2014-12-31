@@ -1,2 +1,13 @@
-<div id="{{ containerID }}">
+<div ng-hide="chartIsInitialized">
+	<!--
+	<span class="lead glyphicon glyphicon-refresh glyphicon-refresh-animate text-center center-block"></span>
+	-->
+
+	<div class="alert alert-info" role="alert">
+		<span class="glyphicon glyphicon-refresh glyphicon-refresh-animate text-center"></span>
+		<strong>Loading data...</strong> Chart will display soon.
+    </div>
 </div>
+
+
+<div id="{{ containerID }}"></div>

@@ -5,6 +5,9 @@ angular.module('stockWatcher.Controllers')
 	.controller('CurrencyChartController', ['$scope', '$interval', 'currencyService', function($scope, $interval, currencyService) {
 		// Set the default refresh interval for the table:
 		$scope.refreshInterval = 60;
+
+		// Set the default status for the chart initialization flag:
+		$scope.chartIsInitialized = false;
 		
 		// Set the ID of the <div> containing the chart (to be used by HighStocks library for drawing graph):
 		var containerID = 'container' + $scope.fromCurrency + $scope.toCurrency;
@@ -155,6 +158,9 @@ angular.module('stockWatcher.Controllers')
 			if (typeof yesterdayClosePrice !== 'undefined') {
 				drawOpenPlotLine();
 			}
+
+			// Chart is now initialized, update flag:
+			$scope.chartIsInitialized = true;
 		};
 
 

@@ -5,7 +5,7 @@
 <td class="text-right">{{ quote.liveData.LastTradePriceOnly | currency }} {{ quote.liveData.Currency }}</td>
 <td class="text-right" ng-class="isGain() ? 'text-success' : (isLoss() ? 'text-danger' : '')">{{ quote.liveData.Change | currency }}</td>
 <td class="text-right" ng-class="isGain() ? 'text-success' : (isLoss() ? 'text-danger' : '')">{{ quote.liveData.ChangeInPercent | percentage:2 }}</td>
-<td class="text-right">{{ quote.liveData.DividendYield }}</td>
+<td class="text-right">{{ quote.liveData.DividendYield | percentage:2 }}</td>
 <td class="text-right">{{ quote.liveData.PERatio }}</td>
 <td class="text-right">{{ quote.liveData.EarningsPerShare | number:2 }}</td>
 <td class="text-right">{{ quote.liveData._52WeekLow | currency }}</td>

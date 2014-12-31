@@ -5,6 +5,9 @@ angular.module('stockWatcher.Controllers')
 	.controller('MarketChartController', ['$scope', '$interval', 'stockService', function($scope, $interval, stockService) {
 		// Set the default refresh interval for the table:
 		$scope.refreshInterval = 60;
+
+		// Set the default status for the chart initialization flag:
+		$scope.chartIsInitialized = false;
 		
 		// Set the ID of the <div> containing the chart (to be used by HighStocks library for drawing graph):
 		var containerID = 'container' + 'Markets';
@@ -73,11 +76,11 @@ angular.module('stockWatcher.Controllers')
 					renderTo: containerID
 				},
 				title: {
-					text: 'TSX, Dow Jones & SP500 Indices'
+					text: 'TSX, Dow Jones & S&P500 Indices'
 				},
-				subtitle : {
-					text: 'In daily percent change'
-				},
+				//subtitle : {
+				//	text: 'In daily percent change'
+				//},
 				xAxis: {
 					events: {
 						setExtremes: function(event) {
@@ -244,6 +247,9 @@ angular.module('stockWatcher.Controllers')
 			if (typeof yesterdayClosePrice !== 'undefined') {
 				drawOpenPlotLine();
 			}
+
+			// Chart is now initialized, update flag:
+			$scope.chartIsInitialized = true;
 		};
 
 

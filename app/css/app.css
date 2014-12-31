@@ -47,3 +47,30 @@ body {
 	opacity: 1;
 	display: block !important;
 }
+
+
+
+/**
+ * CSS Animations for Bootstrap Glyphicons.
+ */
+
+/**
+ * Spins the "glyphicon-refresh" icon.
+ *
+ * Example:
+ * <span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span>
+ */
+.glyphicon-refresh-animate {
+	-webkit-animation: spin2 1.2s infinite linear;
+	       -animation: spin  1.2s infinite linear;
+}
+
+@-webkit-keyframes spin2 {
+	from { -webkit-transform: rotate(  0deg); }
+	to   { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+	from { transform: scale(1)   rotate(0deg); }
+	to   { transform: scale(1) rotate(360deg); }
+}
