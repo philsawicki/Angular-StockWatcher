@@ -206,18 +206,23 @@ angular.module('stockWatcher.Services')
 		
 		/**
 		 * Gets live, streaming stock data for the given symbol.
-		 * @param  {string}  symbol   The stock symbol for which to get streaming data (eg: "PG").
-		 * @param  {string}  exchange The exchange market for the given stock (eg: "NYSE").
-		 * @param  {int}     interval The refresh interval, in seconds (eg: 60).
-		 * @param  {string}  period   The duration for which to get data, up to 10 days (eg: "1d", "1h", etc.).
-		 * @return {Deferred.promise} A promise to be resolved when the request is successfully received.
+		 * @param  {string}      symbol   The stock symbol for which to get streaming data (eg: "PG").
+		 * @param  {string|null} exchange The exchange market for the given stock (eg: "NYSE").
+		 * @param  {int}         interval The refresh interval, in seconds (eg: 60).
+		 * @param  {string}      period   The duration for which to get data, up to 10 days (eg: "1d", "1h", etc.).
+		 * @return {Deferred.promise}     A promise to be resolved when the request is successfully received.
 		 */
 		var getLiveData = function(symbol, exchange, interval, period) {
 			var deferred = $q.defer();
 			
 			var maxTimestamp = 0;
 			
-			var googleFinanceURL = 'http://www.google.com/finance/getprices?q=' + symbol + '&x=' + exchange + '&i=' + interval + '&p=' + period + '&f=d,c,v,k,o,h,l&df=cpct&auto=0&ei=Ef6XUYDfCqSTiAKEMg';
+			var googleFinanceURL = 'http://www.google.com/finance/getprices'
+				+ '?q=' + symbol 
+				+ (exchange === null ? '' : '&x=' + exchange)
+				+ '&i=' + interval
+				+ '&p=' + period
+				+ '&f=d,c,v,k,o,h,l&df=cpct&auto=0&ei=Ef6XUYDfCqSTiAKEMg';
 			var yqlQuery = 'SELECT * FROM csv WHERE url="' + googleFinanceURL + '"';
 			var yqlURL = 'http://query.yahooapis.com/v1/public/yql?q=' + encodeURIComponent(yqlQuery) + '&format=json&callback=JSON_CALLBACK';
 			
@@ -270,10 +275,15 @@ angular.module('stockWatcher.Services')
 			
 			return deferred.promise;
 		};
+
+		var getLiveMarketData = function(marketSymbol, interval, period) {
+			return getLiveData(marketSymbol, null, interval, period);
+		};
 		
 		return {
 			getHistoricalData: getHistoricalData,
 			getLiveData: getLiveData,
+			getLiveMarketData: getLiveMarketData,
 			getCurrentData: getCurrentData,
 			getCurrentDataWithDetails: getCurrentDataWithDetails
 		};
