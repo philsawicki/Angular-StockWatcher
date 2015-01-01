@@ -2,12 +2,9 @@
 
 /* Stock Chart Controller */
 angular.module('stockWatcher.Controllers')
-	.controller('StockChartController', ['$scope', '$interval', 'stockService', function($scope, $interval, stockService) {
+	.controller('StockChartController', ['$scope', '$interval', '$timeout', 'stockService', function($scope, $interval, $timeout, stockService) {
 		// Set the default refresh interval for the table:
 		$scope.refreshInterval = 60;
-
-		// Set the default status for the chart initialization flag:
-		$scope.chartIsInitialized = false;
 		
 		// Set the ID of the <div> containing the chart (to be used by HighStocks library for drawing graph):
 		var containerID = 'container' + $scope.symbol.replace('.', '');
@@ -58,41 +55,6 @@ angular.module('stockWatcher.Controllers')
 				},
 				title: {
 					text: $scope.symbol + ' Stock Price'
-				},
-				xAxis: {
-					events: {
-						setExtremes: function(event) {
-							/*
-							if (typeof(event.rangeSelectorButton) !== 'undefined') {
-								var buttonCount = event.rangeSelectorButton.count;
-								var buttonText = event.rangeSelectorButton.text;
-								var buttonType = event.rangeSelectorButton.type;
-								
-								var selectedButtonIndex = undefined;
-								for (var i = 0, nbButtons = this.chart.rangeSelector.buttons.length; i < nbButtons; i++) {
-									if (this.chart.rangeSelector.buttons[i].state === 2) {
-										selectedButtonIndex = i;
-										break;
-									}
-								}
-								
-								var currentStock = this.chart.title.textStr.replace(' Stock Price', '');
-								if (selectedButtonIndex < 3) { // Index of the button covering the range which is no longer "live" data.
-									console.log('Live data!');
-									
-									_chartData[currentStock].maxTimestamp = 0; // Reset max timestamp
-									_setGraphData([], options);
-									
-									_requestLiveData(_chartData[currentStock].options);
-								} else {
-									console.log('Historical data!');
-									
-									_requestHistoricalData(_chartData[currentStock].options, buttonCount, buttonType);
-								}
-							}
-							*/
-						}
-					}
 				},
 				rangeSelector: {
 					buttons: [{
@@ -158,10 +120,25 @@ angular.module('stockWatcher.Controllers')
 			if (typeof yesterdayClosePrice !== 'undefined') {
 				drawOpenPlotLine();
 			}
-
-			// Chart is now initialized, update flag:
-			$scope.chartIsInitialized = true;
 		};
+
+
+
+		/**
+		 * Kick off the initialization of the chart and the loading of the initil data.
+		 */
+		var bootstrap = function() {
+			// Kick off the request for data to fill the chart and remove the 
+			// "Loading..." message (hopefully the chart will have been created once
+			// the data is received):
+			initGraph();
+
+			// Create the graph a first time, with empty data:
+			createGraph([null]);
+			// Show a "Loading..." message overlayed on top of the chart:
+			chart.showLoading();
+		};
+		$timeout(bootstrap, 0);
 
 
 
@@ -178,6 +155,10 @@ angular.module('stockWatcher.Controllers')
 			var promise = stockService.getLiveData(symbol, exchange, interval, period);
 			promise.then(function(data) {
 				if (data && data.length > 0) {
+					// Hide the "Loading..." message overlayed on top of the chart:
+					chart.hideLoading();
+
+					// Recreate the chart with the new data:
 					createGraph(data);
 				} else {
 					console.warn('"' + symbol + '" init did not receive data, refreshing it.');
@@ -185,7 +166,7 @@ angular.module('stockWatcher.Controllers')
 				}
 			});
 		};
-		initGraph();
+		//initGraph();
 
 		/**
 		 * Updates the chart with new data.
