@@ -16,6 +16,12 @@ angular.module('stockWatcher.Controllers')
 		// "Chart" object to be used by HighStocks library for storing graph properties:
 		var chart = undefined;
 
+		// Promise defined when "initGraph()" fails to receive data:
+		$scope.initGraphPromise = undefined;
+
+		// Promise defined when "updateGraph()" fails to receive data:
+		$scope.updateGraphPromise = undefined;
+
 
 
 		/**
@@ -55,6 +61,9 @@ angular.module('stockWatcher.Controllers')
 				},
 				title: {
 					text: $scope.symbol + ' Stock Price'
+				},
+				credits: {
+					enabled: false
 				},
 				rangeSelector: {
 					buttons: [{
@@ -162,7 +171,7 @@ angular.module('stockWatcher.Controllers')
 					createGraph(data);
 				} else {
 					console.warn('"' + symbol + '" init did not receive data, refreshing it.');
-					initGraph();
+					$scope.initGraphPromise = $timeout(initGraph, 1000);
 				}
 			});
 		};
@@ -181,7 +190,7 @@ angular.module('stockWatcher.Controllers')
 					setGraphData(data);
 				} else {
 					console.warn('"' + symbol + '" update did not receive data, refreshing it.');
-					updateGraph();
+					$scope.updateGraphPromise = $timeout(updateGraph, 1000);
 				}
 			});
 		}
@@ -246,9 +255,33 @@ angular.module('stockWatcher.Controllers')
 		};
 		
 		var refresher = $scope.createRefresher();
+
 		
+		/**
+		 * Called on exit of the Controller, when it is destroyed.
+		 * Opportunity to destroy the remaining resources and free up memory.
+		 */
 		$scope.$on('$destroy', function() {
 			// Make sure that the "refresher" $interval is destroyed:
 			$scope.destroyRefresher();
+
+
+			// Destroy the "initGrap" $timeout Promise, if it is set:
+			if (typeof $scope.initGraphPromise !== 'undefined') {
+				$timeout.cancel(initGraphPromise);
+				$scope.initGraphPromise = undefined;
+			}
+
+			// Destroy the "updateGraph" $timeout Promise, if it is set:
+			if (typeof $scope.updateGraphPromise !== 'undefined') {
+				$timeout.cancel(updateGraphPromise);
+				$scope.updateGraphPromise = undefined;
+			}
+
+
+			// Removes the chart and purges memory:
+			if (typeof chart !== 'undefined') {
+				chart.destroy();
+			}
         });
 	}]);

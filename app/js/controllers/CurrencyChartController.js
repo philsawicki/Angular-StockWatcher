@@ -56,6 +56,9 @@ angular.module('stockWatcher.Controllers')
 				title: {
 					text: $scope.fromCurrency + ' to ' + $scope.toCurrency
 				},
+				credits: {
+					enabled: false
+				},
 				rangeSelector: {
 					buttons: [{
 						type: 'day',
@@ -248,5 +251,10 @@ angular.module('stockWatcher.Controllers')
 		$scope.$on('$destroy', function() {
 			// Make sure that the "refresher" $interval is destroyed:
 			$scope.destroyRefresher();
+
+			// Removes the chart and purges memory:
+			if (typeof chart !== 'undefined') {
+				chart.destroy();
+			}
         });
 	}]);

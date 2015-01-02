@@ -82,9 +82,9 @@ angular.module('stockWatcher.Controllers')
 				title: {
 					text: chartOptions.title
 				},
-				//subtitle : {
-				//	text: 'In daily percent change'
-				//},
+				credits: {
+					enabled: false
+				},
 				xAxis: {
 					events: {
 						setExtremes: function(event) {
@@ -385,6 +385,11 @@ angular.module('stockWatcher.Controllers')
 		$scope.$on('$destroy', function() {
 			// Make sure that the "refresher" $interval is destroyed:
 			$scope.destroyRefresher();
+
+			// Removes the chart and purges memory:
+			if (typeof chart !== 'undefined') {
+				chart.destroy();
+			}
 		});
 
 
@@ -400,15 +405,12 @@ angular.module('stockWatcher.Controllers')
 			if (typeof chart !== 'undefined') {
 				if (showTitle) {
 					chart.setTitle({ text: chartOptions.title });
-
-					chart.reflow();
-					chart.redraw();
 				} else {
 					chart.setTitle({ text: null });
-
-					chart.reflow();
-					chart.redraw();
 				}
+
+				chart.reflow();
+				chart.redraw();
 			}
 		});
 
@@ -471,7 +473,7 @@ angular.module('stockWatcher.Controllers')
 						elem.hide();
 					});
 				}
-				
+
 				chart.reflow();
 				chart.redraw();
 			}
