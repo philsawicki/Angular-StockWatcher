@@ -2,7 +2,7 @@
 
 /* Market Chart Controller */
 angular.module('stockWatcher.Controllers')
-	.controller('MarketChartController', ['$scope', '$interval', 'stockService', function($scope, $interval, stockService) {
+	.controller('MarketChartController', ['$scope', '$interval', 'stockService', function ($scope, $interval, stockService) {
 		// Set the default refresh interval for the table:
 		$scope.refreshInterval = 60;
 
@@ -37,6 +37,10 @@ angular.module('stockWatcher.Controllers')
 				data: []
 			}
 		];
+
+		var chartOptions = {
+			title: 'TSX, Dow Jones & S&P500 Indices'
+		};
 
 
 
@@ -76,7 +80,7 @@ angular.module('stockWatcher.Controllers')
 					renderTo: containerID
 				},
 				title: {
-					text: 'TSX, Dow Jones & S&P500 Indices'
+					text: chartOptions.title
 				},
 				//subtitle : {
 				//	text: 'In daily percent change'
@@ -269,8 +273,8 @@ angular.module('stockWatcher.Controllers')
 				var promise = stockService.getLiveMarketData(marketSymbol, interval, period);
 				promise.then(
 					// Must wrap the Promise callback into a closure in order to pass the serie's index:
-					(function(index) {
-						return function(data) {
+					(function (index) {
+						return function (data) {
 							if (data && data.length > 0) {
 								console.log('MarketChartController::initGraph() received data for index #' + index + ': "' + marketData[index].name + '"');
 								marketData[index].data = data;
@@ -300,8 +304,8 @@ angular.module('stockWatcher.Controllers')
 				var promise = stockService.getLiveMarketData(marketSymbol, interval, period);
 				promise.then(
 					// Must wrap the Promise callback into a closure in order to pass the serie's index:
-					(function(index) {
-						return function(data) {
+					(function (index) {
+						return function (data) {
 							//console.log('Updating graph for "' + symbol + '"');
 							
 							if (data && data.length > 0) {
@@ -381,5 +385,95 @@ angular.module('stockWatcher.Controllers')
 		$scope.$on('$destroy', function() {
 			// Make sure that the "refresher" $interval is destroyed:
 			$scope.destroyRefresher();
-        });
+		});
+
+
+
+
+
+
+		/**
+		 * Listen for "showTitle" variable changes in $parent's $scope and make 
+		 * changes accordingly.
+		 */
+		$scope.$parent.$watch('showTitle', function (showTitle) {
+			if (typeof chart !== 'undefined') {
+				if (showTitle) {
+					chart.setTitle({ text: chartOptions.title });
+
+					chart.reflow();
+					chart.redraw();
+				} else {
+					chart.setTitle({ text: null });
+
+					chart.reflow();
+					chart.redraw();
+				}
+			}
+		});
+
+		/**
+		 * Listen for "showZoom" variable changes in $parent's $scope and make 
+		 * changes accordingly.
+		 */
+		$scope.$parent.$watch('showZoom', function (newValue) {
+			if (typeof chart !== 'undefined') {
+				chart.rangeSelector.enabled = newValue;
+
+				chart.reflow();
+				chart.redraw();
+			}
+		});
+
+		/**
+		 * Listen for "showDatePicker" variable changes in $parent's $scope and make 
+		 * changes accordingly.
+		 */
+		$scope.$parent.$watch('showDatePicker', function (newValue) {
+		});
+
+		/**
+		 * Listen for "showNavigator" variable changes in $parent's $scope and make 
+		 * changes accordingly.
+		 */
+		$scope.$parent.$watch('showNavigator', function (showNavigator) {
+			if (typeof chart !== 'undefined') {
+				var scroller = chart.scroller;
+
+				if (showNavigator) {
+					scroller.xAxis.labelGroup.show();
+					scroller.xAxis.gridGroup.show();
+					scroller.series.show();
+					scroller.navigatorGroup.show();
+					scroller.scrollbar.show();
+					scroller.scrollbarRifles.show();
+					scroller.scrollbarGroup.show();
+
+					//for (var i = 0, nbElementsToDestroy = scroller.elementsToDestroy; i < nbElementsToDestroy; i++) {
+					//	scroller.elementsToDestroy[i].show();
+					//}
+					$.each(scroller.elementsToDestroy, function (i, elem) {
+						elem.hide();
+					});
+				} else {
+					scroller.xAxis.labelGroup.hide();
+					scroller.xAxis.gridGroup.hide();
+					scroller.series.hide();
+					scroller.scrollbar.hide();
+					scroller.scrollbarGroup.hide();
+					scroller.scrollbarRifles.hide();
+					scroller.navigatorGroup.hide();
+
+					//for (var i = 0, nbElementsToDestroy = scroller.elementsToDestroy; i < nbElementsToDestroy; i++) {
+					//	scroller.elementsToDestroy[i].hide();
+					//}
+					$.each(scroller.elementsToDestroy, function (i, elem) {
+						elem.hide();
+					});
+				}
+				
+				chart.reflow();
+				chart.redraw();
+			}
+		});
 	}]);

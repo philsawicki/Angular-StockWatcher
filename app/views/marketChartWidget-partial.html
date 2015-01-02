@@ -1,0 +1,57 @@
+<!-- 
+ See http://www.bootply.com/ampalmira/HpUIknuPf8 for layout examples.
+-->
+
+
+<div class="row">
+	<div class="col-sm-12">
+		<div class="page-header" style="margin-top: 20px;">
+			
+			<div class="row">
+				<div class="col-sm-8">
+					<h2>Market Indices</h2>
+				</div>
+
+				<div class="col-sm-4" style="margin-top: 20px;">
+					<div class="dropdown text-right">
+						<button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+							<span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+							Config
+							<span class="caret"></span>
+						</button>
+						<ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="dropdownMenu1">
+							<li role="presentation">
+								<a role="menuitem" tabindex="-1" href="javascript:;" ng-click="toggleTitle()">
+									<span class="glyphicon" ng-class="{'glyphicon-ok': showTitle, 'glyphicon-none': !showTitle}" aria-hidden="true"></span> Show Title
+								</a>
+							</li>
+							<li role="presentation" class="disabled">
+								<a role="menuitem" tabindex="-1" href="javascript:;" ng-click="toggleZoom()">
+									<span class="glyphicon" ng-class="{'glyphicon-ok': showZoom, 'glyphicon-none': !showZoom}" aria-hidden="true"></span> Show Zoom
+								</a>
+							</li>
+							<li role="presentation" class="disabled">
+								<a role="menuitem" tabindex="-1" href="javascript:;" ng-click="toggleDatePicker()">
+									<span class="glyphicon" ng-class="{'glyphicon-ok': showDatePicker, 'glyphicon-none': !showDatePicker}" aria-hidden="true"></span> Show Date Picker
+								</a>
+							</li>
+							<li role="presentation">
+								<a role="menuitem" tabindex="-1" href="javascript:;" ng-click="toggleNavigator()">
+									<span class="glyphicon" ng-class="{'glyphicon-ok': showNavigator, 'glyphicon-none': !showNavigator}" aria-hidden="true"></span> Show Navigator
+								</a>
+							</li>
+							<li class="divider"></li>
+							<li role="presentation" class="disabled">
+								<a role="menuitem" tabindex="-1" href="#">Export Config</a>
+							</li>
+						</ul>
+					</div>
+			
+				</div>
+			</div>
+			
+		</div>
+
+		<market-chart fetch-TSX="true" fetch-DJ="true"></market-chart>
+	</div>
+</div>

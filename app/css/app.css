@@ -51,6 +51,17 @@ body {
 
 
 /**
+ * "Empty" Bootstrap icon (i.e. transparent placeholder).
+ */
+.glyphicon-none:before {
+	content: "\2122";
+	color: transparent !important;
+}
+
+
+
+
+/**
  * CSS Animations for Bootstrap Glyphicons.
  */
 
