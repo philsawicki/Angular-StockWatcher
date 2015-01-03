@@ -181,7 +181,7 @@ angular.module('stockWatcher.Controllers')
 		 * Updates the chart with new data.
 		 * @return {void}
 		 */
-		var updateGraph = function() {
+		$scope.updateGraph = function() {
 			var promise = stockService.getLiveData(symbol, exchange, interval, period);
 			promise.then(function(data) {
 				//console.log('Updating graph for "' + symbol + '"');
@@ -190,7 +190,7 @@ angular.module('stockWatcher.Controllers')
 					setGraphData(data);
 				} else {
 					console.warn('"' + symbol + '" update did not receive data, refreshing it.');
-					$scope.updateGraphPromise = $timeout(updateGraph, 1000);
+					$scope.updateGraphPromise = $timeout($scope.updateGraph, 1000);
 				}
 			});
 		}
@@ -238,14 +238,14 @@ angular.module('stockWatcher.Controllers')
 		
 		$scope.createRefresher = function() {
 			return $interval(function() {
-				updateGraph();
+				$scope.updateGraph();
 			}, $scope.refreshInterval*1000);
 		};
 		
 		$scope.destroyRefresher = function() {
-			if (angular.isDefined(refresher)) {
-				$interval.cancel(refresher);
-				refresher = undefined;
+			if (angular.isDefined($scope.refresher)) {
+				$interval.cancel($scope.refresher);
+				$scope.refresher = undefined;
 			}
 		};
 		
@@ -253,8 +253,8 @@ angular.module('stockWatcher.Controllers')
 			$scope.destroyRefresher();
 			$scope.createRefresher();
 		};
-		
-		var refresher = $scope.createRefresher();
+
+		$scope.refresher = $scope.createRefresher();
 
 		
 		/**
@@ -268,13 +268,13 @@ angular.module('stockWatcher.Controllers')
 
 			// Destroy the "initGrap" $timeout Promise, if it is set:
 			if (typeof $scope.initGraphPromise !== 'undefined') {
-				$timeout.cancel(initGraphPromise);
+				$timeout.cancel($scope.initGraphPromise);
 				$scope.initGraphPromise = undefined;
 			}
 
 			// Destroy the "updateGraph" $timeout Promise, if it is set:
 			if (typeof $scope.updateGraphPromise !== 'undefined') {
-				$timeout.cancel(updateGraphPromise);
+				$timeout.cancel($scope.updateGraphPromise);
 				$scope.updateGraphPromise = undefined;
 			}
 

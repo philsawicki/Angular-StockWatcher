@@ -28,8 +28,6 @@ describe('AboutPageController', function() {
 });
 
 
-
-
 describe('StockListController', function() {
 	var $httpBackend, $rootScope, createController;
 
