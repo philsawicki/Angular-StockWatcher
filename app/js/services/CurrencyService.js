@@ -68,11 +68,11 @@ angular.module('stockWatcher.Services')
 
 		/**
 		 * Gets live, streaming currency exchange rates for the given symbol.
-		 * @param  {string}  symbol   The stock symbol for which to get streaming data (eg: "PG").
-		 * @param  {string}  exchange The exchange market for the given stock (eg: "NYSE").
-		 * @param  {int}     interval The refresh interval, in seconds (eg: 60).
-		 * @param  {string}  period   The duration for which to get data, up to 10 days (eg: "1d", "1h", etc.).
-		 * @return {Deferred.promise} A promise to be resolved when the request is successfully received.
+		 * @param  {string}  fromCurrency The currency to convert from (eg: "USD").
+		 * @param  {string}  toCurrency   The currency to convert to (eg: "CAD").
+		 * @param  {int}     interval     The refresh interval, in seconds (eg: 60).
+		 * @param  {string}  period       The duration for which to get data, up to 10 days (eg: "1d", "1h", etc.).
+		 * @return {Deferred.promise}     A promise to be resolved when the request is successfully received.
 		 */
 		var getCurrencyExchangeRateHistory = function(fromCurrency, toCurrency, interval, period) {
 			var deferred = $q.defer();
@@ -117,7 +117,7 @@ angular.module('stockWatcher.Services')
 						var date = new Date((startTimestamp + offset * interval + now.getTimezoneOffset() * 60)*1000);
 						
 						if (date > maxTimestamp) {
-							var close = parseFloat(data.query.results.row[i].col1);
+							var close = parseFloat(data.query.results.row[i].col1, 10);
 							var dataRow = [date, close];
 							
 							maxTimestamp = date;

@@ -14,7 +14,7 @@ angular.module('stockWatcher.Controllers')
 		var yesterdayClosePrice = undefined;
 
 		// "Chart" object to be used by HighStocks library for storing graph properties:
-		var chart = undefined;
+		$scope.chart = undefined;
 
 		// Promise defined when "initGraph()" fails to receive data:
 		$scope.initGraphPromise = undefined;
@@ -55,7 +55,7 @@ angular.module('stockWatcher.Controllers')
 		 * @return {void}
 		 */
 		var createGraph = function(dataRows) {
-			chart = new Highcharts.StockChart({
+			$scope.chart = new Highcharts.StockChart({
 				chart: {
 					renderTo: containerID
 				},
@@ -145,7 +145,7 @@ angular.module('stockWatcher.Controllers')
 			// Create the graph a first time, with empty data:
 			createGraph([null]);
 			// Show a "Loading..." message overlayed on top of the chart:
-			chart.showLoading();
+			$scope.chart.showLoading();
 		};
 		$timeout(bootstrap, 0);
 
@@ -165,7 +165,7 @@ angular.module('stockWatcher.Controllers')
 			promise.then(function(data) {
 				if (data && data.length > 0) {
 					// Hide the "Loading..." message overlayed on top of the chart:
-					chart.hideLoading();
+					$scope.chart.hideLoading();
 
 					// Recreate the chart with the new data:
 					createGraph(data);
@@ -197,14 +197,14 @@ angular.module('stockWatcher.Controllers')
 
 		var setGraphData = function(data) {
 			var stock = $scope.symbol;
-			var serie = chart.series[0];
+			var serie = $scope.chart.series[0];
 			serie.setData(data);
 			
 			if (typeof yesterdayClosePrice !== 'undefined') {
 				drawOpenPlotLine();
 			}
 			
-			chart.redraw();
+			$scope.chart.redraw();
 		};
 		
 
@@ -212,11 +212,11 @@ angular.module('stockWatcher.Controllers')
 			var stockSymbol = $scope.symbol;
 			var open = yesterdayClosePrice;
 
-			if (chart) {
+			if (typeof $scope.chart !== 'undefined') {
 				//console.log('Drawing "Open" PlotLine for "%s" ($%s)', stockSymbol, open);
 				
 				var openPlotLineID = stockSymbol + '-open',
-				    chartYAxis = chart.yAxis[0];
+				    chartYAxis = $scope.chart.yAxis[0];
 				
 				chartYAxis.removePlotLine(openPlotLineID);
 				chartYAxis.addPlotLine({
@@ -280,8 +280,8 @@ angular.module('stockWatcher.Controllers')
 
 
 			// Removes the chart and purges memory:
-			if (typeof chart !== 'undefined') {
-				chart.destroy();
+			if (typeof $scope.chart !== 'undefined') {
+				$scope.chart.destroy();
 			}
         });
 	}]);

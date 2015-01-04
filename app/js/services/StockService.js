@@ -260,7 +260,7 @@ angular.module('stockWatcher.Services')
 						var date = new Date((startTimestamp + offset * interval + now.getTimezoneOffset() * 60)*1000);
 						
 						if (date > maxTimestamp) {
-							var close = parseFloat(data.query.results.row[i].col1);
+							var close = parseFloat(data.query.results.row[i].col1, 10);
 							var dataRow = [date, close];
 							
 							maxTimestamp = date;

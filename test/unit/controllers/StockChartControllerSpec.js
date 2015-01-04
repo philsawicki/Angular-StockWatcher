@@ -9,12 +9,12 @@ describe('StockChartController', function() {
 	    $interval, 
 	    $timeout, 
 	    $httpBackend,
-	    $window,
 	    injector,
 	    stockService, 
 	    createController;
 
 	var constants = {
+		refreshInterval: 60,
 		symbol: 'PG'
 	};
 
@@ -28,7 +28,6 @@ describe('StockChartController', function() {
 		$interval = $injector.get('$interval');
 		$timeout = $injector.get('$timeout');
 		$httpBackend = $injector.get('$httpBackend');
-		$window = $injector.get('$window');
 		injector = $injector;
 
 		$httpBackend
@@ -57,7 +56,7 @@ describe('StockChartController', function() {
 		var controller = createController();
 
 		expect($scope.refreshInterval).toBeDefined();
-		expect($scope.refreshInterval).toEqual(60);
+		expect($scope.refreshInterval).toEqual(constants.refreshInterval);
 	});
 
 	it('should have a Stock Symbol set', function() {
@@ -73,6 +72,12 @@ describe('StockChartController', function() {
 		expect($scope.containerID).toBeDefined();
 		expect($scope.containerID).toContain('container');
 		expect($scope.containerID).toContain('PG');
+	});
+
+	it('should have an uninitialized Chart', function() {
+		var controller = createController();
+
+		expect($scope.chart).toBeUndefined();
 	});
 
 	it('should have a "Refresher" object set', function() {
@@ -235,14 +240,18 @@ describe('StockChartController', function() {
 			expect($scope.destroyRefresher).toHaveBeenCalled();
 		});
 
-		xit('should destroy the Chart', function() {
+		it('should destroy the Chart', function() {
 			var controller = createController();
 
-			spyOn(chart, 'destroy').andCallThrough();
+			// Workaround since "$scope.chart" is not yet initialized:
+			expect($scope.chart).toBeUndefined();
+			$scope.chart = { destroy: function() {} };
+
+			spyOn($scope.chart, 'destroy').andCallThrough();
 
 			$scope.$destroy();
 
-			expect(chart.destroy).toHaveBeenCalled();
+			expect($scope.chart.destroy).toHaveBeenCalled();
 		});
 
 		describe('Chart Promises states', function() {
