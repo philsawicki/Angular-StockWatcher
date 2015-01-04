@@ -251,7 +251,7 @@ describe('CurrencyService', function() {
 			var exchangeRatePromise = currencyService.getCurrencyExchangeRate(constants.fromCurrency, constants.toCurrency);
 			exchangeRatePromise.then(function(data) {
 				exchangeRate = data;
-			})
+			});
 
 			$httpBackend.flush();
 
@@ -274,7 +274,7 @@ describe('CurrencyService', function() {
 			var historicalExchangeRateHistoryPromise = currencyService.getCurrencyExchangeRateHistory(constants.fromCurrency, constants.toCurrency, constants.interval, constants.period);
 			historicalExchangeRateHistoryPromise.then(function(data) {
 				historicalExchangeRateHistory = data;
-			})
+			});
 
 			$httpBackend.flush();
 
