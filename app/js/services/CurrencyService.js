@@ -68,9 +68,15 @@ angular.module('stockWatcher.Services')
 
 		/**
 		 * Gets live, streaming currency exchange rates for the given symbol.
+		 * 
+		 * The Yahoo! YQL Service returns at most 5000 rows from a CSV files, so a multi-part response must be retreived
+		 * before parsing it and returning a complete data set for the requested interval/period timeframe. E.g.:
+		 *    1. select * from csv where url="http://www.google.com/finance/getprices?q=CADEUR&i=60&p=10d&f=d,c,v,k,o,h,l&df=cpct&auto=0&ei=Ef6XUYDfCqSTiAKEMg"
+		 *    2. select * from csv(5001,10000) where url="http://www.google.com/finance/getprices?q=CADEUR&i=60&p=10d&f=d,c,v,k,o,h,l&df=cpct&auto=0&ei=Ef6XUYDfCqSTiAKEMg"
+		 * 
 		 * @param  {string}  fromCurrency The currency to convert from (eg: "USD").
 		 * @param  {string}  toCurrency   The currency to convert to (eg: "CAD").
-		 * @param  {int}     interval     The refresh interval, in seconds (eg: 60).
+		 * @param  {int}     interval     The refresh interval, in seconds (eg: 60). Seems to only accept a multiple of 60.
 		 * @param  {string}  period       The duration for which to get data, up to 10 days (eg: "1d", "1h", etc.).
 		 * @return {Deferred.promise}     A promise to be resolved when the request is successfully received.
 		 */

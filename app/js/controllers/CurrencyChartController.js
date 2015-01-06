@@ -147,7 +147,7 @@ angular.module('stockWatcher.Controllers')
 
 		var fromCurrency = $scope.fromCurrency;
 		var toCurrency = $scope.toCurrency;
-		var interval = 60;
+		var interval = 60*3; // Must be at least 60*3 over a '10d'-period, otherwise the CSV will have more than 5000 lines, which YQL will clip.
 		var period = '10d';
 		// Google Finance URL for this stock would be:
 		// http://www.google.com/finance/getprices?q=T&x=TSE&i=60&p=10d&f=d,c,v,k,o,h,l&df=cpct&auto=0&ei=Ef6XUYDfCqSTiAKEMg
