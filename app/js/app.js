@@ -78,4 +78,15 @@ angular.module('stockWatcher', [
 				});
 			};
 		}
+	}])
+	// Disable "UTC" time for Highcharts
+	// See: http://api.highcharts.com/highcharts#global.useUTC
+	.run(['$window', '$rootScope', function($window, $rootScope) {
+		if (typeof Highcharts !== 'undefined') {
+			Highcharts.setOptions({
+				global: {
+					useUTC: false
+				}
+			});
+		}
 	}]);
