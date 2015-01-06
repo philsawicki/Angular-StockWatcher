@@ -277,7 +277,11 @@ angular.module('stockWatcher.Controllers')
 						return function (data) {
 							if (data && data.length > 0) {
 								console.log('MarketChartController::initGraph() received data for index #' + index + ': "' + marketData[index].name + '"');
+								
+								// Set data for the stock symbol:
 								marketData[index].data = data;
+								// Set the "maxTimestamp" to the last timestamp of the array:
+								//marketData[index].maxTimestamp = data[data.length-1][0];
 
 								seriesCount++;
 								if (seriesCount === nbMarketSymbols) {
@@ -298,6 +302,12 @@ angular.module('stockWatcher.Controllers')
 		 * @return {void}
 		 */
 		var updateGraph = function() {
+			// Chart might not be created yet when "updateGraph()" is called by the "refresher" $interval.
+			// Early exit in this case, as to not make requests too early or cause potential crashes when referencing "chart".
+			if (typeof chart === 'undefined') {
+				return;
+			}
+
 			for (var i = 0, nbMarketSymbols = marketData.length; i < nbMarketSymbols; i++) {
 				var marketSymbol = marketData[i].symbol;
 
@@ -310,7 +320,7 @@ angular.module('stockWatcher.Controllers')
 							
 							if (data && data.length > 0) {
 								console.log('MarketChartController::updateGraph() received data for index #' + index + ': "' + marketData[index].name + '"');
-								setGraphData(i, data);
+								setGraphData(index, data);
 							} else {
 								console.warn('"' + marketData[index].name + '" update did not receive data, refreshing it.');
 								updateGraph();
@@ -323,14 +333,29 @@ angular.module('stockWatcher.Controllers')
 
 		var setGraphData = function(serieIndex, data) {
 			//var stock = $scope.symbol;
+			//if (typeof chart === 'undefined') {
+			//	return;
+			//}
+			//var shift = true;
 			var serie = chart.series[serieIndex];
 			serie.setData(data);
+
+			/*
+			for (var i = 0, count = data.length; i < count; i++) {
+				if (data[i][0] > marketData[serieIndex].maxTimestamp) {
+					//serie.addPoint(data[i], true, shift);
+					console.log("Adding point", data[i]);
+					// Update the "maxTimestamp" for the given serie:
+					marketData[serieIndex].maxTimestamp = data[i][0];
+				}
+			}
+			*/
 			
 			if (typeof yesterdayClosePrice !== 'undefined') {
 				drawOpenPlotLine();
 			}
 			
-			chart.redraw();
+			//chart.redraw();
 		};
 		
 
