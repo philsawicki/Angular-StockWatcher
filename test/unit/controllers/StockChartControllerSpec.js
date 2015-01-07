@@ -52,7 +52,7 @@ describe('StockChartController', function() {
 
 
 
-	it('should have a default "Refresh Interval"', function() {
+	it('should have a default "Refresh Interval" set', function() {
 		var controller = createController();
 
 		expect($scope.refreshInterval).toBeDefined();
@@ -84,7 +84,13 @@ describe('StockChartController', function() {
 		var controller = createController();
 
 		expect($scope.refresher).toBeDefined();
-	})
+	});
+
+	it('should have a "Previous Close Refresher" object set', function() {
+		var controller = createController();
+
+		expect($scope.previousCloseRefresher).toBeDefined();
+	});
 
 	xit('should have initiated the "Refresher"', function() {
 		//var controller = createController();
@@ -152,6 +158,16 @@ describe('StockChartController', function() {
 			expect($scope.refresher).toBeUndefined();
 		});
 
+		it('should leave the "Previous Close Refresher" undefined after calling "destroy"', function() {
+			var controller = createController();
+
+			expect($scope.previousCloseRefresher).toBeDefined();
+
+			$scope.destroyRefresher();
+
+			expect($scope.previousCloseRefresher).toBeUndefined();
+		});
+
 		xit('should create an $interval after calling "create"', function() {
 			var controller = createController();
 
@@ -177,6 +193,20 @@ describe('StockChartController', function() {
 
 			expect($interval.cancel).toHaveBeenCalledWith(copyOfRefresherThatWasCalled);
 			expect($scope.refresher).toBeUndefined();
+		});
+
+		it('should set the "Previous Close Refresher" to undefined when calling "destroy"', function() {
+			var controller = createController();
+
+			spyOn($interval, 'cancel').andCallThrough();
+
+			expect($scope.previousCloseRefresher).toBeDefined();
+			var copyOfPreviousCloseRefresherThatWasCalled = angular.copy($scope.previousCloseRefresher);
+
+			$scope.destroyRefresher();
+
+			expect($interval.cancel).toHaveBeenCalledWith(copyOfPreviousCloseRefresherThatWasCalled);
+			expect($scope.previousCloseRefresher).toBeUndefined();
 		});
 
 		xit('should run "updateGraph" after "refreshIntervalChanged"', function() {

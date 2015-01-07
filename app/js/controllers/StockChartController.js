@@ -11,7 +11,7 @@ angular.module('stockWatcher.Controllers')
 		$scope.containerID = containerID;
 
 		// "Open" price for the chart:
-		var yesterdayClosePrice = undefined;
+		$scope.yesterdayClosePrice = undefined;
 
 		// "Chart" object to be used by HighStocks library for storing graph properties:
 		$scope.chart = undefined;
@@ -35,10 +35,10 @@ angular.module('stockWatcher.Controllers')
 			var promise = stockService.getCurrentDataWithDetails(symbols);
 			promise.then(function(data) {
 				if (data.query.count > 0) {
-					yesterdayClosePrice = data.query.results.row.PreviousClose;
+					$scope.yesterdayClosePrice = data.query.results.row.PreviousClose;
 					//console.log('PreviousClose for "' + $scope.symbol + '" [' + data.query.results.row.StockExchange + ']', yesterdayClosePrice);
 
-					if (typeof yesterdayClosePrice !== 'undefined') {
+					if (typeof $scope.yesterdayClosePrice !== 'undefined') {
 						drawOpenPlotLine();
 					}
 				} else {
@@ -126,7 +126,7 @@ angular.module('stockWatcher.Controllers')
 			});
 
 
-			if (typeof yesterdayClosePrice !== 'undefined') {
+			if (typeof $scope.yesterdayClosePrice !== 'undefined') {
 				drawOpenPlotLine();
 			}
 		};
@@ -200,7 +200,7 @@ angular.module('stockWatcher.Controllers')
 			var serie = $scope.chart.series[0];
 			serie.setData(data);
 			
-			if (typeof yesterdayClosePrice !== 'undefined') {
+			if (typeof $scope.yesterdayClosePrice !== 'undefined') {
 				drawOpenPlotLine();
 			}
 			
@@ -210,12 +210,12 @@ angular.module('stockWatcher.Controllers')
 
 		var drawOpenPlotLine = function() {
 			var stockSymbol = $scope.symbol;
-			var open = yesterdayClosePrice;
+			var previousClose = $scope.yesterdayClosePrice;
 
 			if (typeof $scope.chart !== 'undefined') {
-				//console.log('Drawing "Open" PlotLine for "%s" ($%s)', stockSymbol, open);
+				//console.log('Drawing "Open" PlotLine for "%s" ($%s)', stockSymbol, previousClose);
 				
-				var openPlotLineID = stockSymbol + '-open',
+				var openPlotLineID = stockSymbol + '-previousClose',
 				    chartYAxis = $scope.chart.yAxis[0];
 				
 				chartYAxis.removePlotLine(openPlotLineID);
@@ -224,11 +224,11 @@ angular.module('stockWatcher.Controllers')
 					dashStyle: 'LongDash',
 					id: openPlotLineID,
 					label: {
-						text: 'Prev Close ($' + open + ')'
+						text: 'Prev Close ($' + previousClose + ')'
 					},
 					width: 1,
 					zIndex: 3,
-					value: open
+					value: previousClose
 				});
 			}
 		};
@@ -241,11 +241,24 @@ angular.module('stockWatcher.Controllers')
 				$scope.updateGraph();
 			}, $scope.refreshInterval*1000);
 		};
+
+		$scope.createPreviousCloseRefresher = function() {
+			return $interval(function() {
+				fetchPreviousDayClosePrice();
+			}, $scope.refreshInterval*1000);
+		}
 		
 		$scope.destroyRefresher = function() {
-			if (angular.isDefined($scope.refresher)) {
+			// Cancel "refresher":
+			if (typeof $scope.refresher !== 'undefined') {
 				$interval.cancel($scope.refresher);
 				$scope.refresher = undefined;
+			}
+
+			// Cancel "previousCloseRefresher":
+			if (typeof $scope.previousCloseRefresher !== 'undefined') {
+				$interval.cancel($scope.previousCloseRefresher);
+				$scope.previousCloseRefresher = undefined;
 			}
 		};
 		
@@ -254,7 +267,10 @@ angular.module('stockWatcher.Controllers')
 			$scope.createRefresher();
 		};
 
+
+
 		$scope.refresher = $scope.createRefresher();
+		$scope.previousCloseRefresher = $scope.createPreviousCloseRefresher();
 
 		
 		/**
