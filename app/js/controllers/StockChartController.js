@@ -35,14 +35,14 @@ angular.module('stockWatcher.Controllers')
 			var promise = stockService.getCurrentDataWithDetails(symbols);
 			promise.then(function(data) {
 				if (data.query.count > 0) {
-					$scope.yesterdayClosePrice = data.query.results.row.PreviousClose;
-					//console.log('PreviousClose for "' + $scope.symbol + '" [' + data.query.results.row.StockExchange + ']', yesterdayClosePrice);
+					var updatedClosePrice = data.query.results.row.PreviousClose;
 
-					if (typeof $scope.yesterdayClosePrice !== 'undefined') {
+					// Prevent unnecessary redrawing of "Previous Close" Trendline:
+					if (updatedClosePrice !== $scope.yesterdayClosePrice) {
+						$scope.yesterdayClosePrice = updatedClosePrice;
+
 						drawOpenPlotLine();
 					}
-				} else {
-					//console.error('No PreviousClose for ' + $scope.symbol);
 				}
 			});
 		};
@@ -51,7 +51,7 @@ angular.module('stockWatcher.Controllers')
 
 		/**
 		 * Creates the "chart" object using the "Highcharts" library.
-		 * @param  {Array} dataRows The initial dataset of values to plot on the chart.
+		 * @param  {Array<Array<Date,int>>} dataRows The initial dataset of values to plot on the chart.
 		 * @return {void}
 		 */
 		var createGraph = function(dataRows) {
@@ -196,26 +196,27 @@ angular.module('stockWatcher.Controllers')
 		}
 
 		var setGraphData = function(data) {
-			var stock = $scope.symbol;
 			var serie = $scope.chart.series[0];
 			serie.setData(data);
 			
-			if (typeof $scope.yesterdayClosePrice !== 'undefined') {
-				drawOpenPlotLine();
-			}
+			//if (typeof $scope.yesterdayClosePrice !== 'undefined') {
+			//	drawOpenPlotLine();
+			//}
 			
-			$scope.chart.redraw();
+			//$scope.chart.redraw();
 		};
 		
 
+		/**
+		 * Draws the "Previous Close" Trendline on the chart.
+		 * @return {void}
+		 */
 		var drawOpenPlotLine = function() {
-			var stockSymbol = $scope.symbol;
-			var previousClose = $scope.yesterdayClosePrice;
-
 			if (typeof $scope.chart !== 'undefined') {
-				//console.log('Drawing "Open" PlotLine for "%s" ($%s)', stockSymbol, previousClose);
+				var previousClose = $scope.yesterdayClosePrice;
+				//console.log('Drawing "Open" PlotLine for "%s" ($%s)', $scope.symbol, previousClose);
 				
-				var openPlotLineID = stockSymbol + '-previousClose',
+				var openPlotLineID = $scope.symbol + '-previousClose',
 				    chartYAxis = $scope.chart.yAxis[0];
 				
 				chartYAxis.removePlotLine(openPlotLineID);
