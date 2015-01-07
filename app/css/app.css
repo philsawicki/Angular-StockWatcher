@@ -1,4 +1,4 @@
-/* app css stylesheet */
+/* Application CSS Stylesheet */
 
 body {
 	padding-top: 70px;
@@ -22,6 +22,31 @@ body {
 .glyphicon-lighter {
 	color: darkgray;
 }
+
+
+#stockwatcher-page-wrapper {
+	position: relative;
+	width: 100%;
+}
+
+#stockwatcher-page-container {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	width: 100%;
+}
+
+
+
+
+/**
+ * "Empty" Bootstrap icon (i.e. transparent placeholder).
+ */
+.glyphicon-none:before {
+	content: "\2122";
+	color: transparent !important;
+}
+
 
 
 
@@ -49,13 +74,39 @@ body {
 }
 
 
-
 /**
- * "Empty" Bootstrap icon (i.e. transparent placeholder).
+ * CSS Animations for fading pages in and out.
  */
-.glyphicon-none:before {
-	content: "\2122";
-	color: transparent !important;
+.at-view-fade-in.ng-enter {
+	-webkit-transition-property: opacity;
+	   -moz-transition-property: opacity;
+	     -o-transition-property: opacity;
+	        transition-property: opacity;
+	-webkit-transition-duration: 0.5s;
+	   -moz-transition-duration: 0.5s;
+	     -o-transition-duration: 0.5s;
+	        transition-duration: 0.5s;
+	opacity: 0;
+}
+
+.at-view-fade-in.ng-enter-active {
+	opacity: 1;
+}
+
+.at-view-fade-out.ng-leave {
+	-webkit-transition-property: opacity;
+	   -moz-transition-property: opacity;
+	     -o-transition-property: opacity;
+	        transition-property: opacity;
+	-webkit-transition-duration: 0.5s;
+	   -moz-transition-duration: 0.5s;
+	     -o-transition-duration: 0.5s;
+	        transition-duration: 0.5s;
+	opacity: 1;
+}
+
+.at-view-fade-out.ng-leave-active {
+	opacity: 0;
 }
 
 

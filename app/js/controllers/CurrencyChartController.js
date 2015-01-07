@@ -23,7 +23,7 @@ angular.module('stockWatcher.Controllers')
 		 * @return {void} Executes a promise that, when resolved, sets the "yesterdayClosePrice" for the current stock.
 		 * @todo Add a timed "$interval" for this to be called regularly (i.e. at least at opening time each trade day).
 		 */
-		var fetchPreviousDayClosePrice = function() {
+		$scope.fetchPreviousDayClosePrice = function() {
 			var symbols = [$scope.symbol];
 
 			var promise = stockService.getCurrentDataWithDetails(symbols);
@@ -40,7 +40,7 @@ angular.module('stockWatcher.Controllers')
 				}
 			});
 		};
-		//fetchPreviousDayClosePrice();
+		//$scope.fetchPreviousDayClosePrice();
 
 
 		/**
@@ -233,21 +233,40 @@ angular.module('stockWatcher.Controllers')
 				updateGraph();
 			}, $scope.refreshInterval*1000);
 		};
+
+		//$scope.createPreviousCloseRefresher = function() {
+		//	return $interval(function() {
+		//		fetchPreviousDayClosePrice();
+		//	}, $scope.refreshInterval*1000);
+		//};
 		
 		$scope.destroyRefresher = function() {
-			if (angular.isDefined(refresher)) {
-				$interval.cancel(refresher);
-				refresher = undefined;
+			// Cancel "refresher":
+			if (typeof $scope.refresher !== 'undefined') {
+				$interval.cancel($scope.refresher);
+				$scope.refresher = undefined;
 			}
+
+			// Cancel "previousCloseRefresher":
+			//if (typeof $scope.previousCloseRefresher !== 'undefined') {
+			//	$interval.cancel($scope.previousCloseRefresher);
+			//	$scope.previousCloseRefresher = undefined;
+			//}
 		};
 		
 		$scope.refreshIntervalChanged = function() {
 			$scope.destroyRefresher();
 			$scope.createRefresher();
 		};
-		
-		var refresher = $scope.createRefresher();
-		
+
+		$scope.refresher = $scope.createRefresher();
+		//$scope.previousCloseRefresher = $scope.createPreviousCloseRefresher();
+
+
+		/**
+		 * Called on exit of the Controller, when it is destroyed.
+		 * Opportunity to destroy the remaining resources and free up memory.
+		 */
 		$scope.$on('$destroy', function() {
 			// Make sure that the "refresher" $interval is destroyed:
 			$scope.destroyRefresher();

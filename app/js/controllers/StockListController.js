@@ -1,27 +1,20 @@
 'use strict';
 
-/* Stock List Controller */
+/**
+ * Stock List Controller.
+ */
 angular.module('stockWatcher.Controllers')
 	.controller('StockListController', ['$scope', '$interval', 'stockService', function($scope, $interval, stockService) {
-		/*
-		var symbol    = 'GOOG';
-		var startDate = '2014-12-08';
-		var endDate   = '2014-12-12';
-		
-		
-		var getHistoricalData = function() {
-			var promise = stockService.getHistoricalData(symbol, startDate, endDate);
-			promise.then(function(data) {
-				$scope.quotes = data;
-			});
-		};
-		getHistoricalData();
-		*/
-		
 		// Set the default refresh interval for the table:
 		$scope.refreshInterval = 30;
+
+		// Set the default sort order for the table:
+		$scope.sortOrder = 'index';
+
+		// Set the default sort direction for the table:
+		$scope.sortReversed = false;
 		
-		var stockQuotes = [
+		$scope.stockQuotes = [
 			{
 				symbol: 'PG',
 				yahooSymbol: 'PG',
@@ -114,34 +107,13 @@ angular.module('stockWatcher.Controllers')
 			}
 		];
 		
-		$scope.stockQuotes = stockQuotes;
-		
 		
 
 
 		var allYahooSymbols = [];
-		for (var i = 0, nbStocks = stockQuotes.length; i < nbStocks; i++) {
-			allYahooSymbols.push(stockQuotes[i].yahooSymbol);
+		for (var i = 0, nbStocks = $scope.stockQuotes.length; i < nbStocks; i++) {
+			allYahooSymbols.push($scope.stockQuotes[i].yahooSymbol);
 		}
-		
-		//var getCurrentData = function() {
-		//	var promise = stockService.getCurrentData(allYahooSymbols);
-		//	promise.then(function(data) {
-		//		for (var i = 0, count = data.length; i < count; i++) {
-		//			var stockData = data[i];
-		//			
-		//			var yesterdayClose = stockData.LastTradePriceOnly - stockData.Change;
-		//			var changePercentage = stockData.Change / yesterdayClose;
-		//			stockData.ChangePercentage = changePercentage;
-		//			
-		//			$scope.stockQuotes[i].liveData = stockData;
-		//		}
-		//	});
-		//};
-		//getCurrentData();
-
-
-
 
 		var getCurrentDataWithDetails = function() {
 			var promise = stockService.getCurrentDataWithDetails(allYahooSymbols);
@@ -164,7 +136,7 @@ angular.module('stockWatcher.Controllers')
 		};
 		
 		$scope.destroyRefresher = function() {
-			if (angular.isDefined(refresher)) {
+			if (typeof refresher !== 'undefined') {
 				$interval.cancel(refresher);
 				refresher = undefined;
 			}
@@ -181,12 +153,4 @@ angular.module('stockWatcher.Controllers')
 			// Make sure that the "refresher" $interval is destroyed:
 			$scope.destroyRefresher();
         });
-
-
-
-
-
-
-		$scope.sortOrder = 'index';
-		$scope.sortReversed = false;
 	}]);

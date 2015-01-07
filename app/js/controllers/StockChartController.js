@@ -246,7 +246,7 @@ angular.module('stockWatcher.Controllers')
 			return $interval(function() {
 				fetchPreviousDayClosePrice();
 			}, $scope.refreshInterval*1000);
-		}
+		};
 		
 		$scope.destroyRefresher = function() {
 			// Cancel "refresher":
@@ -266,8 +266,6 @@ angular.module('stockWatcher.Controllers')
 			$scope.destroyRefresher();
 			$scope.createRefresher();
 		};
-
-
 
 		$scope.refresher = $scope.createRefresher();
 		$scope.previousCloseRefresher = $scope.createPreviousCloseRefresher();
