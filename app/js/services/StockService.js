@@ -1,7 +1,10 @@
 'use strict';
 
 angular.module('stockWatcher.Services')
-	.factory('stockService', ['$q', '$http', function($q, $http) {
+	.factory('stockService', ['$q', '$http', '$timeout', function($q, $http, $timeout) {
+		// Delay before assuming that the request failed due to a timeout (in ms):
+		var requestTimeoutDelay = 5000;
+
 		// See note about known Yahoo! Finance API bugs:
 		// https://developer.yahoo.com/forum/General-Discussion-at-YDN/Stock-Quote-API-returning-commas-in/1234765072000-6036c128-a7e0-3aa5-9e72-1af1871e1b41/
 		var yahooAPITags = [
@@ -113,16 +116,20 @@ angular.module('stockWatcher.Services')
 			var format = '&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&callback=JSON_CALLBACK';
 			var url = 'http://query.yahooapis.com/v1/public/yql?q=' + encodeURIComponent(query) + format;
 			
-			$http.jsonp(url).success(function(json) {
-				var quotes = [];
-				
-				if (json.query.count > 0) {
-					// TODO: Filter & format quotes:
-					quotes = json.query.results.quote;
-				}
-				
-				deferred.resolve(quotes);
-			});
+			$http.jsonp(url)
+				.success(function (data) {
+					var quotes = [];
+					
+					if (data.query.count > 0) {
+						// TODO: Filter & format quotes:
+						quotes = data.query.results.quote;
+					}
+					
+					deferred.resolve(quotes);
+				})
+				.error(function (data) {
+					deferred.reject(data);
+				});
 			
 			return deferred.promise;
 		};
@@ -146,16 +153,20 @@ angular.module('stockWatcher.Services')
 			var format = '&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&callback=JSON_CALLBACK';
 			var url = 'http://query.yahooapis.com/v1/public/yql?q=' + encodeURIComponent(query) + format;
 			
-			$http.jsonp(url).success(function(json) {
-				var quotes = [];
-				
-				if (json.query.count > 0) {
-					// TODO: Filter & format quotes:
-					quotes = json.query.results.quote;
-				}
-				
-				deferred.resolve(quotes);
-			});
+			$http.jsonp(url)
+				.success(function (data) {
+					var quotes = [];
+					
+					if (data.query.count > 0) {
+						// TODO: Filter & format quotes:
+						quotes = data.query.results.quote;
+					}
+					
+					deferred.resolve(quotes);
+				})
+				.error(function (data) {
+					deferred.reject(data);
+				});
 			
 			return deferred.promise;
 		};
@@ -184,22 +195,26 @@ angular.module('stockWatcher.Services')
 			var format = '&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&callback=JSON_CALLBACK';
 			var url = 'http://query.yahooapis.com/v1/public/yql?q=' + encodeURIComponent(query) + format;
 			
-			$http.jsonp(url).success(function(csv) {
-				//console.log(csv);
-				/*
-				var data = {};
-				for (var i = yahooAPITags.length - 1; i >= 0; i--) {
-					var columnName = yahooAPITags[i][1];
-					var columnValue = csv.query.results.row['col' + (i+3)];
+			$http.jsonp(url)
+				.success(function (data) {
+					//console.log(data);
+					/*
+					var data = {};
+					for (var i = yahooAPITags.length - 1; i >= 0; i--) {
+						var columnName = yahooAPITags[i][1];
+						var columnValue = data.query.results.row['col' + (i+3)];
 
-					data[columnName] = columnValue;
-				}
+						data[columnName] = columnValue;
+					}
 
-				console.log(data);
-				*/
+					console.log(data);
+					*/
 
-				deferred.resolve(csv);
-			});
+					deferred.resolve(data);
+				})
+				.error(function (data) {
+					deferred.reject(data);
+				});
 
 			return deferred.promise;
 		};
@@ -214,6 +229,9 @@ angular.module('stockWatcher.Services')
 		 */
 		var getLiveData = function(symbol, exchange, interval, period) {
 			var deferred = $q.defer();
+			var timeoutPromise = $q.defer();
+			var requestTimedOut = false;
+			var timeoutCountdown = undefined;
 			
 			var maxTimestamp = 0;
 			
@@ -234,45 +252,82 @@ angular.module('stockWatcher.Services')
 			//    "i" is the interval
 			//    "p" is the period
 
-			$http.jsonp(yqlURL).success(function(data) {
-				var quotes = [];
-				var now = new Date();
-				
-				var process = data.query.results !== null && data.query.results.row.length >= 7; // TODO: Some results do not have a "TIMEZONE_OFFSET=" line, parse data until "DATA=" line is found...
-				if (data.query && data.query.count > 0 && process) {
-					var timezoneOffset = 0;
-					if (data.query.results.row[6]) {
-						timezoneOffset = parseInt(data.query.results.row[6].col0.replace('TIMEZONE_OFFSET=', ''), 10); // in minutes
-					}
+			$http.jsonp(yqlURL, { timeout: timeoutPromise.promise })
+				.success(function (data) {
+					var quotes = [];
+					var now = new Date();
 					
-					var startTimestamp = parseInt(data.query.results.row[7].col0.replace('a', ''), 10) + timezoneOffset * 60;
-					var offset = 0;
-					
-					var chartNeedsRedraw = false;
-					for (var i = 7; i < data.query.count; i++) {
-						if (data.query.results.row[i].col0[0] === 'a') {
-							startTimestamp = parseInt(data.query.results.row[i].col0.replace('a', ''), 10) + timezoneOffset * 60;
-							offset = 0;
-						} else {
-							offset = parseInt(data.query.results.row[i].col0, 10);
+					var process = data.query.results !== null && data.query.results.row.length >= 7; // TODO: Some results do not have a "TIMEZONE_OFFSET=" line, parse data until "DATA=" line is found...
+					if (data.query && data.query.count > 0 && process) {
+						var timezoneOffset = 0;
+						if (data.query.results.row[6]) {
+							timezoneOffset = parseInt(data.query.results.row[6].col0.replace('TIMEZONE_OFFSET=', ''), 10); // in minutes
 						}
-						//var date = new Date(startTimestamp + offset * interval).getTime()*1000;
-						var date = new Date((startTimestamp + offset * interval + now.getTimezoneOffset() * 60)*1000);
 						
-						if (date > maxTimestamp) {
-							var close = parseFloat(data.query.results.row[i].col1, 10);
-							var dataRow = [date, close];
+						var startTimestamp = parseInt(data.query.results.row[7].col0.replace('a', ''), 10) + timezoneOffset * 60;
+						var offset = 0;
+						
+						var chartNeedsRedraw = false;
+						for (var i = 7; i < data.query.count; i++) {
+							if (data.query.results.row[i].col0[0] === 'a') {
+								startTimestamp = parseInt(data.query.results.row[i].col0.replace('a', ''), 10) + timezoneOffset * 60;
+								offset = 0;
+							} else {
+								offset = parseInt(data.query.results.row[i].col0, 10);
+							}
+							//var date = new Date(startTimestamp + offset * interval).getTime()*1000;
+							var date = new Date((startTimestamp + offset * interval + now.getTimezoneOffset() * 60)*1000);
 							
-							maxTimestamp = date;
-							
-							quotes.push(dataRow);
+							if (date > maxTimestamp) {
+								var close = parseFloat(data.query.results.row[i].col1, 10);
+								var dataRow = [date, close];
+								
+								maxTimestamp = date;
+								
+								quotes.push(dataRow);
+							}
 						}
 					}
-				}
-				
-				deferred.resolve(quotes);
-			});
+
+
+					// Fail the request, as no data has been received:
+					if (quotes.length === 0) {
+						deferred.reject({
+							error: 'no data',
+							message: 'Did not receive data'
+						});
+					}
+					
+
+					// Cancel the "timeout" $timeout:
+					$timeout.cancel(timeoutCountdown);
+					// Cancel the "timeout" Promise:
+					timeoutPromise.reject();
+
+					
+					// Resolve the Promise with data:
+					deferred.resolve(quotes);
+				})
+				.error(function (data) {
+					if (requestTimedOut) {
+						deferred.reject({
+							error: 'timeout',
+							message: 'Request took longer than ' + requestTimeoutDelay + 'ms',
+							data: data
+						});
+					} else {
+						deferred.reject(data);
+					}
+				});
+
+
+			// Start a $timeout which, if resolved, will fail the $http request sent (and assume a timeout):
+			timeoutCountdown = $timeout(function() {
+				requestTimedOut = true;
+				timeoutPromise.resolve();
+			}, requestTimeoutDelay);
 			
+
 			return deferred.promise;
 		};
 

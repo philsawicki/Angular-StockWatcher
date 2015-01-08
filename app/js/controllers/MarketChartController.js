@@ -270,11 +270,17 @@ angular.module('stockWatcher.Controllers')
 			for (var i = 0, nbMarketSymbols = marketData.length; i < nbMarketSymbols; i++) {
 				var marketSymbol = marketData[i].symbol;
 
+				console.log('MarketChartController::initGraph() sent data request for index #' + i + ': "' + marketData[i].name + '"');
+
 				var promise = stockService.getLiveMarketData(marketSymbol, interval, period);
 				promise.then(
 					// Must wrap the Promise callback into a closure in order to pass the serie's index:
 					(function (index) {
 						return function (data) {
+							seriesCount++;
+
+							console.log('for #' + index + ', got', data.length);
+
 							if (data && data.length > 0) {
 								console.log('MarketChartController::initGraph() received data for index #' + index + ': "' + marketData[index].name + '"');
 								
@@ -283,11 +289,28 @@ angular.module('stockWatcher.Controllers')
 								// Set the "maxTimestamp" to the last timestamp of the array:
 								//marketData[index].maxTimestamp = data[data.length-1][0];
 
-								seriesCount++;
 								if (seriesCount === nbMarketSymbols) {
 									console.log('MarketChartController::initGraph() received all expected data. Creating graph...');
 									// Received all Market data, graph is now ready to be drawn:
 									createGraph();
+								}
+							}
+						};
+					})(i), 
+
+					// Must wrap the Promise callback into a closure in order to pass the serie's index:
+					(function (index) {
+						return function (reason) {
+							seriesCount++;
+							
+							console.error('Error while receiving data for serie #' + index, reason);
+
+							if (reason && reason.error) {
+								if (reason.error === 'no data') {
+									// TODO: Fix this is sub-optimal behavior when not all data is received:
+									if (seriesCount === nbMarketSymbols) {
+										createGraph();
+									}
 								}
 							}
 						};
@@ -311,13 +334,15 @@ angular.module('stockWatcher.Controllers')
 			for (var i = 0, nbMarketSymbols = marketData.length; i < nbMarketSymbols; i++) {
 				var marketSymbol = marketData[i].symbol;
 
+				console.log('MarketChartController::updateGraph() sent data request for index #' + i + ': "' + marketData[i].name + '"');
+								
 				var promise = stockService.getLiveMarketData(marketSymbol, interval, period);
 				promise.then(
 					// Must wrap the Promise callback into a closure in order to pass the serie's index:
 					(function (index) {
 						return function (data) {
 							//console.log('Updating graph for "' + symbol + '"');
-							
+
 							if (data && data.length > 0) {
 								console.log('MarketChartController::updateGraph() received data for index #' + index + ': "' + marketData[index].name + '"');
 								setGraphData(index, data);
@@ -327,7 +352,9 @@ angular.module('stockWatcher.Controllers')
 							}
 						};
 					})(i)
-				);
+				, function (reason) {
+					console.error(reason);
+				});
 			}
 		}
 
