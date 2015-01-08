@@ -3,7 +3,7 @@
 angular.module('stockWatcher.Services')
 	.factory('stockService', ['$q', '$http', '$timeout', function($q, $http, $timeout) {
 		// Delay before assuming that the request failed due to a timeout (in ms):
-		var requestTimeoutDelay = 5000;
+		var requestTimeoutDelay = 10*1000;
 
 		// See note about known Yahoo! Finance API bugs:
 		// https://developer.yahoo.com/forum/General-Discussion-at-YDN/Stock-Quote-API-returning-commas-in/1234765072000-6036c128-a7e0-3aa5-9e72-1af1871e1b41/
@@ -111,12 +111,15 @@ angular.module('stockWatcher.Services')
 		 */
 		var getHistoricalData = function(symbol, startDate, endDate) {
 			var deferred = $q.defer();
+			var timeoutPromise = $q.defer();
+			var requestTimedOut = false;
+			var timeoutCountdown = undefined;
 			
 			var query = 'select * from yahoo.finance.historicaldata where symbol = "' + symbol + '" and startDate = "' + startDate + '" and endDate = "' + endDate + '"';
 			var format = '&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&callback=JSON_CALLBACK';
 			var url = 'http://query.yahooapis.com/v1/public/yql?q=' + encodeURIComponent(query) + format;
 			
-			$http.jsonp(url)
+			$http.jsonp(url, { timeout: timeoutPromise.promise })
 				.success(function (data) {
 					var quotes = [];
 					
@@ -124,13 +127,44 @@ angular.module('stockWatcher.Services')
 						// TODO: Filter & format quotes:
 						quotes = data.query.results.quote;
 					}
+
+					// Fail the request, as no data has been received:
+					if (data.query.count === 0) {
+						deferred.reject({
+							error: 'no data',
+							message: 'Did not receive data'
+						});
+					}
 					
+
+					// Cancel the "timeout" $timeout:
+					$timeout.cancel(timeoutCountdown);
+					// Cancel the "timeout" Promise:
+					timeoutPromise.reject();
+
+					
+					// Resolve the Promise with data:
 					deferred.resolve(quotes);
 				})
 				.error(function (data) {
-					deferred.reject(data);
+					if (requestTimedOut) {
+						deferred.reject({
+							error: 'timeout',
+							message: 'Request took longer than ' + requestTimeoutDelay + 'ms',
+							data: data
+						});
+					} else {
+						deferred.reject(data);
+					}
 				});
-			
+
+
+			// Start a $timeout which, if resolved, will fail the $http request sent (and assume a timeout):
+			timeoutCountdown = $timeout(function() {
+				requestTimedOut = true;
+				timeoutPromise.resolve();
+			}, requestTimeoutDelay);
+
 			return deferred.promise;
 		};
 		
@@ -141,6 +175,9 @@ angular.module('stockWatcher.Services')
 		 */
 		var getCurrentData = function(symbols) {
 			var deferred = $q.defer();
+			var timeoutPromise = $q.defer();
+			var requestTimedOut = false;
+			var timeoutCountdown = undefined;
 			
 			// Proper URL:
 			// https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20yahoo.finance.quote%20where%20symbol%20in%20(%22YHOO%22%2C%22AAPL%22%2C%22GOOG%22%2C%22MSFT%22)&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&callback=
@@ -153,7 +190,7 @@ angular.module('stockWatcher.Services')
 			var format = '&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&callback=JSON_CALLBACK';
 			var url = 'http://query.yahooapis.com/v1/public/yql?q=' + encodeURIComponent(query) + format;
 			
-			$http.jsonp(url)
+			$http.jsonp(url, { timeout: timeoutPromise.promise })
 				.success(function (data) {
 					var quotes = [];
 					
@@ -161,13 +198,44 @@ angular.module('stockWatcher.Services')
 						// TODO: Filter & format quotes:
 						quotes = data.query.results.quote;
 					}
+
+					// Fail the request, as no data has been received:
+					if (data.query.count === 0) {
+						deferred.reject({
+							error: 'no data',
+							message: 'Did not receive data'
+						});
+					}
 					
+
+					// Cancel the "timeout" $timeout:
+					$timeout.cancel(timeoutCountdown);
+					// Cancel the "timeout" Promise:
+					timeoutPromise.reject();
+
+					
+					// Resolve the Promise with data:
 					deferred.resolve(quotes);
 				})
 				.error(function (data) {
-					deferred.reject(data);
+					if (requestTimedOut) {
+						deferred.reject({
+							error: 'timeout',
+							message: 'Request took longer than ' + requestTimeoutDelay + 'ms',
+							data: data
+						});
+					} else {
+						deferred.reject(data);
+					}
 				});
-			
+
+
+			// Start a $timeout which, if resolved, will fail the $http request sent (and assume a timeout):
+			timeoutCountdown = $timeout(function() {
+				requestTimedOut = true;
+				timeoutPromise.resolve();
+			}, requestTimeoutDelay);
+
 			return deferred.promise;
 		};
 
@@ -178,6 +246,9 @@ angular.module('stockWatcher.Services')
 		 */
 		var getCurrentDataWithDetails = function(symbols) {
 			var deferred = $q.defer();
+			var timeoutPromise = $q.defer();
+			var requestTimedOut = false;
+			var timeoutCountdown = undefined;
 
 			var formattedSymbols = symbols.join(',');
 			var formattedYahooAPITags = [];
@@ -195,7 +266,7 @@ angular.module('stockWatcher.Services')
 			var format = '&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&callback=JSON_CALLBACK';
 			var url = 'http://query.yahooapis.com/v1/public/yql?q=' + encodeURIComponent(query) + format;
 			
-			$http.jsonp(url)
+			$http.jsonp(url, { timeout: timeoutPromise.promise })
 				.success(function (data) {
 					//console.log(data);
 					/*
@@ -210,11 +281,44 @@ angular.module('stockWatcher.Services')
 					console.log(data);
 					*/
 
+
+
+					// Fail the request, as no data has been received:
+					if (data.query.count === 0) {
+						deferred.reject({
+							error: 'no data',
+							message: 'Did not receive data'
+						});
+					}
+					
+
+					// Cancel the "timeout" $timeout:
+					$timeout.cancel(timeoutCountdown);
+					// Cancel the "timeout" Promise:
+					timeoutPromise.reject();
+
+					
+					// Resolve the Promise with data:
 					deferred.resolve(data);
 				})
 				.error(function (data) {
-					deferred.reject(data);
+					if (requestTimedOut) {
+						deferred.reject({
+							error: 'timeout',
+							message: 'Request took longer than ' + requestTimeoutDelay + 'ms',
+							data: data
+						});
+					} else {
+						deferred.reject(data);
+					}
 				});
+
+
+			// Start a $timeout which, if resolved, will fail the $http request sent (and assume a timeout):
+			timeoutCountdown = $timeout(function() {
+				requestTimedOut = true;
+				timeoutPromise.resolve();
+			}, requestTimeoutDelay);
 
 			return deferred.promise;
 		};
@@ -304,7 +408,7 @@ angular.module('stockWatcher.Services')
 					// Cancel the "timeout" Promise:
 					timeoutPromise.reject();
 
-					
+
 					// Resolve the Promise with data:
 					deferred.resolve(quotes);
 				})
