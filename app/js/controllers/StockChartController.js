@@ -1,8 +1,10 @@
 'use strict';
 
-/* Stock Chart Controller */
+/**
+ * Stock Chart Controller
+ */
 angular.module('stockWatcher.Controllers')
-	.controller('StockChartController', ['$scope', '$interval', '$timeout', 'stockService', function($scope, $interval, $timeout, stockService) {
+	.controller('StockChartController', ['$scope', '$interval', '$timeout', 'stockService', function ($scope, $interval, $timeout, stockService) {
 		// Set the default refresh interval for the table:
 		$scope.refreshInterval = 60;
 		
@@ -33,18 +35,26 @@ angular.module('stockWatcher.Controllers')
 			var symbols = [$scope.symbol];
 
 			var promise = stockService.getCurrentDataWithDetails(symbols);
-			promise.then(function(data) {
-				if (data.query.count > 0) {
-					var updatedClosePrice = data.query.results.row.PreviousClose;
+			promise.then(
+				function (data) {
+					if (data.query.count > 0) {
+						var updatedClosePrice = data.query.results.row.PreviousClose;
 
-					// Prevent unnecessary redrawing of "Previous Close" Trendline:
-					if (updatedClosePrice !== $scope.yesterdayClosePrice) {
-						$scope.yesterdayClosePrice = updatedClosePrice;
+						// Prevent unnecessary redrawing of "Previous Close" Trendline:
+						if (updatedClosePrice !== $scope.yesterdayClosePrice) {
+							$scope.yesterdayClosePrice = updatedClosePrice;
 
-						drawOpenPlotLine();
+							drawOpenPlotLine();
+						}
 					}
+				},
+				function (reason) {
+					console.error(reason);
+
+					// If an error was detected, try fetching the data once again:
+					fetchPreviousDayClosePrice();
 				}
-			});
+			);
 		};
 		fetchPreviousDayClosePrice();
 
@@ -162,18 +172,26 @@ angular.module('stockWatcher.Controllers')
 		
 		var initGraph = function() {
 			var promise = stockService.getLiveData(symbol, exchange, interval, period);
-			promise.then(function(data) {
-				if (data && data.length > 0) {
-					// Hide the "Loading..." message overlayed on top of the chart:
-					$scope.chart.hideLoading();
+			promise.then(
+				function (data) {
+					if (data && data.length > 0) {
+						// Hide the "Loading..." message overlayed on top of the chart:
+						$scope.chart.hideLoading();
 
-					// Recreate the chart with the new data:
-					createGraph(data);
-				} else {
-					console.warn('"' + symbol + '" init did not receive data, refreshing it.');
-					$scope.initGraphPromise = $timeout(initGraph, 1000);
+						// Recreate the chart with the new data:
+						createGraph(data);
+					} else {
+						console.warn('"' + symbol + '" init did not receive data, refreshing it.');
+						$scope.initGraphPromise = $timeout(initGraph, 1000);
+					}
+				},
+				function (reason) {
+					console.error(reason);
+
+					// If an error was detected, try fetching the data once again:
+					initGraph();
 				}
-			});
+			);
 		};
 		//initGraph();
 
@@ -183,16 +201,24 @@ angular.module('stockWatcher.Controllers')
 		 */
 		$scope.updateGraph = function() {
 			var promise = stockService.getLiveData(symbol, exchange, interval, period);
-			promise.then(function(data) {
-				//console.log('Updating graph for "' + symbol + '"');
-				
-				if (data && data.length > 0) {
-					setGraphData(data);
-				} else {
-					console.warn('"' + symbol + '" update did not receive data, refreshing it.');
-					$scope.updateGraphPromise = $timeout($scope.updateGraph, 1000);
+			promise.then(
+				function (data) {
+					//console.log('Updating graph for "' + symbol + '"');
+					
+					if (data && data.length > 0) {
+						setGraphData(data);
+					} else {
+						console.warn('"' + symbol + '" update did not receive data, refreshing it.');
+						$scope.updateGraphPromise = $timeout($scope.updateGraph, 1000);
+					}
+				},
+				function (reason) {
+					console.error(reason);
+
+					// If an error was detected, try fetching the data once again:
+					$scope.updateGraph();
 				}
-			});
+			);
 		}
 
 		var setGraphData = function(data) {
