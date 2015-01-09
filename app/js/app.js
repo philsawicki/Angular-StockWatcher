@@ -7,6 +7,8 @@ angular.module('stockWatcher.Controllers', []);
 angular.module('stockWatcher.Directives', []);
 // Declare "Filters" module for the app:
 angular.module('stockWatcher.Filters', []);
+// Declare "Providers" module for the app:
+angular.module('stockWatcher.Providers', []);
 // Declare "Services" module for the app:
 angular.module('stockWatcher.Services', []);
 
@@ -18,9 +20,12 @@ angular.module('stockWatcher', [
 	'stockWatcher.Controllers',
 	'stockWatcher.Directives',
 	'stockWatcher.Services',
+	'stockWatcher.Providers',
 	'stockWatcher.Filters'
 ])
-	.config(['$routeProvider', function($routeProvider) {
+	
+	// Setup the application routes:
+	.config(['$routeProvider', function ($routeProvider) {
 		$routeProvider
 			.when('/', {
 				templateUrl: 'views/home-page.html',
@@ -42,9 +47,25 @@ angular.module('stockWatcher', [
 				redirectTo: '/'
 			});
 	}])
+
+	// Create a "String.format()"-like function for formatting purposes:
+	.config(function() {
+		if (!String.prototype.format) {
+			String.prototype.format = function() {
+				var args = arguments;
+				return this.replace(/{(\d+)}/g, function (match, number) {
+					return typeof args[number] != 'undefined'
+						? args[number]
+						: match
+					;
+				});
+			};
+		}
+	})
+
 	// Check online/offline status of the application
 	// (From: http://stackoverflow.com/questions/16242389/how-to-check-internet-connection-in-angularjs)
-	.run(['$window', '$rootScope', function($window, $rootScope) {
+	.run(['$window', '$rootScope', function ($window, $rootScope) {
 		// If "navigator.onLine" is not found, assume that the app is online:
 		var applicationIsOnline = true;
 		if (navigator && navigator.onLine) {
@@ -81,7 +102,7 @@ angular.module('stockWatcher', [
 	}])
 	// Disable "UTC" time for Highcharts
 	// See: http://api.highcharts.com/highcharts#global.useUTC
-	.run(['$window', '$rootScope', function($window, $rootScope) {
+	.run(['$window', '$rootScope', function ($window, $rootScope) {
 		if (typeof Highcharts !== 'undefined') {
 			Highcharts.setOptions({
 				global: {

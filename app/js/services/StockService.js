@@ -1,10 +1,8 @@
 'use strict';
 
 angular.module('stockWatcher.Services')
-	.factory('stockService', ['$q', '$http', '$timeout', function($q, $http, $timeout) {
-		// Delay before assuming that the request failed due to a timeout (in ms):
-		var requestTimeoutDelay = 10*1000;
-
+	.factory('stockService', ['$q', '$http', '$timeout', 'appConfig', 'errorMessages', 
+		function($q, $http, $timeout, appConfig, errorMessages) {
 		// See note about known Yahoo! Finance API bugs:
 		// https://developer.yahoo.com/forum/General-Discussion-at-YDN/Stock-Quote-API-returning-commas-in/1234765072000-6036c128-a7e0-3aa5-9e72-1af1871e1b41/
 		var yahooAPITags = [
@@ -131,8 +129,8 @@ angular.module('stockWatcher.Services')
 					// Fail the request, as no data has been received:
 					if (data.query.count === 0) {
 						deferred.reject({
-							error: 'no data',
-							message: 'Did not receive data'
+							error: errorMessages.NoData.Error,
+							message: errorMessages.NoData.Message
 						});
 					}
 					
@@ -149,8 +147,8 @@ angular.module('stockWatcher.Services')
 				.error(function (data) {
 					if (requestTimedOut) {
 						deferred.reject({
-							error: 'timeout',
-							message: 'Request took longer than ' + requestTimeoutDelay + 'ms',
+							error: errorMessages.Timeout.Error,
+							message: errorMessages.Timeout.Message.format(appConfig.JSONPTimeout),
 							data: data
 						});
 					} else {
@@ -163,7 +161,7 @@ angular.module('stockWatcher.Services')
 			timeoutCountdown = $timeout(function() {
 				requestTimedOut = true;
 				timeoutPromise.resolve();
-			}, requestTimeoutDelay);
+			}, appConfig.JSONPTimeout);
 
 			return deferred.promise;
 		};
@@ -202,8 +200,8 @@ angular.module('stockWatcher.Services')
 					// Fail the request, as no data has been received:
 					if (data.query.count === 0) {
 						deferred.reject({
-							error: 'no data',
-							message: 'Did not receive data'
+							error: errorMessages.NoData.Error,
+							message: errorMessages.NoData.Message
 						});
 					}
 					
@@ -220,8 +218,8 @@ angular.module('stockWatcher.Services')
 				.error(function (data) {
 					if (requestTimedOut) {
 						deferred.reject({
-							error: 'timeout',
-							message: 'Request took longer than ' + requestTimeoutDelay + 'ms',
+							error: errorMessages.Timeout.Error,
+							message: errorMessages.Timeout.Message.format(appConfig.JSONPTimeout),
 							data: data
 						});
 					} else {
@@ -234,7 +232,7 @@ angular.module('stockWatcher.Services')
 			timeoutCountdown = $timeout(function() {
 				requestTimedOut = true;
 				timeoutPromise.resolve();
-			}, requestTimeoutDelay);
+			}, appConfig.JSONPTimeout);
 
 			return deferred.promise;
 		};
@@ -286,8 +284,8 @@ angular.module('stockWatcher.Services')
 					// Fail the request, as no data has been received:
 					if (data.query.count === 0) {
 						deferred.reject({
-							error: 'no data',
-							message: 'Did not receive data'
+							error: errorMessages.NoData.Error,
+							message: errorMessages.NoData.Message
 						});
 					}
 					
@@ -304,8 +302,8 @@ angular.module('stockWatcher.Services')
 				.error(function (data) {
 					if (requestTimedOut) {
 						deferred.reject({
-							error: 'timeout',
-							message: 'Request took longer than ' + requestTimeoutDelay + 'ms',
+							error: errorMessages.Timeout.Error,
+							message: errorMessages.Timeout.Message.format(appConfig.JSONPTimeout),
 							data: data
 						});
 					} else {
@@ -318,7 +316,7 @@ angular.module('stockWatcher.Services')
 			timeoutCountdown = $timeout(function() {
 				requestTimedOut = true;
 				timeoutPromise.resolve();
-			}, requestTimeoutDelay);
+			}, appConfig.JSONPTimeout);
 
 			return deferred.promise;
 		};
@@ -397,8 +395,8 @@ angular.module('stockWatcher.Services')
 					// Fail the request, as no data has been received:
 					if (quotes.length === 0) {
 						deferred.reject({
-							error: 'no data',
-							message: 'Did not receive data'
+							error: errorMessages.NoData.Error,
+							message: errorMessages.NoData.Message
 						});
 					}
 					
@@ -415,8 +413,8 @@ angular.module('stockWatcher.Services')
 				.error(function (data) {
 					if (requestTimedOut) {
 						deferred.reject({
-							error: 'timeout',
-							message: 'Request took longer than ' + requestTimeoutDelay + 'ms',
+							error: errorMessages.Timeout.Error,
+							message: errorMessages.Timeout.Message.format(appConfig.JSONPTimeout),
 							data: data
 						});
 					} else {
@@ -429,7 +427,7 @@ angular.module('stockWatcher.Services')
 			timeoutCountdown = $timeout(function() {
 				requestTimedOut = true;
 				timeoutPromise.resolve();
-			}, requestTimeoutDelay);
+			}, appConfig.JSONPTimeout);
 			
 
 			return deferred.promise;

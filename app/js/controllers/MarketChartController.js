@@ -1,8 +1,12 @@
 'use strict';
 
-/* Market Chart Controller */
+/**
+ * Market Chart Controller
+ */
 angular.module('stockWatcher.Controllers')
-	.controller('MarketChartController', ['$scope', '$interval', 'stockService', function ($scope, $interval, stockService) {
+	.controller('MarketChartController', ['$scope', '$interval', 'stockService', 'errorMessages', 
+		function ($scope, $interval, stockService, errorMessages) {
+
 		// Set the default refresh interval for the table:
 		$scope.refreshInterval = 60;
 
@@ -306,7 +310,7 @@ angular.module('stockWatcher.Controllers')
 							console.error('Error while receiving data for serie #' + index, reason);
 
 							if (reason && reason.error) {
-								if (reason.error === 'no data') {
+								if (reason.error === errorMessages.NoData.Error) {
 									// TODO: Fix this is sub-optimal behavior when not all data is received:
 									if (seriesCount === nbMarketSymbols) {
 										createGraph();

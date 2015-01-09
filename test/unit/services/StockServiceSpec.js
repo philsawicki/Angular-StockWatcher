@@ -6,7 +6,8 @@
 describe('StockService', function() {
 	var $q,
 	    $httpBackend,
-	    stockService;
+	    stockService,
+	    errorMessages;
 
 	var constants = {
 		symbol: 'PG',
@@ -512,6 +513,7 @@ describe('StockService', function() {
 		$q = $injector.get('$q');
 		$httpBackend = $injector.get('$httpBackend');
 		stockService = $injector.get('stockService');
+		errorMessages = $injector.get('errorMessages');
 
 		// Setup expected backend responses:
 		//$httpBackend
@@ -571,8 +573,8 @@ describe('StockService', function() {
 			expect(errorCallbackFired).toBeTruthy();
 			expect(errorCallbackReason).toBeDefined();
 			expect(errorCallbackReason).toEqual({
-				error: 'no data',
-				message: 'Did not receive data'
+				error: errorMessages.NoData.Error,
+				message: errorMessages.NoData.Message
 			});
 		});
 	});
@@ -625,8 +627,8 @@ describe('StockService', function() {
 			expect(errorCallbackFired).toBeTruthy();
 			expect(errorCallbackReason).toBeDefined();
 			expect(errorCallbackReason).toEqual({
-				error: 'no data',
-				message: 'Did not receive data'
+				error: errorMessages.NoData.Error,
+				message: errorMessages.NoData.Message
 			});
 		});
 	});
@@ -679,8 +681,8 @@ describe('StockService', function() {
 			expect(errorCallbackFired).toBeTruthy();
 			expect(errorCallbackReason).toBeDefined();
 			expect(errorCallbackReason).toEqual({
-				error: 'no data',
-				message: 'Did not receive data'
+				error: errorMessages.NoData.Error,
+				message: errorMessages.NoData.Message
 			});
 		});
 	});
@@ -733,8 +735,8 @@ describe('StockService', function() {
 			expect(errorCallbackFired).toBeTruthy();
 			expect(errorCallbackReason).toBeDefined();
 			expect(errorCallbackReason).toEqual({
-				error: 'no data',
-				message: 'Did not receive data'
+				error: errorMessages.NoData.Error,
+				message: errorMessages.NoData.Message
 			});
 		});
 	});
@@ -787,8 +789,8 @@ describe('StockService', function() {
 			expect(errorCallbackFired).toBeTruthy();
 			expect(errorCallbackReason).toBeDefined();
 			expect(errorCallbackReason).toEqual({
-				error: 'no data',
-				message: 'Did not receive data'
+				error: errorMessages.NoData.Error,
+				message: errorMessages.NoData.Message
 			});
 		});
 	});

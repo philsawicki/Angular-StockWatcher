@@ -4,7 +4,9 @@
  * Stock Chart Controller
  */
 angular.module('stockWatcher.Controllers')
-	.controller('StockChartController', ['$scope', '$interval', '$timeout', 'stockService', function ($scope, $interval, $timeout, stockService) {
+	.controller('StockChartController', ['$scope', '$interval', '$timeout', 'stockService', 'errorMessages',
+		function ($scope, $interval, $timeout, stockService, errorMessages) {
+
 		// Set the default refresh interval for the table:
 		$scope.refreshInterval = 60;
 		
@@ -49,10 +51,12 @@ angular.module('stockWatcher.Controllers')
 					}
 				},
 				function (reason) {
-					console.error(reason);
-
 					// If an error was detected, try fetching the data once again:
 					fetchPreviousDayClosePrice();
+
+					if (reason.error !== errorMessages.NoData.Error) {
+						console.error(reason);
+					}
 				}
 			);
 		};
@@ -186,10 +190,12 @@ angular.module('stockWatcher.Controllers')
 					}
 				},
 				function (reason) {
-					console.error(reason);
-
 					// If an error was detected, try fetching the data once again:
 					initGraph();
+
+					if (reason.error !== errorMessages.NoData.Error) {
+						console.error(reason);
+					}
 				}
 			);
 		};
@@ -213,10 +219,12 @@ angular.module('stockWatcher.Controllers')
 					}
 				},
 				function (reason) {
-					console.error(reason);
-
 					// If an error was detected, try fetching the data once again:
 					$scope.updateGraph();
+
+					if (reason.error !== errorMessages.NoData.Error) {
+						console.error(reason);
+					}
 				}
 			);
 		}
