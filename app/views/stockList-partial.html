@@ -74,7 +74,10 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr stock-list-item ng-repeat="quote in stockQuotes | orderBy:sortOrder:sortReversed" quote="quote"></tr>
+				<tr stock-list-item class="animate-repeat" ng-repeat="quote in stockQuotes | orderBy:sortOrder:sortReversed" quote="quote" ng-hide="typeof stockQuotes === 'undefined'"></tr>
+				<tr ng-hide="stockQuotes.length > 0">
+					<td colspan="13" class="text-center"><strong>Loading data...</strong></td>
+				</tr>
 			</tbody>
 		</table>
 	</div>

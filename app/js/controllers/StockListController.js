@@ -14,7 +14,7 @@ angular.module('stockWatcher.Controllers')
 		// Set the default sort direction for the table:
 		$scope.sortReversed = false;
 		
-		$scope.stockQuotes = [
+		$scope.quotesToFetch = [
 			{
 				symbol: 'PG',
 				yahooSymbol: 'PG',
@@ -111,16 +111,18 @@ angular.module('stockWatcher.Controllers')
 
 
 		var allYahooSymbols = [];
-		for (var i = 0, nbStocks = $scope.stockQuotes.length; i < nbStocks; i++) {
-			allYahooSymbols.push($scope.stockQuotes[i].yahooSymbol);
+		for (var i = 0, nbStocks = $scope.quotesToFetch.length; i < nbStocks; i++) {
+			allYahooSymbols.push($scope.quotesToFetch[i].yahooSymbol);
 		}
 
 		var getCurrentDataWithDetails = function() {
 			var promise = stockService.getCurrentDataWithDetails(allYahooSymbols);
 			promise.then(function(data) {
 				for (var i = 0, count = data.query.count; i < count; i++) {
-					$scope.stockQuotes[i].liveData = data.query.results.row[i];
+					$scope.quotesToFetch[i].liveData = data.query.results.row[i];
 				}
+
+				$scope.stockQuotes = $scope.quotesToFetch;
 			});
 		}
 		getCurrentDataWithDetails();

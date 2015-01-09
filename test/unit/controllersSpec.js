@@ -94,8 +94,8 @@ describe('StockListController', function() {
 	it('should have default Portfolio entries', function() {
 		var controller = createController();
 
-		expect($rootScope.stockQuotes).toBeDefined();
-		expect($rootScope.stockQuotes.length).toBe(10);
+		expect($rootScope.quotesToFetch).toBeDefined();
+		expect($rootScope.quotesToFetch.length).toBe(10);
 	});
 
 	//it('should fetch things', function() {
