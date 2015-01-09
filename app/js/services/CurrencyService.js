@@ -1,5 +1,8 @@
 'use strict';
 
+/**
+ * Currency Service
+ */
 angular.module('stockWatcher.Services')
 	.factory('currencyService', ['$q', '$http', function($q, $http) {
 		/**

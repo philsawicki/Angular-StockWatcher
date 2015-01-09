@@ -6,6 +6,8 @@
 describe('StockService', function() {
 	var $q,
 	    $httpBackend,
+	    $timeout,
+	    appConfig,
 	    stockService,
 	    errorMessages;
 
@@ -512,6 +514,8 @@ describe('StockService', function() {
 		// Get objects to test:
 		$q = $injector.get('$q');
 		$httpBackend = $injector.get('$httpBackend');
+		$timeout = $injector.get('$timeout');
+		appConfig = $injector.get('appConfig');
 		stockService = $injector.get('stockService');
 		errorMessages = $injector.get('errorMessages');
 
@@ -536,30 +540,30 @@ describe('StockService', function() {
 				.expectJSONP("http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20yahoo.finance.historicaldata%20where%20symbol%20%3D%20%22" + constants.symbol + "%22%20and%20startDate%20%3D%20%22" + constants.startDate + "%22%20and%20endDate%20%3D%20%22" + constants.endDate + "%22&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&callback=JSON_CALLBACK")
 				.respond(expectedResponses.getHistoricalData);
 
-			var historicalData = undefined;
-			var historicalDataPromise = stockService.getHistoricalData(constants.symbol, constants.startDate, constants.endDate);
-			historicalDataPromise.then(function (data) {
-				historicalData = data;
+			var resultData = undefined;
+			var resultDataPromise = stockService.getHistoricalData(constants.symbol, constants.startDate, constants.endDate);
+			resultDataPromise.then(function (data) {
+				resultData = data;
 			})
 
 			$httpBackend.flush();
 
-			expect(historicalData).toBeDefined();
-			expect(historicalData).toEqual(expectedResponses.getHistoricalData.query.results.quote);
+			expect(resultData).toBeDefined();
+			expect(resultData).toEqual(expectedResponses.getHistoricalData.query.results.quote);
 		});
 
-		it('should return a "no data" Error Promise when receiving empty data array', function() {
+		it('should return a "NoData" Error Promise when receiving empty data array', function() {
 			$httpBackend
 				.expectJSONP("http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20yahoo.finance.historicaldata%20where%20symbol%20%3D%20%22" + constants.symbol + "%22%20and%20startDate%20%3D%20%22" + constants.startDate + "%22%20and%20endDate%20%3D%20%22" + constants.endDate + "%22&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&callback=JSON_CALLBACK")
 				.respond(expectedResponses.getCurrentDataWithDetailsWithoutAnyResults);
 
-			var historicalData = undefined;
+			var resultData = undefined;
 			var errorCallbackFired = false;
 			var errorCallbackReason = undefined;
-			var historicalDataPromise = stockService.getHistoricalData(constants.symbol, constants.startDate, constants.endDate);
-			historicalDataPromise.then(
+			var resultDataPromise = stockService.getHistoricalData(constants.symbol, constants.startDate, constants.endDate);
+			resultDataPromise.then(
 				function (data) {
-					historicalData = data;
+					resultData = data;
 				},
 				function (reason) {
 					errorCallbackFired = true;
@@ -569,12 +573,42 @@ describe('StockService', function() {
 
 			$httpBackend.flush();
 
-			expect(historicalData).toBeUndefined();
+			expect(resultData).toBeUndefined();
 			expect(errorCallbackFired).toBeTruthy();
 			expect(errorCallbackReason).toBeDefined();
 			expect(errorCallbackReason).toEqual({
 				error: errorMessages.NoData.Error,
 				message: errorMessages.NoData.Message
+			});
+		});
+		
+		it('should return a "Timeout" Error Promise when the request takes too long to respond', function() {
+			$httpBackend
+				.expectJSONP("http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20yahoo.finance.historicaldata%20where%20symbol%20%3D%20%22" + constants.symbol + "%22%20and%20startDate%20%3D%20%22" + constants.startDate + "%22%20and%20endDate%20%3D%20%22" + constants.endDate + "%22&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&callback=JSON_CALLBACK")
+				.respond(expectedResponses.getCurrentDataWithDetailsWithoutAnyResults);
+
+			var resultData = undefined;
+			var errorCallbackFired = false;
+			var errorCallbackReason = undefined;
+			var resultDataPromise = stockService.getHistoricalData(constants.symbol, constants.startDate, constants.endDate);
+			resultDataPromise.then(
+				function (data) {
+					resultData = data;
+				},
+				function (reason) {
+					errorCallbackFired = true;
+					errorCallbackReason = reason;
+				}
+			);
+
+			$timeout.flush(appConfig.JSONPTimeout + 1);
+
+			expect(resultData).toBeUndefined();
+			expect(errorCallbackFired).toBeTruthy();
+			expect(errorCallbackReason).toBeDefined();
+			expect(errorCallbackReason).toEqual({
+				error: errorMessages.Timeout.Error,
+				message: errorMessages.Timeout.Message.format(appConfig.JSONPTimeout)
 			});
 		});
 	});
@@ -590,30 +624,30 @@ describe('StockService', function() {
 				.expectJSONP("http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20yahoo.finance.quote%20where%20symbol%20in%20(%22" + constants.symbol + "%22)&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&callback=JSON_CALLBACK")
 				.respond(expectedResponses.getCurrentData);
 
-			var currentData = undefined;
-			var currentDataPromise = stockService.getCurrentData([constants.symbol]);
-			currentDataPromise.then(function (data) {
-				currentData = data;
+			var resultData = undefined;
+			var resultDataPromise = stockService.getCurrentData([constants.symbol]);
+			resultDataPromise.then(function (data) {
+				resultData = data;
 			})
 
 			$httpBackend.flush();
 
-			expect(currentData).toBeDefined();
-			expect(currentData).toEqual(expectedResponses.getCurrentData.query.results.quote);
+			expect(resultData).toBeDefined();
+			expect(resultData).toEqual(expectedResponses.getCurrentData.query.results.quote);
 		});
 
-		it('should return a "no data" Error Promise when receiving empty data array', function() {
+		it('should return a "NoData" Error Promise when receiving empty data array', function() {
 			$httpBackend
 				.expectJSONP("http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20yahoo.finance.quote%20where%20symbol%20in%20(%22" + constants.symbol + "%22)&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&callback=JSON_CALLBACK")
 				.respond(expectedResponses.getCurrentDataWithDetailsWithoutAnyResults);
 
-			var currentData = undefined;
+			var resultData = undefined;
 			var errorCallbackFired = false;
 			var errorCallbackReason = undefined;
-			var currentDataPromise = stockService.getCurrentData([constants.symbol]);
-			currentDataPromise.then(
+			var resultDataPromise = stockService.getCurrentData([constants.symbol]);
+			resultDataPromise.then(
 				function (data) {
-					currentData = data;
+					resultData = data;
 				},
 				function (reason) {
 					errorCallbackFired = true;
@@ -623,12 +657,42 @@ describe('StockService', function() {
 
 			$httpBackend.flush();
 
-			expect(currentData).toBeUndefined();
+			expect(resultData).toBeUndefined();
 			expect(errorCallbackFired).toBeTruthy();
 			expect(errorCallbackReason).toBeDefined();
 			expect(errorCallbackReason).toEqual({
 				error: errorMessages.NoData.Error,
 				message: errorMessages.NoData.Message
+			});
+		});
+		
+		it('should return a "Timeout" Error Promise when the request takes too long to respond', function() {
+			$httpBackend
+				.expectJSONP("http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20yahoo.finance.quote%20where%20symbol%20in%20(%22" + constants.symbol + "%22)&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&callback=JSON_CALLBACK")
+				.respond(expectedResponses.getCurrentDataWithDetailsWithoutAnyResults);
+
+			var resultData = undefined;
+			var errorCallbackFired = false;
+			var errorCallbackReason = undefined;
+			var resultDataPromise = stockService.getCurrentData([constants.symbol]);
+			resultDataPromise.then(
+				function (data) {
+					resultData = data;
+				},
+				function (reason) {
+					errorCallbackFired = true;
+					errorCallbackReason = reason;
+				}
+			);
+
+			$timeout.flush(appConfig.JSONPTimeout + 1);
+
+			expect(resultData).toBeUndefined();
+			expect(errorCallbackFired).toBeTruthy();
+			expect(errorCallbackReason).toBeDefined();
+			expect(errorCallbackReason).toEqual({
+				error: errorMessages.Timeout.Error,
+				message: errorMessages.Timeout.Message.format(appConfig.JSONPTimeout)
 			});
 		});
 	});
@@ -644,30 +708,30 @@ describe('StockService', function() {
 				.expectJSONP("http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20csv%20where%20url%3D'http%3A%2F%2Fdownload.finance.yahoo.com%2Fd%2Fquotes.csv%3Fs%3D" + constants.symbol + "%26f%3Da0a2a5b0b2b3b4b6c0c1c3c4c6c8d0d1d2e0e1e7e8e9h0j0k0g0g1g3g4g5g6i0i5j0j1j3j4j5j6k0k1k2k4k5l0l1l2l3m0m2m3m4m5m6m7m8n0n4o0p0p1p2p5p6q0r0r1r2r5r6r7s0s1s6s7t1t7t8v0v1v7w0w1w4x0y0%26e%3D.csv'%20and%20columns%3D'Ask%2CAverageDailyVolume%2CAskSize%2CBid%2CAskRealTime%2CBidRealTime%2CBookValue%2CBidSize%2CChangeAndPercentChange%2CChange%2CCommission%2CCurrency%2CChangeRealTime%2CAfterHoursChangeRealTime%2CDividendPerShare%2CLastTradeDate%2CTradeDate%2CEarningsPerShare%2CErrorIndication%2CEPSEstimateCurrentYear%2CEPSEstimateNextYear%2CEPSEstimateNextQuarter%2CDaysHigh%2C_52WeekLow%2C_52WeekHigh%2CDaysLow%2CHoldingsGainPercent%2CAnnualizedGain%2CHoldingsGain%2CHoldingsGainPercentRealTime%2CHoldingsGainRealTime%2CMoreInfo%2COrderBookRealTime%2CYearLow%2CMarketCapitalization%2CMarketCapRealTime%2CEBITDA%2CChangeFrom52WeekLow%2CPercentChangeFrom52WeekLow%2CYearHigh%2CLastTradeRealTimeWithTime%2CChangePercentRealTime%2CChangeFrom52WeekHigh%2CPercentChangeFrom52WeekHigh%2CLastTradeWithTime%2CLastTradePriceOnly%2CHighLimit%2CLowLimit%2CDaysRange%2CDaysRangeRealTime%2C_50DayMovingAverage%2C_200DayMovingAverage%2CChangeFrom200DayMovingAverage%2CPercentChangeFrom200DayMovingAverage%2CChangeFrom50DayMovingAverage%2CPercentChangeFrom50DayMovingAverage%2CName%2CNotes%2COpen%2CPreviousClose%2CPricePaid%2CChangeInPercent%2CPricePerSales%2CPricePerBook%2CExDividendDate%2CPERatio%2CDividendPayDate%2CPERatioRealTime%2CPEGRatio%2CPricePerEPSEstimateCurrentYear%2CPricePerEPSEstimateNextYear%2CSymbol%2CSharesOwned%2CRevenue%2CShortRatio%2CLastTradeTime%2CTickerTrend%2C_1YearTargetPrice%2CVolume%2CHoldingsValue%2CHoldingsValueRealTime%2C_52WeekRange%2CDaysValueChange%2CDaysValueChangeRealTime%2CStockExchange%2CDividendYield'&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&callback=JSON_CALLBACK")
 				.respond(expectedResponses.getCurrentDataWithDetails);
 
-			var currentDataWithDetails = undefined;
-			var currentDataWithDetailsPromise = stockService.getCurrentDataWithDetails([constants.symbol]);
-			currentDataWithDetailsPromise.then(function (data) {
-				currentDataWithDetails = data;
+			var resultData = undefined;
+			var resultDataPromise = stockService.getCurrentDataWithDetails([constants.symbol]);
+			resultDataPromise.then(function (data) {
+				resultData = data;
 			});
 
 			$httpBackend.flush();
 
-			expect(currentDataWithDetails).toBeDefined();
-			expect(currentDataWithDetails).toEqual(expectedResponses.getCurrentDataWithDetails);
+			expect(resultData).toBeDefined();
+			expect(resultData).toEqual(expectedResponses.getCurrentDataWithDetails);
 		});
 
-		it('should return a "no data" Error Promise when receiving empty data array', function() {
+		it('should return a "NoData" Error Promise when receiving empty data array', function() {
 			$httpBackend
 				.expectJSONP("http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20csv%20where%20url%3D'http%3A%2F%2Fdownload.finance.yahoo.com%2Fd%2Fquotes.csv%3Fs%3D" + constants.symbol + "%26f%3Da0a2a5b0b2b3b4b6c0c1c3c4c6c8d0d1d2e0e1e7e8e9h0j0k0g0g1g3g4g5g6i0i5j0j1j3j4j5j6k0k1k2k4k5l0l1l2l3m0m2m3m4m5m6m7m8n0n4o0p0p1p2p5p6q0r0r1r2r5r6r7s0s1s6s7t1t7t8v0v1v7w0w1w4x0y0%26e%3D.csv'%20and%20columns%3D'Ask%2CAverageDailyVolume%2CAskSize%2CBid%2CAskRealTime%2CBidRealTime%2CBookValue%2CBidSize%2CChangeAndPercentChange%2CChange%2CCommission%2CCurrency%2CChangeRealTime%2CAfterHoursChangeRealTime%2CDividendPerShare%2CLastTradeDate%2CTradeDate%2CEarningsPerShare%2CErrorIndication%2CEPSEstimateCurrentYear%2CEPSEstimateNextYear%2CEPSEstimateNextQuarter%2CDaysHigh%2C_52WeekLow%2C_52WeekHigh%2CDaysLow%2CHoldingsGainPercent%2CAnnualizedGain%2CHoldingsGain%2CHoldingsGainPercentRealTime%2CHoldingsGainRealTime%2CMoreInfo%2COrderBookRealTime%2CYearLow%2CMarketCapitalization%2CMarketCapRealTime%2CEBITDA%2CChangeFrom52WeekLow%2CPercentChangeFrom52WeekLow%2CYearHigh%2CLastTradeRealTimeWithTime%2CChangePercentRealTime%2CChangeFrom52WeekHigh%2CPercentChangeFrom52WeekHigh%2CLastTradeWithTime%2CLastTradePriceOnly%2CHighLimit%2CLowLimit%2CDaysRange%2CDaysRangeRealTime%2C_50DayMovingAverage%2C_200DayMovingAverage%2CChangeFrom200DayMovingAverage%2CPercentChangeFrom200DayMovingAverage%2CChangeFrom50DayMovingAverage%2CPercentChangeFrom50DayMovingAverage%2CName%2CNotes%2COpen%2CPreviousClose%2CPricePaid%2CChangeInPercent%2CPricePerSales%2CPricePerBook%2CExDividendDate%2CPERatio%2CDividendPayDate%2CPERatioRealTime%2CPEGRatio%2CPricePerEPSEstimateCurrentYear%2CPricePerEPSEstimateNextYear%2CSymbol%2CSharesOwned%2CRevenue%2CShortRatio%2CLastTradeTime%2CTickerTrend%2C_1YearTargetPrice%2CVolume%2CHoldingsValue%2CHoldingsValueRealTime%2C_52WeekRange%2CDaysValueChange%2CDaysValueChangeRealTime%2CStockExchange%2CDividendYield'&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&callback=JSON_CALLBACK")
 				.respond(expectedResponses.getCurrentDataWithDetailsWithoutAnyResults);
 
-			var liveData = undefined;
+			var resultData = undefined;
 			var errorCallbackFired = false;
 			var errorCallbackReason = undefined;
-			var liveDataPromise = stockService.getCurrentDataWithDetails([constants.symbol]);
-			liveDataPromise.then(
+			var resultDataPromise = stockService.getCurrentDataWithDetails([constants.symbol]);
+			resultDataPromise.then(
 				function (data) {
-					liveData = data;
+					resultData = data;
 				},
 				function (reason) {
 					errorCallbackFired = true;
@@ -677,12 +741,42 @@ describe('StockService', function() {
 
 			$httpBackend.flush();
 
-			expect(liveData).toBeUndefined();
+			expect(resultData).toBeUndefined();
 			expect(errorCallbackFired).toBeTruthy();
 			expect(errorCallbackReason).toBeDefined();
 			expect(errorCallbackReason).toEqual({
 				error: errorMessages.NoData.Error,
 				message: errorMessages.NoData.Message
+			});
+		});
+		
+		it('should return a "Timeout" Error Promise when the request takes too long to respond', function() {
+			$httpBackend
+				.expectJSONP("http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20csv%20where%20url%3D'http%3A%2F%2Fdownload.finance.yahoo.com%2Fd%2Fquotes.csv%3Fs%3D" + constants.symbol + "%26f%3Da0a2a5b0b2b3b4b6c0c1c3c4c6c8d0d1d2e0e1e7e8e9h0j0k0g0g1g3g4g5g6i0i5j0j1j3j4j5j6k0k1k2k4k5l0l1l2l3m0m2m3m4m5m6m7m8n0n4o0p0p1p2p5p6q0r0r1r2r5r6r7s0s1s6s7t1t7t8v0v1v7w0w1w4x0y0%26e%3D.csv'%20and%20columns%3D'Ask%2CAverageDailyVolume%2CAskSize%2CBid%2CAskRealTime%2CBidRealTime%2CBookValue%2CBidSize%2CChangeAndPercentChange%2CChange%2CCommission%2CCurrency%2CChangeRealTime%2CAfterHoursChangeRealTime%2CDividendPerShare%2CLastTradeDate%2CTradeDate%2CEarningsPerShare%2CErrorIndication%2CEPSEstimateCurrentYear%2CEPSEstimateNextYear%2CEPSEstimateNextQuarter%2CDaysHigh%2C_52WeekLow%2C_52WeekHigh%2CDaysLow%2CHoldingsGainPercent%2CAnnualizedGain%2CHoldingsGain%2CHoldingsGainPercentRealTime%2CHoldingsGainRealTime%2CMoreInfo%2COrderBookRealTime%2CYearLow%2CMarketCapitalization%2CMarketCapRealTime%2CEBITDA%2CChangeFrom52WeekLow%2CPercentChangeFrom52WeekLow%2CYearHigh%2CLastTradeRealTimeWithTime%2CChangePercentRealTime%2CChangeFrom52WeekHigh%2CPercentChangeFrom52WeekHigh%2CLastTradeWithTime%2CLastTradePriceOnly%2CHighLimit%2CLowLimit%2CDaysRange%2CDaysRangeRealTime%2C_50DayMovingAverage%2C_200DayMovingAverage%2CChangeFrom200DayMovingAverage%2CPercentChangeFrom200DayMovingAverage%2CChangeFrom50DayMovingAverage%2CPercentChangeFrom50DayMovingAverage%2CName%2CNotes%2COpen%2CPreviousClose%2CPricePaid%2CChangeInPercent%2CPricePerSales%2CPricePerBook%2CExDividendDate%2CPERatio%2CDividendPayDate%2CPERatioRealTime%2CPEGRatio%2CPricePerEPSEstimateCurrentYear%2CPricePerEPSEstimateNextYear%2CSymbol%2CSharesOwned%2CRevenue%2CShortRatio%2CLastTradeTime%2CTickerTrend%2C_1YearTargetPrice%2CVolume%2CHoldingsValue%2CHoldingsValueRealTime%2C_52WeekRange%2CDaysValueChange%2CDaysValueChangeRealTime%2CStockExchange%2CDividendYield'&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&callback=JSON_CALLBACK")
+				.respond(expectedResponses.getCurrentDataWithDetailsWithoutAnyResults);
+
+			var resultData = undefined;
+			var errorCallbackFired = false;
+			var errorCallbackReason = undefined;
+			var resultDataPromise = stockService.getCurrentDataWithDetails([constants.symbol]);
+			resultDataPromise.then(
+				function (data) {
+					resultData = data;
+				},
+				function (reason) {
+					errorCallbackFired = true;
+					errorCallbackReason = reason;
+				}
+			);
+
+			$timeout.flush(appConfig.JSONPTimeout + 1);
+
+			expect(resultData).toBeUndefined();
+			expect(errorCallbackFired).toBeTruthy();
+			expect(errorCallbackReason).toBeDefined();
+			expect(errorCallbackReason).toEqual({
+				error: errorMessages.Timeout.Error,
+				message: errorMessages.Timeout.Message.format(appConfig.JSONPTimeout)
 			});
 		});
 	});
@@ -698,30 +792,30 @@ describe('StockService', function() {
 				.expectJSONP("http://query.yahooapis.com/v1/public/yql?q=SELECT%20*%20FROM%20csv%20WHERE%20url%3D%22http%3A%2F%2Fwww.google.com%2Ffinance%2Fgetprices%3Fq%3D" + constants.symbol + "%26x%3D" + constants.exchange + "%26i%3D" + constants.interval + "%26p%3D" + constants.period + "%26f%3Dd%2Cc%2Cv%2Ck%2Co%2Ch%2Cl%26df%3Dcpct%26auto%3D0%26ei%3DEf6XUYDfCqSTiAKEMg%22&format=json&callback=JSON_CALLBACK")
 				.respond(expectedResponses.getLiveData);
 
-			var liveData = undefined;
-			var liveDataPromise = stockService.getLiveData(constants.symbol, constants.exchange, constants.interval, constants.period);
-			liveDataPromise.then(function (data) {
-				liveData = data;
+			var resultData = undefined;
+			var resultDataPromise = stockService.getLiveData(constants.symbol, constants.exchange, constants.interval, constants.period);
+			resultDataPromise.then(function (data) {
+				resultData = data;
 			});
 
 			$httpBackend.flush();
 
-			expect(liveData).toBeDefined();
-			expect(liveData).toEqual(formattedResponses.getLiveData);
+			expect(resultData).toBeDefined();
+			expect(resultData).toEqual(formattedResponses.getLiveData);
 		});
 
-		it('should return a "no data" Error Promise when receiving empty data array', function() {
+		it('should return a "NoData" Error Promise when receiving empty data array', function() {
 			$httpBackend
 				.expectJSONP("http://query.yahooapis.com/v1/public/yql?q=SELECT%20*%20FROM%20csv%20WHERE%20url%3D%22http%3A%2F%2Fwww.google.com%2Ffinance%2Fgetprices%3Fq%3D" + constants.symbol + "%26x%3D" + constants.exchange + "%26i%3D" + constants.interval + "%26p%3D" + constants.period + "%26f%3Dd%2Cc%2Cv%2Ck%2Co%2Ch%2Cl%26df%3Dcpct%26auto%3D0%26ei%3DEf6XUYDfCqSTiAKEMg%22&format=json&callback=JSON_CALLBACK")
 				.respond(expectedResponses.getDataWithoutAnyResults);
 
-			var liveData = undefined;
+			var resultData = undefined;
 			var errorCallbackFired = false;
 			var errorCallbackReason = undefined;
-			var liveDataPromise = stockService.getLiveData(constants.symbol, constants.exchange, constants.interval, constants.period);
-			liveDataPromise.then(
+			var resultDataPromise = stockService.getLiveData(constants.symbol, constants.exchange, constants.interval, constants.period);
+			resultDataPromise.then(
 				function (data) {
-					liveData = data;
+					resultData = data;
 				},
 				function (reason) {
 					errorCallbackFired = true;
@@ -731,12 +825,42 @@ describe('StockService', function() {
 
 			$httpBackend.flush();
 
-			expect(liveData).toBeUndefined();
+			expect(resultData).toBeUndefined();
 			expect(errorCallbackFired).toBeTruthy();
 			expect(errorCallbackReason).toBeDefined();
 			expect(errorCallbackReason).toEqual({
 				error: errorMessages.NoData.Error,
 				message: errorMessages.NoData.Message
+			});
+		});
+		
+		it('should return a "Timeout" Error Promise when the request takes too long to respond', function() {
+			$httpBackend
+				.expectJSONP("http://query.yahooapis.com/v1/public/yql?q=SELECT%20*%20FROM%20csv%20WHERE%20url%3D%22http%3A%2F%2Fwww.google.com%2Ffinance%2Fgetprices%3Fq%3D" + constants.symbol + "%26x%3D" + constants.exchange + "%26i%3D" + constants.interval + "%26p%3D" + constants.period + "%26f%3Dd%2Cc%2Cv%2Ck%2Co%2Ch%2Cl%26df%3Dcpct%26auto%3D0%26ei%3DEf6XUYDfCqSTiAKEMg%22&format=json&callback=JSON_CALLBACK")
+				.respond(expectedResponses.getDataWithoutAnyResults);
+
+			var resultData = undefined;
+			var errorCallbackFired = false;
+			var errorCallbackReason = undefined;
+			var resultDataPromise = stockService.getLiveData(constants.symbol, constants.exchange, constants.interval, constants.period);
+			resultDataPromise.then(
+				function (data) {
+					resultData = data;
+				},
+				function (reason) {
+					errorCallbackFired = true;
+					errorCallbackReason = reason;
+				}
+			);
+
+			$timeout.flush(appConfig.JSONPTimeout + 1);
+
+			expect(resultData).toBeUndefined();
+			expect(errorCallbackFired).toBeTruthy();
+			expect(errorCallbackReason).toBeDefined();
+			expect(errorCallbackReason).toEqual({
+				error: errorMessages.Timeout.Error,
+				message: errorMessages.Timeout.Message.format(appConfig.JSONPTimeout)
 			});
 		});
 	});
@@ -752,30 +876,30 @@ describe('StockService', function() {
 				.expectJSONP("http://query.yahooapis.com/v1/public/yql?q=SELECT%20*%20FROM%20csv%20WHERE%20url%3D%22http%3A%2F%2Fwww.google.com%2Ffinance%2Fgetprices%3Fq%3D" + constants.marketSymbol + "%26i%3D" + constants.interval + "%26p%3D" + constants.period + "%26f%3Dd%2Cc%2Cv%2Ck%2Co%2Ch%2Cl%26df%3Dcpct%26auto%3D0%26ei%3DEf6XUYDfCqSTiAKEMg%22&format=json&callback=JSON_CALLBACK")
 				.respond(expectedResponses.getLiveMarketData);
 
-			var liveMarketData = undefined;
-			var liveMarketDataPromise = stockService.getLiveMarketData(constants.marketSymbol, constants.interval, constants.period);
-			liveMarketDataPromise.then(function (data) {
-				liveMarketData = data;
+			var resultData = undefined;
+			var resultDataPromise = stockService.getLiveMarketData(constants.marketSymbol, constants.interval, constants.period);
+			resultDataPromise.then(function (data) {
+				resultData = data;
 			});
 
 			$httpBackend.flush();
 
-			expect(liveMarketData).toBeDefined();
-			expect(liveMarketData).toEqual(formattedResponses.getLiveMarketData);
+			expect(resultData).toBeDefined();
+			expect(resultData).toEqual(formattedResponses.getLiveMarketData);
 		});
 
-		it('should return a "no data" Error Promise when receiving empty data array', function() {
+		it('should return a "NoData" Error Promise when receiving empty data array', function() {
 			$httpBackend
 				.expectJSONP("http://query.yahooapis.com/v1/public/yql?q=SELECT%20*%20FROM%20csv%20WHERE%20url%3D%22http%3A%2F%2Fwww.google.com%2Ffinance%2Fgetprices%3Fq%3D" + constants.marketSymbol + "%26i%3D" + constants.interval + "%26p%3D" + constants.period + "%26f%3Dd%2Cc%2Cv%2Ck%2Co%2Ch%2Cl%26df%3Dcpct%26auto%3D0%26ei%3DEf6XUYDfCqSTiAKEMg%22&format=json&callback=JSON_CALLBACK")
 				.respond(expectedResponses.getDataWithoutAnyResults);
 
-			var liveMarketData = undefined;
+			var resultData = undefined;
 			var errorCallbackFired = false;
 			var errorCallbackReason = undefined;
-			var liveMarketDataPromise = stockService.getLiveMarketData(constants.marketSymbol, constants.interval, constants.period);
-			liveMarketDataPromise.then(
+			var resultDataPromise = stockService.getLiveMarketData(constants.marketSymbol, constants.interval, constants.period);
+			resultDataPromise.then(
 				function (data) {
-					liveMarketData = data;
+					resultData = data;
 				},
 				function (reason) {
 					errorCallbackFired = true;
@@ -785,12 +909,42 @@ describe('StockService', function() {
 
 			$httpBackend.flush();
 
-			expect(liveMarketData).toBeUndefined();
+			expect(resultData).toBeUndefined();
 			expect(errorCallbackFired).toBeTruthy();
 			expect(errorCallbackReason).toBeDefined();
 			expect(errorCallbackReason).toEqual({
 				error: errorMessages.NoData.Error,
 				message: errorMessages.NoData.Message
+			});
+		});
+		
+		it('should return a "Timeout" Error Promise when the request takes too long to respond', function() {
+			$httpBackend
+				.expectJSONP("http://query.yahooapis.com/v1/public/yql?q=SELECT%20*%20FROM%20csv%20WHERE%20url%3D%22http%3A%2F%2Fwww.google.com%2Ffinance%2Fgetprices%3Fq%3D" + constants.marketSymbol + "%26i%3D" + constants.interval + "%26p%3D" + constants.period + "%26f%3Dd%2Cc%2Cv%2Ck%2Co%2Ch%2Cl%26df%3Dcpct%26auto%3D0%26ei%3DEf6XUYDfCqSTiAKEMg%22&format=json&callback=JSON_CALLBACK")
+				.respond(expectedResponses.getDataWithoutAnyResults);
+
+			var resultData = undefined;
+			var errorCallbackFired = false;
+			var errorCallbackReason = undefined;
+			var resultDataPromise = stockService.getLiveMarketData(constants.marketSymbol, constants.interval, constants.period);
+			resultDataPromise.then(
+				function (data) {
+					resultData = data;
+				},
+				function (reason) {
+					errorCallbackFired = true;
+					errorCallbackReason = reason;
+				}
+			);
+
+			$timeout.flush(appConfig.JSONPTimeout + 1);
+
+			expect(resultData).toBeUndefined();
+			expect(errorCallbackFired).toBeTruthy();
+			expect(errorCallbackReason).toBeDefined();
+			expect(errorCallbackReason).toEqual({
+				error: errorMessages.Timeout.Error,
+				message: errorMessages.Timeout.Message.format(appConfig.JSONPTimeout)
 			});
 		});
 	});

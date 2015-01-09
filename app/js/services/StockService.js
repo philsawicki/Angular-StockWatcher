@@ -3,6 +3,7 @@
 angular.module('stockWatcher.Services')
 	.factory('stockService', ['$q', '$http', '$timeout', 'appConfig', 'errorMessages', 
 		function($q, $http, $timeout, appConfig, errorMessages) {
+		
 		// See note about known Yahoo! Finance API bugs:
 		// https://developer.yahoo.com/forum/General-Discussion-at-YDN/Stock-Quote-API-returning-commas-in/1234765072000-6036c128-a7e0-3aa5-9e72-1af1871e1b41/
 		var yahooAPITags = [

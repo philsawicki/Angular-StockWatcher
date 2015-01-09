@@ -11,6 +11,10 @@ angular.module('stockWatcher.Providers')
 		};
 
 		return {
+			// "appConfig.set(...)" can only be called during "app.config(...)", as:
+			//    app.config(['appConfigProvider', function(appConfigProvider) {
+			//       appConfigProvider.set('key', 'value');
+			//    }]);
 			set: function(key, value) {
 				appConfig[key] = value;
 			},

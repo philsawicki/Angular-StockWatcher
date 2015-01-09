@@ -18,6 +18,10 @@ angular.module('stockWatcher.Providers')
 		};
 
 		return {
+			// "errorMessages.set(...)" can only be called during "app.config(...)", as:
+			//    app.config(['errorMessagesProvider', function(errorMessagesProvider) {
+			//       errorMessagesProvider.set('key', 'value');
+			//    }]);
 			set: function(key, value) {
 				errorMessages[key] = value;
 			},
