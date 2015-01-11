@@ -54,8 +54,18 @@ angular.module('stockWatcher.Controllers')
 					// If an error was detected, try fetching the data once again:
 					fetchPreviousDayClosePrice();
 
-					if (reason.error !== errorMessages.NoData.Error) {
-						console.error(reason);
+					if (reason) {
+						var printError = true;
+
+						if (typeof reason.error !== 'undefined') {
+							if (reason.error === errorMessages.NoData.Error) {
+								printError = false;
+							}
+						}
+
+						if (printError) {
+							console.error('Error while fetching data', reason);
+						}
 					}
 				}
 			);

@@ -4,7 +4,9 @@
  * Stock List Controller.
  */
 angular.module('stockWatcher.Controllers')
-	.controller('StockListController', ['$scope', '$interval', 'stockService', function($scope, $interval, stockService) {
+	.controller('StockListController', ['$scope', '$interval', 'stockService', 'errorMessages', 
+		function ($scope, $interval, stockService, errorMessages) {
+
 		// Set the default refresh interval for the table:
 		$scope.refreshInterval = 30;
 
@@ -117,13 +119,30 @@ angular.module('stockWatcher.Controllers')
 
 		var getCurrentDataWithDetails = function() {
 			var promise = stockService.getCurrentDataWithDetails(allYahooSymbols);
-			promise.then(function(data) {
-				for (var i = 0, count = data.query.count; i < count; i++) {
-					$scope.quotesToFetch[i].liveData = data.query.results.row[i];
-				}
+			promise.then(
+				function (data) {
+					for (var i = 0, count = data.query.count; i < count; i++) {
+						$scope.quotesToFetch[i].liveData = data.query.results.row[i];
+					}
 
-				$scope.stockQuotes = $scope.quotesToFetch;
-			});
+					$scope.stockQuotes = $scope.quotesToFetch;
+				},
+				function (reason) {
+					if (reason) {
+						var printError = true;
+
+						if (typeof reason.error !== 'undefined') {
+							if (reason.error === errorMessages.NoData.Error) {
+								printError = false;
+							}
+						}
+
+						if (printError) {
+							console.error('Error while fetching data', reason);
+						}
+					}
+				}
+			);
 		}
 		getCurrentDataWithDetails();
 		

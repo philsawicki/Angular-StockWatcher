@@ -1,9 +1,12 @@
 'use strict';
 
-/* Quote Details Page Controller */
+/**
+ * Quote Details Page Controller
+ */
 angular.module('stockWatcher.Controllers')
-	.controller('QuoteDetailsPageController', ['$scope', '$interval', '$routeParams', '$location', 'stockService', function($scope, $interval, $routeParams, $location, stockService) {
-		$scope.controllerVersion = '0.0.1';
+	.controller('QuoteDetailsPageController', ['$scope', '$interval', '$routeParams', '$location', 'stockService', 'errorMessages', 
+		function ($scope, $interval, $routeParams, $location, stockService, errorMessages) {
+
 		$scope.$location = $location;
 
 		$scope.stockSymbol = $routeParams.stockSymbol;
@@ -17,9 +20,27 @@ angular.module('stockWatcher.Controllers')
 			var stockSymbols = [$scope.stockSymbol];
 
 			var promise = stockService.getCurrentDataWithDetails(stockSymbols);
-			promise.then(function(data) {
-				$scope.stockData = data.query.results.row;
-			});
+			promise.then(
+				function (data) {
+					$scope.stockData = data.query.results.row;
+				},
+
+				function (reason) {
+					if (reason) {
+						var printError = true;
+
+						if (typeof reason.error !== 'undefined') {
+							if (reason.error === errorMessages.NoData.Error) {
+								printError = false;
+							}
+						}
+
+						if (printError) {
+							console.error('Error while fetching data', reason);
+						}
+					}
+				}
+			);
 		};
 		getDetailedData();
 

@@ -4,7 +4,7 @@
  * Unit Tests for Controllers.
  */
 
-describe('HomePageController', function() {
+xdescribe('HomePageController', function() {
 	beforeEach(module('stockWatcher'));
 
 	it('should display an introduction message with controller version', inject(function($controller) {
@@ -16,7 +16,7 @@ describe('HomePageController', function() {
 });
 
 
-describe('AboutPageController', function() {
+xdescribe('AboutPageController', function() {
 	beforeEach(module('stockWatcher'));
 
 	it('should display an introduction message with controller version', inject(function($controller) {

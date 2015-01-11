@@ -1,8 +1,12 @@
 'use strict';
 
-/* Currency Chart Controller */
+/**
+ * Currency Chart Controller
+ */
 angular.module('stockWatcher.Controllers')
-	.controller('CurrencyChartController', ['$scope', '$interval', '$timeout', 'currencyService', function($scope, $interval, $timeout, currencyService) {
+	.controller('CurrencyChartController', ['$scope', '$interval', '$timeout', 'currencyService', 'errorMessages', 
+		function ($scope, $interval, $timeout, currencyService, errorMessages) {
+
 		// Set the default refresh interval for the table:
 		$scope.refreshInterval = 60;
 		
@@ -27,18 +31,33 @@ angular.module('stockWatcher.Controllers')
 			var symbols = [$scope.symbol];
 
 			var promise = stockService.getCurrentDataWithDetails(symbols);
-			promise.then(function(data) {
-				if (data.query.count > 0) {
-					yesterdayClosePrice = data.query.results.row.PreviousClose;
-					//console.log('PreviousClose for "' + $scope.symbol + '" [' + data.query.results.row.StockExchange + ']', yesterdayClosePrice);
-
-					if (typeof yesterdayClosePrice !== 'undefined') {
-						drawOpenPlotLine();
+			promise.then(
+				function (data) {
+					if (data.query.count > 0) {
+						yesterdayClosePrice = data.query.results.row.PreviousClose;
+						
+						if (typeof yesterdayClosePrice !== 'undefined') {
+							drawOpenPlotLine();
+						}
 					}
-				} else {
-					//console.error('No PreviousClose for ' + $scope.symbol);
+				},
+
+				function (reason) {
+					if (reason) {
+						var printError = true;
+
+						if (typeof reason.error !== 'undefined') {
+							if (reason.error === errorMessages.NoData.Error) {
+								printError = false;
+							}
+						}
+
+						if (printError) {
+							console.error('Error while fetching data', reason);
+						}
+					}
 				}
-			});
+			);
 		};
 		//$scope.fetchPreviousDayClosePrice();
 
@@ -149,23 +168,31 @@ angular.module('stockWatcher.Controllers')
 		var toCurrency = $scope.toCurrency;
 		var interval = 60*3; // Must be at least 60*3 over a '10d'-period, otherwise the CSV will have more than 5000 lines, which YQL will clip.
 		var period = '10d';
-		// Google Finance URL for this stock would be:
-		// http://www.google.com/finance/getprices?q=T&x=TSE&i=60&p=10d&f=d,c,v,k,o,h,l&df=cpct&auto=0&ei=Ef6XUYDfCqSTiAKEMg
 		
 		var initGraph = function() {
 			var promise = currencyService.getCurrencyExchangeRateHistory(fromCurrency, toCurrency, interval, period);
-			promise.then(function(data) {
-				if (data && data.length > 0) {
-					// Hide the "Loading..." message overlayed on top of the chart:
-					chart.hideLoading();
+			promise.then(
+				function (data) {
+					if (data && data.length > 0) {
+						// Hide the "Loading..." message overlayed on top of the chart:
+						chart.hideLoading();
 
-					// Recreate the chart with the new data:
-					createGraph(data);
-				} else {
-					console.warn('"' + fromCurrency + '-' + toCurrency + '" init did not receive data, refreshing it.');
-					initGraph();
+						// Recreate the chart with the new data:
+						createGraph(data);
+					} else {
+						console.warn('"' + fromCurrency + '-' + toCurrency + '" init did not receive data, refreshing it.');
+						initGraph();
+					}
+				},
+
+				function (reason) {
+					if (reason) {
+						if (console && console.error) {
+							console.error(reason);
+						}
+					}
 				}
-			});
+			);
 		};
 		//initGraph();
 
@@ -175,16 +202,26 @@ angular.module('stockWatcher.Controllers')
 		 */
 		var updateGraph = function() {
 			var promise = currencyService.getCurrencyExchangeRateHistory(fromCurrency, toCurrency, interval, period);
-			promise.then(function(data) {
-				//console.log('Updating graph for "' + symbol + '"');
-				
-				if (data && data.length > 0) {
-					setGraphData(data);
-				} else {
-					console.warn('"' + fromCurrency + '-' + toCurrency + '" update did not receive data, refreshing it.');
-					updateGraph();
+			promise.then(
+				function (data) {
+					//console.log('Updating graph for "' + symbol + '"');
+					
+					if (data && data.length > 0) {
+						setGraphData(data);
+					} else {
+						console.warn('"' + fromCurrency + '-' + toCurrency + '" update did not receive data, refreshing it.');
+						updateGraph();
+					}
+				},
+
+				function (reason) {
+					if (reason) {
+						if (console && console.error) {
+							console.error(reason);
+						}
+					}
 				}
-			});
+			);
 		}
 
 		var setGraphData = function(data) {

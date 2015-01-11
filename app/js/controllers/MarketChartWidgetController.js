@@ -1,9 +1,10 @@
 'use strict';
 
-
-/* Market ChartWidget Controller */
+/**
+ * Market ChartWidget Controller
+ */
 angular.module('stockWatcher.Controllers')
-	.controller('MarketChartWidgetController', ['$scope', function($scope) {
+	.controller('MarketChartWidgetController', ['$scope', function ($scope) {
 		$scope.showTitle = true;
 		$scope.showZoom = true;
 		$scope.showDatePicker = true;

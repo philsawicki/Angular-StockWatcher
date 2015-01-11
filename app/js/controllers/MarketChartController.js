@@ -60,20 +60,26 @@ angular.module('stockWatcher.Controllers')
 			var symbols = [$scope.symbol];
 
 			var promise = stockService.getCurrentDataWithDetails(symbols);
-			promise.then(function(data) {
-				if (data.query.count > 0) {
-					yesterdayClosePrice = data.query.results.row.PreviousClose;
-					//console.log('PreviousClose for "' + $scope.symbol + '" [' + data.query.results.row.StockExchange + ']', yesterdayClosePrice);
+			promise.then(
+				function (data) {
+					if (data.query.count > 0) {
+						yesterdayClosePrice = data.query.results.row.PreviousClose;
 
-					if (typeof yesterdayClosePrice !== 'undefined') {
-						drawOpenPlotLine();
+						if (typeof yesterdayClosePrice !== 'undefined') {
+							drawYesterdayClosePlotLine();
+						}
 					}
-				} else {
-					//console.error('No PreviousClose for ' + $scope.symbol);
+				},
+
+				function (reason) {
+					if (reason) {
+						if (console && console.error) {
+							console.error(reason);
+						}
+					}
 				}
-			});
+			);
 		};
-		//fetchPreviousDayClosePrice();
 
 
 		/**
@@ -94,41 +100,6 @@ angular.module('stockWatcher.Controllers')
 				},
 				navigator: {
 					enabled: false
-				},
-				xAxis: {
-					events: {
-						setExtremes: function(event) {
-							/*
-							if (typeof(event.rangeSelectorButton) !== 'undefined') {
-								var buttonCount = event.rangeSelectorButton.count;
-								var buttonText = event.rangeSelectorButton.text;
-								var buttonType = event.rangeSelectorButton.type;
-								
-								var selectedButtonIndex = undefined;
-								for (var i = 0, nbButtons = this.chart.rangeSelector.buttons.length; i < nbButtons; i++) {
-									if (this.chart.rangeSelector.buttons[i].state === 2) {
-										selectedButtonIndex = i;
-										break;
-									}
-								}
-								
-								var currentStock = this.chart.title.textStr.replace(' Stock Price', '');
-								if (selectedButtonIndex < 3) { // Index of the button covering the range which is no longer "live" data.
-									console.log('Live data!');
-									
-									_chartData[currentStock].maxTimestamp = 0; // Reset max timestamp
-									_setGraphData([], options);
-									
-									_requestLiveData(_chartData[currentStock].options);
-								} else {
-									console.log('Historical data!');
-									
-									_requestHistoricalData(_chartData[currentStock].options, buttonCount, buttonType);
-								}
-							}
-							*/
-						}
-					}
 				},
 				rangeSelector: {
 					buttons: [{
@@ -167,73 +138,6 @@ angular.module('stockWatcher.Controllers')
 					allButtonsEnabled: true
 				},
 				series: marketData,
-				/*[{
-					name: marketData[0].name,
-					//type: 'area',
-					data: marketData[0].data,
-					//gapSize: 5,
-					//tooltip: {
-					//	valueDecimals: 4
-					//},
-					//fillColor: {
-					//	linearGradient: {
-					//		x1: 0,
-					//		y1: 0,
-					//		x2: 0,
-					//		y2: 1
-					//	},
-					//	stops: [
-					//		[0, Highcharts.getOptions().colors[0]],
-					//		[1, Highcharts.Color(Highcharts.getOptions().colors[0]).setOpacity(0).get('rgba')]
-					//	]
-					//},
-					threshold: null
-				},
-				{
-					name: marketData[1].name,
-					//type: 'area',
-					data: marketData[1].data,
-					//gapSize: 5,
-					//tooltip: {
-					//	valueDecimals: 4
-					//},
-					//fillColor: {
-					//	linearGradient: {
-					//		x1: 0,
-					//		y1: 0,
-					//		x2: 0,
-					//		y2: 1
-					//	},
-					//	stops: [
-					//		[0, Highcharts.getOptions().colors[0]],
-					//		[1, Highcharts.Color(Highcharts.getOptions().colors[0]).setOpacity(0).get('rgba')]
-					//	]
-					//},
-					threshold: null
-				},
-				{
-					name: marketData[2].name,
-					//type: 'area',
-					data: marketData[2].data,
-					//gapSize: 5,
-					//tooltip: {
-					//	valueDecimals: 4
-					//},
-					//fillColor: {
-					//	linearGradient: {
-					//		x1: 0,
-					//		y1: 0,
-					//		x2: 0,
-					//		y2: 1
-					//	},
-					//	stops: [
-					//		[0, Highcharts.getOptions().colors[0]],
-					//		[1, Highcharts.Color(Highcharts.getOptions().colors[0]).setOpacity(0).get('rgba')]
-					//	]
-					//},
-					threshold: null
-				}],
-				*/
 				plotOptions: {
 					series: {
 						compare: 'percent'
@@ -259,7 +163,7 @@ angular.module('stockWatcher.Controllers')
 
 
 			if (typeof yesterdayClosePrice !== 'undefined') {
-				drawOpenPlotLine();
+				drawYesterdayClosePlotLine();
 			}
 
 			// Chart is now initialized, update flag:
@@ -273,6 +177,12 @@ angular.module('stockWatcher.Controllers')
 		var period = '10d';
 		var seriesCount = 0;
 
+		/**
+		 * Updates the fetch Promise for the given data.
+		 * @param  {int}    stockIndex The index of the stock data in the "marketData" Object array.
+		 * @param  {string} fetchType  Type of callback to execute once data is received (either "init" or "update").
+		 * @return {void}
+		 */
 		var updateFetchPromise = function(stockIndex, fetchType) {
 			var marketSymbol = marketData[stockIndex].symbol;
 			var nbMarketSymbols = marketData.length;
@@ -352,16 +262,25 @@ angular.module('stockWatcher.Controllers')
 			}
 		}
 
+		/**
+		 * Sets the chart's data for the given serie index.
+		 * @param {int}   serieIndex The index of the serie to update.
+		 * @param {Array} data       The data to set.
+		 */
 		var setGraphData = function(serieIndex, data) {
 			var serie = chart.series[serieIndex];
 			serie.setData(data);
 			
 			if (typeof yesterdayClosePrice !== 'undefined') {
-				drawOpenPlotLine();
+				drawYesterdayClosePlotLine();
 			}
 		};
 
-		var drawOpenPlotLine = function() {
+		/**
+		 * Draws a horizontal trendline on the chart, indicating yesterday's close price.
+		 * @return {void}
+		 */
+		var drawYesterdayClosePlotLine = function() {
 			var stockSymbol = $scope.fromCurrency + $scope.toCurrency;
 			var open = yesterdayClosePrice;
 
