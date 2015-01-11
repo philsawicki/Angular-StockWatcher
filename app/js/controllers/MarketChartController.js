@@ -42,6 +42,9 @@ angular.module('stockWatcher.Controllers')
 			}
 		];
 
+		// Data fetch Promises (for init & update):
+		var fetchPromises = [];
+
 		var chartOptions = {
 			title: 'TSX, Dow Jones & S&P500 Indices'
 		};
@@ -87,6 +90,9 @@ angular.module('stockWatcher.Controllers')
 					text: chartOptions.title
 				},
 				credits: {
+					enabled: false
+				},
+				navigator: {
 					enabled: false
 				},
 				xAxis: {
@@ -263,63 +269,71 @@ angular.module('stockWatcher.Controllers')
 
 
 
-		//var marketSymbol = marketSymbols[1].symbol;
 		var interval = 60;
 		var period = '10d';
-		// Google Finance URL for this stock would be:
-		// http://www.google.com/finance/getprices?q=T&x=TSE&i=60&p=10d&f=d,c,v,k,o,h,l&df=cpct&auto=0&ei=Ef6XUYDfCqSTiAKEMg
-
 		var seriesCount = 0;
-		var initGraph = function() {
-			for (var i = 0, nbMarketSymbols = marketData.length; i < nbMarketSymbols; i++) {
-				var marketSymbol = marketData[i].symbol;
 
-				console.log('MarketChartController::initGraph() sent data request for index #' + i + ': "' + marketData[i].name + '"');
+		var updateFetchPromise = function(stockIndex, fetchType) {
+			var marketSymbol = marketData[stockIndex].symbol;
+			var nbMarketSymbols = marketData.length;
 
-				var promise = stockService.getLiveMarketData(marketSymbol, interval, period);
-				promise.then(
-					// Must wrap the Promise callback into a closure in order to pass the serie's index:
-					(function (index) {
-						return function (data) {
-							seriesCount++;
+			fetchPromises[stockIndex] = stockService.getLiveMarketData(marketSymbol, interval, period);
+			fetchPromises[stockIndex].then(
+				// Must wrap the Promise callback into a closure in order to pass the serie's index:
+				(function (index, fetchType) {
+					return function (data) {
+						// If data is received, store it to be drawn later:
+						if (data && data.length > 0) {
+							// Set data for the stock symbol:
+							marketData[index].data = data;
 
-							console.log('for #' + index + ', got', data.length);
-
-							if (data && data.length > 0) {
-								console.log('MarketChartController::initGraph() received data for index #' + index + ': "' + marketData[index].name + '"');
-								
-								// Set data for the stock symbol:
-								marketData[index].data = data;
-								// Set the "maxTimestamp" to the last timestamp of the array:
-								//marketData[index].maxTimestamp = data[data.length-1][0];
-
+							if (fetchType === 'init') {
+								seriesCount++;
 								if (seriesCount === nbMarketSymbols) {
-									console.log('MarketChartController::initGraph() received all expected data. Creating graph...');
 									// Received all Market data, graph is now ready to be drawn:
 									createGraph();
 								}
+							} else if (fetchType === 'update') {
+								setGraphData(index, data);
 							}
-						};
-					})(i), 
+						} else {
+							// No data was received, try fetching it once again:
+							updateFetchPromise(index, fetchType);
+						}
+					};
+				})(stockIndex, fetchType), 
 
-					// Must wrap the Promise callback into a closure in order to pass the serie's index:
-					(function (index) {
-						return function (reason) {
-							seriesCount++;
-							
-							console.error('Error while receiving data for serie #' + index, reason);
+				// Must wrap the Promise callback into a closure in order to pass the serie's index:
+				(function (index, fetchType) {
+					return function (reason) {
+						if (reason) {
+							var printError = true;
 
-							if (reason && reason.error) {
+							if (typeof reason.error !== 'undefined') {
 								if (reason.error === errorMessages.NoData.Error) {
-									// TODO: Fix this is sub-optimal behavior when not all data is received:
-									if (seriesCount === nbMarketSymbols) {
-										createGraph();
-									}
+									printError = false;
 								}
 							}
-						};
-					})(i)
-				);
+
+							if (printError) {
+								console.error('Error while fetching data', reason);
+							}
+						}
+
+						// Retry fetching the data for the given serie:
+						updateFetchPromise(index, fetchType);
+					};
+				})(stockIndex, fetchType)
+			);
+		};
+
+		/**
+		 * Fetches the initial data required to draw the chart.
+		 * @return {void}
+		 */
+		var initGraph = function() {
+			for (var i = 0, nbMarketSymbols = marketData.length; i < nbMarketSymbols; i++) {
+				updateFetchPromise(i, 'init');
 			}
 		};
 		initGraph();
@@ -331,72 +345,27 @@ angular.module('stockWatcher.Controllers')
 		var updateGraph = function() {
 			// Chart might not be created yet when "updateGraph()" is called by the "refresher" $interval.
 			// Early exit in this case, as to not make requests too early or cause potential crashes when referencing "chart".
-			if (typeof chart === 'undefined') {
-				return;
-			}
-
-			for (var i = 0, nbMarketSymbols = marketData.length; i < nbMarketSymbols; i++) {
-				var marketSymbol = marketData[i].symbol;
-
-				console.log('MarketChartController::updateGraph() sent data request for index #' + i + ': "' + marketData[i].name + '"');
-								
-				var promise = stockService.getLiveMarketData(marketSymbol, interval, period);
-				promise.then(
-					// Must wrap the Promise callback into a closure in order to pass the serie's index:
-					(function (index) {
-						return function (data) {
-							//console.log('Updating graph for "' + symbol + '"');
-
-							if (data && data.length > 0) {
-								console.log('MarketChartController::updateGraph() received data for index #' + index + ': "' + marketData[index].name + '"');
-								setGraphData(index, data);
-							} else {
-								console.warn('"' + marketData[index].name + '" update did not receive data, refreshing it.');
-								updateGraph();
-							}
-						};
-					})(i)
-				, function (reason) {
-					console.error(reason);
-				});
+			if (typeof chart !== 'undefined') {
+				for (var i = 0, nbMarketSymbols = marketData.length; i < nbMarketSymbols; i++) {
+					updateFetchPromise(i, 'update');
+				}
 			}
 		}
 
 		var setGraphData = function(serieIndex, data) {
-			//var stock = $scope.symbol;
-			//if (typeof chart === 'undefined') {
-			//	return;
-			//}
-			//var shift = true;
 			var serie = chart.series[serieIndex];
 			serie.setData(data);
-
-			/*
-			for (var i = 0, count = data.length; i < count; i++) {
-				if (data[i][0] > marketData[serieIndex].maxTimestamp) {
-					//serie.addPoint(data[i], true, shift);
-					console.log("Adding point", data[i]);
-					// Update the "maxTimestamp" for the given serie:
-					marketData[serieIndex].maxTimestamp = data[i][0];
-				}
-			}
-			*/
 			
 			if (typeof yesterdayClosePrice !== 'undefined') {
 				drawOpenPlotLine();
 			}
-			
-			//chart.redraw();
 		};
-		
 
 		var drawOpenPlotLine = function() {
 			var stockSymbol = $scope.fromCurrency + $scope.toCurrency;
 			var open = yesterdayClosePrice;
 
 			if (chart) {
-				//console.log('Drawing "Open" PlotLine for "%s" ($%s)', stockSymbol, open);
-				
 				var openPlotLineID = stockSymbol + '-open',
 				    chartYAxis = chart.yAxis[0];
 				
