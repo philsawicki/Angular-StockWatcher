@@ -22,7 +22,7 @@ describe('StockChartController', function() {
 	// Set up the module:
 	beforeEach(module('stockWatcher'));
 
-	beforeEach(inject(function($injector) {
+	beforeEach(inject(function ($injector) {
 		// Get hold of a scope (i.e. the root scope):
 		$rootScope = $injector.get('$rootScope');
 		$interval = $injector.get('$interval');
@@ -187,11 +187,10 @@ describe('StockChartController', function() {
 			spyOn($interval, 'cancel').andCallThrough();
 
 			expect($scope.refresher).toBeDefined();
-			var copyOfRefresherThatWasCalled = angular.copy($scope.refresher);
 
 			$scope.destroyRefresher();
 
-			expect($interval.cancel).toHaveBeenCalledWith(copyOfRefresherThatWasCalled);
+			expect($interval.cancel).toHaveBeenCalled();
 			expect($scope.refresher).toBeUndefined();
 		});
 
@@ -201,11 +200,10 @@ describe('StockChartController', function() {
 			spyOn($interval, 'cancel').andCallThrough();
 
 			expect($scope.previousCloseRefresher).toBeDefined();
-			var copyOfPreviousCloseRefresherThatWasCalled = angular.copy($scope.previousCloseRefresher);
 
 			$scope.destroyRefresher();
 
-			expect($interval.cancel).toHaveBeenCalledWith(copyOfPreviousCloseRefresherThatWasCalled);
+			expect($interval.cancel).toHaveBeenCalled();
 			expect($scope.previousCloseRefresher).toBeUndefined();
 		});
 

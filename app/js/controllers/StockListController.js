@@ -106,7 +106,7 @@ angular.module('stockWatcher.Controllers')
 				index: 9
 			}
 		];
-		
+		$scope.stockQuotes = [];
 		
 
 

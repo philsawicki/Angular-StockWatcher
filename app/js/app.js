@@ -48,6 +48,12 @@ angular.module('stockWatcher', [
 			});
 	}])
 
+	// Disable debug info for production builds:
+	.config(['$compileProvider', function ($compileProvider) {
+		var isDevServer = window.location.href.indexOf('http://localhost:8000/app') !== -1;
+		$compileProvider.debugInfoEnabled(!isDevServer);
+	}])
+
 	// Create a "String.format()"-like function for formatting purposes:
 	.config(function() {
 		if (!String.prototype.format) {
