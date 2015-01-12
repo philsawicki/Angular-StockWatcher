@@ -437,12 +437,103 @@ angular.module('stockWatcher.Services')
 		var getLiveMarketData = function(marketSymbol, interval, period) {
 			return getLiveData(marketSymbol, null, interval, period);
 		};
+
+		/**
+		 * Gets stock symbols matching the given partial name.
+		 * @param  {string} partialStockSymbol The partial stock name to look for (eg: "goog" for "Google");
+		 * @return {Deferred.promise}          A promise to be resolved when the request is successfully received.
+		 */
+		var getStockSymbol = function(partialStockSymbol) {
+			var deferred = $q.defer();
+			var timeoutPromise = $q.defer();
+			var requestTimedOut = false;
+			var timeoutCountdown = undefined;
+
+			//if (typeof window.YAHOO === 'undefined') {
+				var YAHOO = window.YAHOO = { Finance: { SymbolSuggest: { } } };
+
+				YAHOO.Finance.SymbolSuggest.ssCallback = function (data) {
+					// Cancel the "timeout" $timeout:
+					$timeout.cancel(timeoutCountdown);
+					// Cancel the "timeout" Promise:
+					timeoutPromise.reject();
+					
+					// Resolve the Promise with data:
+					deferred.resolve(data.ResultSet.Result);
+				};
+			//}
+			
+			// Proper URL:
+			// http://autoc.finance.yahoo.com/autoc?query=google&callback=YAHOO.Finance.SymbolSuggest.ssCallback
+			
+			var url = 'http://autoc.finance.yahoo.com/autoc?query=' + partialStockSymbol + '&callback=YAHOO.Finance.SymbolSuggest.ssCallback';
+			$.getScript(url);
+
+			/*
+			$http.get(url, {
+				timeout: timeoutPromise.promise,
+				//headers: {
+				//	'Accept': 'application/json, text/plain, * /*'
+				//},
+				transformRequest: function(data, headersGetter) {
+					console.log('transformRequest');
+					return data;
+				}
+			})
+				.success(function (data) {
+					var quotes = [];
+					
+					if (data.query.count > 0) {
+						// TODO: Filter & format quotes:
+						quotes = data.query.results.quote;
+					}
+
+					// Fail the request, as no data has been received:
+					if (data.query.count === 0) {
+						deferred.reject({
+							error: errorMessages.NoData.Error,
+							message: errorMessages.NoData.Message
+						});
+					}
+					
+
+					// Cancel the "timeout" $timeout:
+					$timeout.cancel(timeoutCountdown);
+					// Cancel the "timeout" Promise:
+					timeoutPromise.reject();
+
+					
+					// Resolve the Promise with data:
+					deferred.resolve(quotes);
+				})
+				.error(function (data) {
+					if (requestTimedOut) {
+						deferred.reject({
+							error: errorMessages.Timeout.Error,
+							message: errorMessages.Timeout.Message.format(appConfig.JSONPTimeout),
+							data: data
+						});
+					} else {
+						deferred.reject(data);
+					}
+				});*/
+
+
+			// Start a $timeout which, if resolved, will fail the $http request sent (and assume a timeout):
+			timeoutCountdown = $timeout(function() {
+				requestTimedOut = true;
+				timeoutPromise.resolve();
+			}, appConfig.JSONPTimeout);
+
+			return deferred.promise;
+		};
 		
 		return {
 			getHistoricalData: getHistoricalData,
 			getLiveData: getLiveData,
 			getLiveMarketData: getLiveMarketData,
 			getCurrentData: getCurrentData,
-			getCurrentDataWithDetails: getCurrentDataWithDetails
+			getCurrentDataWithDetails: getCurrentDataWithDetails,
+			getStockSymbol: getStockSymbol
 		};
 	}]);

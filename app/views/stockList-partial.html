@@ -4,6 +4,7 @@
 			<h2>Watchlist</h2>
 		</div>
 		<div class="col-sm-4">
+			<!--
 			<form class="form-horizontal" role="form">
 				<div class="form-group form-group-sm">
 					<label class="col-sm-8 control-label" for="refreshInterval">Refresh interval:</label>
@@ -17,6 +18,45 @@
 					</div>
 				</div>
 			</form>
+			-->
+
+
+			<div class="btn-group pull-right" style="margin-top: 20px;">
+				<button type="button" class="btn btn-primary dropdown-toggle btn-sm" data-toggle="dropdown" aria-expanded="false">
+					Refresh interval <span class="caret"></span>
+				</button>
+				<ul class="dropdown-menu dropdown-menu-right" role="menu">
+					<li role="presentation" class="small">
+						<a href="javascript:;" ng-click="setRefreshInterval(30)">
+							<span class="glyphicon" ng-class="{'glyphicon-ok': refreshInterval === 30, 'glyphicon-none': refreshInterval !== 30}" aria-hidden="true"></span> 30 sec
+						</a>
+					</li>
+					<li role="presentation" class="small">
+						<a href="javascript:;" ng-click="setRefreshInterval(60)">
+							<span class="glyphicon" ng-class="{'glyphicon-ok': refreshInterval === 60, 'glyphicon-none': refreshInterval !== 60}" aria-hidden="true"></span> 60 sec
+						</a>
+					</li>
+					<li role="presentation" class="small">
+						<a href="javascript:;" ng-click="setRefreshInterval(300)">
+							<span class="glyphicon" ng-class="{'glyphicon-ok': refreshInterval === 300, 'glyphicon-none': refreshInterval !== 300}" aria-hidden="true"></span> 5 min
+						</a>
+					</li>
+					<li role="presentation" class="small">
+						<a href="javascript:;" ng-click="setRefreshInterval(900)">
+							<span class="glyphicon" ng-class="{'glyphicon-ok': refreshInterval === 900, 'glyphicon-none': refreshInterval !== 900}" aria-hidden="true"></span> 15 min
+						</a>
+					</li>
+				</ul>
+			</div>
+
+			<!--
+			<button type="button" class="btn btn-primary btn-sm pull-right" style="margin-top: 20px; margin-right: 10px;" ng-click="addStock()">Add Stock</button>
+			-->
+
+			<!-- Button trigger modal -->
+			<button type="button" class="btn btn-primary btn-sm pull-right" data-toggle="modal" data-target="#addStockModal" style="margin-top: 20px; margin-right: 10px;">
+				Add Stock
+			</button>
 		</div>
 	</div>
 </div>
@@ -80,5 +120,53 @@
 				</tr>
 			</tbody>
 		</table>
+	</div>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="addStockModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="myModalLabel">Add Stock</h4>
+			</div>
+
+			<div class="modal-body">
+				<form>
+					<div class="form-group">
+						<label for="addStockName">Stock Name</label>
+						<input type="text" class="form-control" id="addStockName" placeholder="Enter Stock Name" ng-model="addStockName">
+					</div>
+				</form>
+
+				<table class="table table-responsive table-striped" ng-show="addStockSuggestions.length > 0">
+					<thead>
+						<tr>
+							<th>Select</th>
+							<th>Name</th>
+							<th>Symbol</th>
+							<th>Exchange</th>
+							<th>Type</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr ng-repeat="stockSuggestion in addStockSuggestions">
+							<td><input type="radio" name="addStockChosen" value="{{ stockSuggestion.name }}" ng-click="setSelectedStock(stockSuggestion)"></td>
+							<th scope="row">{{ stockSuggestion.symbol }}</th>
+							<td>{{ stockSuggestion.name }}</td>
+							<td>{{ stockSuggestion.exch }} ({{ stockSuggestion.exchDisp }})</td>
+							<td>{{ stockSuggestion.typeDisp }}</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+				<button type="button" class="btn btn-primary" data-dismiss="modal" ng-class="{ disabled: !hasSelectedStock }" ng-click="saveSelectedStock()">Add Stock</button>
+			</div>
+		</div>
 	</div>
 </div>

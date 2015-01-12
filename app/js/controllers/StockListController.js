@@ -112,12 +112,13 @@ angular.module('stockWatcher.Controllers')
 		
 
 
-		var allYahooSymbols = [];
-		for (var i = 0, nbStocks = $scope.quotesToFetch.length; i < nbStocks; i++) {
-			allYahooSymbols.push($scope.quotesToFetch[i].yahooSymbol);
-		}
 
 		var getCurrentDataWithDetails = function() {
+			var allYahooSymbols = [];
+			for (var i = 0, nbStocks = $scope.quotesToFetch.length; i < nbStocks; i++) {
+				allYahooSymbols.push($scope.quotesToFetch[i].yahooSymbol);
+			}
+
 			var promise = stockService.getCurrentDataWithDetails(allYahooSymbols);
 			promise.then(
 				function (data) {
@@ -145,6 +146,67 @@ angular.module('stockWatcher.Controllers')
 			);
 		}
 		getCurrentDataWithDetails();
+
+
+
+
+
+		$scope.addStockSuggestions = [];
+
+		$scope.$watch('addStockName', function (newValue) {
+			if (typeof newValue !== 'undefined') {
+				var promise = stockService.getStockSymbol(newValue);
+				promise.then(
+					function (data) {
+						$scope.addStockSuggestions = data;
+					},
+
+					function (reason) {
+						console.error(reason);
+					}
+				);
+			}
+		});
+
+
+
+
+		$scope.selectedStock = undefined;
+		$scope.hasSelectedStock = false;
+
+		$scope.setSelectedStock = function(selectedStock) {
+			if (typeof selectedStock !== 'undefined') {
+				$scope.selectedStock = selectedStock;
+				$scope.hasSelectedStock = true;
+			} else {
+				$scope.setSelectedStock = undefined;
+				$scope.hasSelectedStock = false;
+				$scope.addStockName = undefined; // Reset the input
+				$scope.addStockSuggestions = [];
+			}
+		};
+
+		$scope.saveSelectedStock = function() {
+			// Add the selected symbol to the watchlist:
+			$scope.quotesToFetch.push(
+				{
+					symbol: $scope.selectedStock.symbol,
+					yahooSymbol: $scope.selectedStock.symbol,
+					//exchange: 'NYSE',
+					//interval: 60*15,
+					//period: '10d',
+					liveData: {},
+					index: $scope.quotesToFetch.length
+				}
+			);
+
+			// Refresh the stock list:
+			getCurrentDataWithDetails();
+
+			// Close the modal:
+			$scope.setSelectedStock(undefined);
+			//$('#addStockModal').modal('hide');
+		};
 		
 		
 		
@@ -166,6 +228,11 @@ angular.module('stockWatcher.Controllers')
 		$scope.refreshIntervalChanged = function() {
 			$scope.destroyRefresher();
 			$scope.createRefresher();
+		};
+
+		$scope.setRefreshInterval = function(interval) {
+			$scope.refreshInterval = interval;
+			$scope.refreshIntervalChanged();
 		};
 		
 		var refresher = $scope.createRefresher();
