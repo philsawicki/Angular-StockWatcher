@@ -126,11 +126,11 @@
 
 <!-- Modal -->
 <div class="modal fade" id="addStockModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-	<div class="modal-dialog">
+	<div class="modal-dialog modal-lg">
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-				<h4 class="modal-title" id="myModalLabel">Add Stock</h4>
+				<h4 class="modal-title" id="myModalLabel">Add Stock to Watchlist</h4>
 			</div>
 
 			<div class="modal-body">
@@ -144,27 +144,27 @@
 				<table class="table table-responsive table-striped" ng-show="addStockSuggestions.length > 0">
 					<thead>
 						<tr>
-							<th>Select</th>
-							<th>Name</th>
-							<th>Symbol</th>
-							<th>Exchange</th>
-							<th>Type</th>
+							<th class="col-md-1 text-center">Select</th>
+							<th class="col-md-2">Name</th>
+							<th class="col-md-6">Symbol</th>
+							<th class="col-md-3">Exchange</th>
+							<th class="col-md-1">Type</th>
 						</tr>
 					</thead>
 					<tbody>
 						<tr ng-repeat="stockSuggestion in addStockSuggestions">
-							<td><input type="radio" name="addStockChosen" value="{{ stockSuggestion.name }}" ng-click="setSelectedStock(stockSuggestion)"></td>
-							<th scope="row">{{ stockSuggestion.symbol }}</th>
-							<td>{{ stockSuggestion.name }}</td>
-							<td>{{ stockSuggestion.exch }} ({{ stockSuggestion.exchDisp }})</td>
-							<td>{{ stockSuggestion.typeDisp }}</td>
+							<td class="col-md-1 text-center"><input type="radio" name="addStockChosen" value="{{ stockSuggestion.name }}" ng-click="setSelectedStock(stockSuggestion)"></td>
+							<th class="col-md-2" scope="row">{{ stockSuggestion.symbol }}</th>
+							<td class="col-md-7">{{ stockSuggestion.name }}</td>
+							<td class="col-md-2">{{ stockSuggestion.exchDisp }}</td>
+							<td class="col-md-1">{{ stockSuggestion.typeDisp }}</td>
 						</tr>
 					</tbody>
 				</table>
 			</div>
 
 			<div class="modal-footer">
-				<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+				<button type="button" class="btn btn-default" data-dismiss="modal" ng-click="closeAddStockModal()">Cancel</button>
 				<button type="button" class="btn btn-primary" data-dismiss="modal" ng-class="{ disabled: !hasSelectedStock }" ng-click="saveSelectedStock()">Add Stock</button>
 			</div>
 		</div>

@@ -4,8 +4,8 @@
  * Stock List Controller.
  */
 angular.module('stockWatcher.Controllers')
-	.controller('StockListController', ['$scope', '$interval', 'stockService', 'errorMessages', 
-		function ($scope, $interval, stockService, errorMessages) {
+	.controller('StockListController', ['$scope', '$interval', 'stockService', 'errorMessages', 'storageService',
+		function ($scope, $interval, stockService, errorMessages, storageService) {
 
 		// Set the default refresh interval for the table:
 		$scope.refreshInterval = 30;
@@ -16,94 +16,69 @@ angular.module('stockWatcher.Controllers')
 		// Set the default sort direction for the table:
 		$scope.sortReversed = false;
 		
-		$scope.quotesToFetch = [
+
+		// Retrieve the quotes to fetch from storage:
+		//var savedQuotesKey = 'StockWatcher_quotesToFetch';
+		//var savedQuotes = angular.fromJson(storageService.getData(savedQuotesKey));
+
+		$scope.quotesToFetch = /*savedQuotes ||*/ [
 			{
 				symbol: 'PG',
 				yahooSymbol: 'PG',
-				//exchange: 'NYSE',
-				//interval: 60*15,
-				//period: '10d',
 				liveData: {},
 				index: 0
 			},
 			{
 				symbol: 'T',
 				yahooSymbol: 'T.TO',
-				//exchange: 'TSE',
-				//interval: 60*15,
-				//period: '1d',
 				liveData: {},
 				index: 1
 			},
 			{
 				symbol: 'BNS',
 				yahooSymbol: 'BNS.TO',
-				//exchange: 'TSE',
-				//interval: 60*15,
-				//period: '1d',
 				liveData: {},
 				index: 2
 			},
 			{
 				symbol: 'TD',
 				yahooSymbol: 'TD.TO',
-				//exchange: 'TSE',
-				//interval: 60*15,
-				//period: '1d',
 				liveData: {},
 				index: 3
 			},
 			{
 				symbol: 'PWF',
 				yahooSymbol: 'PWF.TO',
-				//exchange: 'TSE',
-				//interval: 60*15,
-				//period: '1d',
 				liveData: {},
 				index: 4
 			},
 			{
 				symbol: 'FTS',
 				yahooSymbol: 'FTS.TO',
-				//exchange: 'TSE',
-				//interval: 60*15,
-				//period: '1d',
 				liveData: {},
 				index: 5
 			},
 			{
 				symbol: 'BEP',
 				yahooSymbol: 'BEP-UN.TO',
-				//exchange: 'TSE',
-				//interval: 60*15,
-				//period: '1d',
 				liveData: {},
 				index: 6
 			},
 			{
 				symbol: 'EMA',
 				yahooSymbol: 'EMA.TO',
-				//exchange: 'TSE',
-				//interval: 60*15,
-				//period: '1d',
 				liveData: {},
 				index: 7
 			},
 			{
 				symbol: 'XIC',
 				yahooSymbol: 'XIC.TO',
-				//exchange: 'TSE',
-				//interval: 60*15,
-				//period: '1d',
 				liveData: {},
 				index: 8
 			},
 			{
 				symbol: 'XSP',
 				yahooSymbol: 'XSP.TO',
-				//exchange: 'TSE',
-				//interval: 60*15,
-				//period: '1d',
 				liveData: {},
 				index: 9
 			}
@@ -179,7 +154,7 @@ angular.module('stockWatcher.Controllers')
 				$scope.selectedStock = selectedStock;
 				$scope.hasSelectedStock = true;
 			} else {
-				$scope.setSelectedStock = undefined;
+				$scope.selectedStock = undefined;
 				$scope.hasSelectedStock = false;
 				$scope.addStockName = undefined; // Reset the input
 				$scope.addStockSuggestions = [];
@@ -192,21 +167,36 @@ angular.module('stockWatcher.Controllers')
 				{
 					symbol: $scope.selectedStock.symbol,
 					yahooSymbol: $scope.selectedStock.symbol,
-					//exchange: 'NYSE',
-					//interval: 60*15,
-					//period: '10d',
 					liveData: {},
 					index: $scope.quotesToFetch.length
 				}
 			);
 
+			// Store the updated quotes to fetch:
+			var quotesToSerialize = [];
+			for (var i = 0, nbQuotes = $scope.quotesToFetch.length; i < nbQuotes; i++) {
+				var data = $scope.quotesToFetch[i];
+
+				quotesToSerialize.push({
+					symbol: data.symbol,
+					yahooSymbol: data.yahooSymbol,
+					liveData: {},
+					index: data.index
+				});
+			}
+			storageService.setData(savedQuotesKey, angular.toJson(quotesToSerialize));
+
 			// Refresh the stock list:
 			getCurrentDataWithDetails();
 
-			// Close the modal:
-			$scope.setSelectedStock(undefined);
-			//$('#addStockModal').modal('hide');
+			// Close Modal:
+			$scope.closeAddStockModal();
 		};
+
+		$scope.closeAddStockModal = function() {
+			// Reset saved data:
+			$scope.setSelectedStock(undefined);
+		}
 		
 		
 		
