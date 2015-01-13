@@ -4,8 +4,8 @@
  * Stock List Controller.
  */
 angular.module('stockWatcher.Controllers')
-	.controller('StockListController', ['$scope', '$interval', 'stockService', 'errorMessages', 'storageService',
-		function ($scope, $interval, stockService, errorMessages, storageService) {
+	.controller('StockListController', ['$scope', '$interval', 'stockService', 'errorMessages', 'storageService', 'applicationStorageService',
+		function ($scope, $interval, stockService, errorMessages, storageService, applicationStorageService) {
 
 		// Set the default refresh interval for the table:
 		$scope.refreshInterval = 30;
@@ -18,8 +18,7 @@ angular.module('stockWatcher.Controllers')
 		
 
 		// Retrieve the quotes to fetch from storage:
-		//var savedQuotesKey = 'StockWatcher_quotesToFetch';
-		//var savedQuotes = angular.fromJson(storageService.getData(savedQuotesKey));
+		//var savedQuotes = applicationStorageService.getSavedStockSymbols();
 
 		$scope.quotesToFetch = /*savedQuotes ||*/ [
 			{
@@ -184,7 +183,7 @@ angular.module('stockWatcher.Controllers')
 					index: data.index
 				});
 			}
-			storageService.setData(savedQuotesKey, angular.toJson(quotesToSerialize));
+			applicationStorageService.setSavedStocks(quotesToSerialize);
 
 			// Refresh the stock list:
 			getCurrentDataWithDetails();

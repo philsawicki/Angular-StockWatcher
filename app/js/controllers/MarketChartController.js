@@ -274,6 +274,8 @@ angular.module('stockWatcher.Controllers')
 			if (typeof yesterdayClosePrice !== 'undefined') {
 				drawYesterdayClosePlotLine();
 			}
+
+			chart.redraw();
 		};
 
 		/**

@@ -141,26 +141,28 @@
 					</div>
 				</form>
 
-				<table class="table table-responsive table-striped" ng-show="addStockSuggestions.length > 0">
-					<thead>
-						<tr>
-							<th class="col-md-1 text-center">Select</th>
-							<th class="col-md-2">Name</th>
-							<th class="col-md-6">Symbol</th>
-							<th class="col-md-3">Exchange</th>
-							<th class="col-md-1">Type</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr ng-repeat="stockSuggestion in addStockSuggestions">
-							<td class="col-md-1 text-center"><input type="radio" name="addStockChosen" value="{{ stockSuggestion.name }}" ng-click="setSelectedStock(stockSuggestion)"></td>
-							<th class="col-md-2" scope="row">{{ stockSuggestion.symbol }}</th>
-							<td class="col-md-7">{{ stockSuggestion.name }}</td>
-							<td class="col-md-2">{{ stockSuggestion.exchDisp }}</td>
-							<td class="col-md-1">{{ stockSuggestion.typeDisp }}</td>
-						</tr>
-					</tbody>
-				</table>
+				<div class="table-responsive">
+					<table class="table table-striped" ng-show="addStockSuggestions.length > 0">
+						<thead>
+							<tr>
+								<th class="col-md-1 text-center">Select</th>
+								<th class="col-md-2">Name</th>
+								<th class="col-md-6">Symbol</th>
+								<th class="col-md-3">Exchange</th>
+								<th class="col-md-1">Type</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr ng-repeat="stockSuggestion in addStockSuggestions">
+								<td class="col-md-1 text-center"><input type="radio" name="addStockChosen" value="{{ stockSuggestion.name }}" ng-click="setSelectedStock(stockSuggestion)"></td>
+								<th class="col-md-2" scope="row">{{ stockSuggestion.symbol }}</th>
+								<td class="col-md-7">{{ stockSuggestion.name }}</td>
+								<td class="col-md-2">{{ stockSuggestion.exchDisp }}</td>
+								<td class="col-md-1">{{ stockSuggestion.typeDisp }}</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
 			</div>
 
 			<div class="modal-footer">
