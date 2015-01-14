@@ -194,10 +194,10 @@ angular.module('stockWatcher.Controllers')
 					return function (data) {
 						// If data is received, store it to be drawn later:
 						if (data && data.length > 0) {
-							// Set data for the stock symbol:
-							marketData[index].data = data;
-
 							if (fetchType === 'init') {
+								// Set data for the stock symbol:
+								marketData[index].data = data;
+
 								seriesCount++;
 								if (seriesCount === nbMarketSymbols) {
 									// Received all Market data, graph is now ready to be drawn:
@@ -260,7 +260,7 @@ angular.module('stockWatcher.Controllers')
 					updateFetchPromise(i, 'update');
 				}
 			}
-		}
+		};
 
 		/**
 		 * Sets the chart's data for the given serie index.
@@ -269,7 +269,7 @@ angular.module('stockWatcher.Controllers')
 		 */
 		var setGraphData = function(serieIndex, data) {
 			var serie = chart.series[serieIndex];
-			serie.setData(data);
+			serie.setData(data, true, true, false);
 			
 			if (typeof yesterdayClosePrice !== 'undefined') {
 				drawYesterdayClosePlotLine();
