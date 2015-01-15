@@ -504,7 +504,104 @@ describe('StockService', function() {
 			[ new Date("Fri Jan 02 2015 09:32:00 GMT-0500 (EST)"), 2067.57 ],
 			[ new Date("Fri Jan 02 2015 09:33:00 GMT-0500 (EST)"), 2070.06 ],
 			[ new Date("Fri Jan 02 2015 16:00:00 GMT-0500 (EST)"), 2058.03 ]
-		]
+		],
+		getCurrentDataWithDetails: {
+			"query": {
+				"count": 1,
+				"created": "2015-01-04T07:11:13Z",
+				"lang": "en-US",
+				"results": {
+					"row": {
+						"Ask": "N/A",
+						"AverageDailyVolume": "7778830",
+						"AskSize": "N/A",
+						"Bid": "N/A",
+						"AskRealTime": "93.20",
+						"BidRealTime": "90.18",
+						"BookValue": "24.038",
+						"BidSize": "N/A",
+						"ChangeAndPercentChange": "-0.65 - -0.71%",
+						"Change": "-0.65",
+						"Commission": "-",
+						"Currency": "USD",
+						"ChangeRealTime": "-0.65",
+						"AfterHoursChangeRealTime": "N/A - N/A",
+						"DividendPerShare": "2.534",
+						"LastTradeDate": "1/2/2015",
+						"TradeDate": "-",
+						"EarningsPerShare": "3.663",
+						"ErrorIndication": "N/A",
+						"EPSEstimateCurrentYear": "4.34",
+						"EPSEstimateNextYear": "4.69",
+						"EPSEstimateNextQuarter": "1.08",
+						"DaysHigh": "91.00",
+						"_52WeekLow": "75.26",
+						"_52WeekHigh": "93.89",
+						"DaysLow": "89.92",
+						"HoldingsGainPercent": "- - -",
+						"AnnualizedGain": "-",
+						"HoldingsGain": "-",
+						"HoldingsGainPercentRealTime": "N/A - N/A",
+						"HoldingsGainRealTime": "N/A",
+						"MoreInfo": "cn",
+						"OrderBookRealTime": "N/A",
+						"YearLow": "75.26",
+						"MarketCapitalization": "244.4B",
+						"MarketCapRealTime": "N/A",
+						"EBITDA": "19.175B",
+						"ChangeFrom52WeekLow": "+15.18",
+						"PercentChangeFrom52WeekLow": "+20.17%",
+						"YearHigh": "93.89",
+						"LastTradeRealTimeWithTime": "N/A - <b>90.44</b>",
+						"ChangePercentRealTime": "N/A - -0.71%",
+						"ChangeFrom52WeekHigh": "-3.45",
+						"PercentChangeFrom52WeekHigh": "-3.67%",
+						"LastTradeWithTime": "Jan  2 - <b>90.44</b>",
+						"LastTradePriceOnly": "90.44",
+						"HighLimit": "-",
+						"LowLimit": "-",
+						"DaysRange": "89.92 - 91.00",
+						"DaysRangeRealTime": "N/A - N/A",
+						"_50DayMovingAverage": "90.3585",
+						"_200DayMovingAverage": "84.5965",
+						"ChangeFrom200DayMovingAverage": "+5.8435",
+						"PercentChangeFrom200DayMovingAverage": "+6.91%",
+						"ChangeFrom50DayMovingAverage": "+0.0815",
+						"PercentChangeFrom50DayMovingAverage": "+0.09%",
+						"Name": "Procter & Gamble ",
+						"Notes": "-",
+						"Open": "90.89",
+						"PreviousClose": "91.09",
+						"PricePaid": "-",
+						"ChangeInPercent": -0.71,
+						"PricePerSales": "2.96",
+						"PricePerBook": "3.79",
+						"ExDividendDate": "Oct 22",
+						"PERatio": "24.87",
+						"DividendPayDate": "Nov 17",
+						"PERatioRealTime": "N/A",
+						"PEGRatio": "2.62",
+						"PricePerEPSEstimateCurrentYear": "20.99",
+						"PricePerEPSEstimateNextYear": "19.42",
+						"Symbol": "PG",
+						"SharesOwned": "-",
+						"Revenue": "83.024B",
+						"ShortRatio": "3.80",
+						"LastTradeTime": "4:02pm",
+						"TickerTrend": " =====+ ",
+						"_1YearTargetPrice": "91.65",
+						"Volume": "7255494",
+						"HoldingsValue": "-",
+						"HoldingsValueRealTime": "N/A",
+						"_52WeekRange": "75.26 - 93.89",
+						"DaysValueChange": "- - -0.71%",
+						"DaysValueChangeRealTime": "N/A - N/A",
+						"StockExchange": "NYSE",
+						"DividendYield": "2.78"
+					}
+				}
+			}
+		}
 	};
 
 	// Set up the module:
@@ -717,7 +814,7 @@ describe('StockService', function() {
 			$httpBackend.flush();
 
 			expect(resultData).toBeDefined();
-			expect(resultData).toEqual(expectedResponses.getCurrentDataWithDetails);
+			expect(resultData).toEqual(formattedResponses.getCurrentDataWithDetails);
 		});
 
 		it('should return a "NoData" Error Promise when receiving empty data array', function() {

@@ -288,6 +288,16 @@ angular.module('stockWatcher.Services')
 							error: errorMessages.NoData.Error,
 							message: errorMessages.NoData.Message
 						});
+					} else {
+						
+						// Parse & format the incoming data:
+						if (data.query.count === 1) {
+							data.query.results.row.ChangeInPercent = parseFloat(data.query.results.row.ChangeInPercent, 10);
+						} else {
+							for (var i = 0, nbResults = data.query.count; i < nbResults; i++) {
+								data.query.results.row[i].ChangeInPercent = parseFloat(data.query.results.row[i].ChangeInPercent, 10);
+							}
+						}
 					}
 					
 
@@ -434,8 +444,75 @@ angular.module('stockWatcher.Services')
 			return deferred.promise;
 		};
 
+		/**
+		 * Gets live, streaming stock data for the given market.
+		 * @param  {string}      symbol   The market symbol for which to get streaming data (eg: ".INX").
+		 * @param  {int}         interval The refresh interval, in seconds (eg: 60).
+		 * @param  {string}      period   The duration for which to get data, up to 10 days (eg: "1d", "1h", etc.).
+		 * @return {Deferred.promise}     A promise to be resolved when the request is successfully received.
+		 */
 		var getLiveMarketData = function(marketSymbol, interval, period) {
 			return getLiveData(marketSymbol, null, interval, period);
+		};
+
+		/**
+		 * Gets Yahoo! Finance Newsfeed items for the given stock symbol.
+		 * @param  {string} stockSymbol The stock symbol for which to get streaming data (eg: "PG").
+		 * @return {Deferred.promise}   A promise to be resolved when the request is successfully received.
+		 */
+		var getNewsFeedForStock = function(stockSymbol) {
+			var deferred = $q.defer();
+			var timeoutPromise = $q.defer();
+			var requestTimedOut = false;
+			var timeoutCountdown = undefined;
+
+			var csvUrl = 'http://feeds.finance.yahoo.com/rss/2.0/headline?s=' + stockSymbol + '&region=CA';
+			var query = "select * from feed where url='" + csvUrl + '"'; // and columns='symbol,price,date,time,change,col1,high,low,col2'";
+			var format = '&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&callback=JSON_CALLBACK';
+			var url = 'http://query.yahooapis.com/v1/public/yql?q=' + encodeURIComponent(query) + format;
+			
+			$http.jsonp(url, { timeout: timeoutPromise.promise })
+				.success(function (data) {
+					var nbResults = data.query.count;
+
+					// Fail the request, as no data has been received:
+					if (nbResults === 0) {
+						deferred.reject({
+							error: errorMessages.NoData.Error,
+							message: errorMessages.NoData.Message
+						});
+					}
+					
+
+					// Cancel the "timeout" $timeout:
+					$timeout.cancel(timeoutCountdown);
+					// Cancel the "timeout" Promise:
+					timeoutPromise.reject();
+
+					
+					// Resolve the Promise with data:
+					deferred.resolve(data.query.results.item);
+				})
+				.error(function (data) {
+					if (requestTimedOut) {
+						deferred.reject({
+							error: errorMessages.Timeout.Error,
+							message: errorMessages.Timeout.Message.format(appConfig.JSONPTimeout),
+							data: data
+						});
+					} else {
+						deferred.reject(data);
+					}
+				});
+
+
+			// Start a $timeout which, if resolved, will fail the $http request sent (and assume a timeout):
+			timeoutCountdown = $timeout(function() {
+				requestTimedOut = true;
+				timeoutPromise.resolve();
+			}, appConfig.JSONPTimeout);
+
+			return deferred.promise;
 		};
 
 		/**
@@ -534,6 +611,7 @@ angular.module('stockWatcher.Services')
 			getLiveMarketData: getLiveMarketData,
 			getCurrentData: getCurrentData,
 			getCurrentDataWithDetails: getCurrentDataWithDetails,
-			getStockSymbol: getStockSymbol
+			getStockSymbol: getStockSymbol,
+			getNewsFeedForStock: getNewsFeedForStock
 		};
 	}]);
