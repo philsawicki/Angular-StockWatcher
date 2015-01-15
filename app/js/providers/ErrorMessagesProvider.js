@@ -14,6 +14,10 @@ angular.module('stockWatcher.Providers')
 			Timeout: {
 				Error: 'Timeout',
 				Message: 'Request took longer than {0}ms'
+			},
+			YQL: {
+				Error: 'YQLError',
+				Message: 'Check "data" for details'
 			}
 		};
 

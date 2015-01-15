@@ -467,12 +467,23 @@ angular.module('stockWatcher.Services')
 			var timeoutCountdown = undefined;
 
 			var csvUrl = 'http://feeds.finance.yahoo.com/rss/2.0/headline?s=' + stockSymbol + '&region=CA';
-			var query = "select * from feed where url='" + csvUrl + '"'; // and columns='symbol,price,date,time,change,col1,high,low,col2'";
+			var query = "select * from feed where url='" + csvUrl + "'"; // and columns='symbol,price,date,time,change,col1,high,low,col2'";
 			var format = '&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&callback=JSON_CALLBACK';
 			var url = 'http://query.yahooapis.com/v1/public/yql?q=' + encodeURIComponent(query) + format;
 			
 			$http.jsonp(url, { timeout: timeoutPromise.promise })
 				.success(function (data) {
+					// Return YQL error message:
+					if (typeof data.error !== 'undefined') {
+						deferred.reject({
+							error: errorMessages.YQL.Error,
+							message: errorMessages.YQL.Message,
+							data: data.error
+						});
+
+						return;
+					}
+
 					var nbResults = data.query.count;
 
 					// Fail the request, as no data has been received:

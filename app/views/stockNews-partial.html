@@ -1,0 +1,23 @@
+<div class="page-header">
+	<h3>News</h3>
+</div>
+
+<div class="row">
+	<div class="table-responsive">
+		<table class="table table-striped">
+			<thead>
+			</thead>
+			<tbody>
+				<tr class="animate-repeat" ng-repeat="newsItem in newsItems | reverse">
+					<td class="col-md-4">
+						<p>
+							<a href="{{ newsItem.link }}" target="blank" title="{{ newsItem.title }}">{{ newsItem.title }}</a>
+						</p>
+						<p>{{ newsItem.pubDate }}</p>
+					</td>
+					<td class="col-md-8">{{ newsItem.description }}</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>
