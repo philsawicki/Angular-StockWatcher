@@ -13,7 +13,9 @@ describe('ApplicationStorageService', function() {
 			{
 				key: 'value'
 			}
-		]
+		],
+		sortingField: 'sortingField',
+		sortingDirection: true
 	};
 
 
@@ -125,6 +127,74 @@ describe('ApplicationStorageService', function() {
 				expect(storageService.getData.callCount).toEqual(1);
 				expect(storageService.getData.mostRecentCall.args[0]).toEqual(appConfig.StorageKeys.StoredQuotes);
 			});
+		});
+	});
+
+
+	describe('Stock List sort field', function() {
+		it('can save and retrieve data', function() {
+			applicationStorageService.setStockListSortingField(constants.sortingField);
+
+			var storedValue = applicationStorageService.getStockListSortingField();
+
+			expect(storedValue).toEqual(constants.sortingField);
+			expect(storageService.setData).toHaveBeenCalled();
+		});
+
+		it('should return a string', function() {
+			applicationStorageService.setStockListSortingField(constants.sortingField);
+
+			var storedValue = applicationStorageService.getStockListSortingField();
+
+			expect(typeof storedValue).toEqual('string');
+		});
+	});
+
+
+	describe('Stock List sort direction', function() {
+		it('can save and retrieve data', function() {
+			applicationStorageService.setStockListSortingDirection(constants.sortingDirection);
+
+			var storedValue = applicationStorageService.getStockListSortingDirection();
+
+			expect(storedValue).toEqual(constants.sortingDirection);
+			expect(storageService.setData).toHaveBeenCalled();
+		});
+
+		it('should save the given value in the proper format', function() {
+			applicationStorageService.setStockListSortingDirection('true');
+
+			var storedValue = applicationStorageService.getStockListSortingDirection();
+
+			expect(storedValue).toEqual(true);
+			expect(typeof storedValue).toEqual('boolean');
+		});
+
+		it('should understand parmeter given as string', function() {
+			applicationStorageService.setStockListSortingDirection('false');
+
+			var storedValue = applicationStorageService.getStockListSortingDirection();
+
+			expect(storedValue).toEqual(false);
+			expect(typeof storedValue).toEqual('boolean');
+		});
+
+		it('should understand parmeter given as int', function() {
+			applicationStorageService.setStockListSortingDirection(0);
+
+			var storedValue = applicationStorageService.getStockListSortingDirection();
+
+			expect(storedValue).toEqual(false);
+			expect(typeof storedValue).toEqual('boolean');
+		});
+
+		it('should return a boolean', function() {
+			applicationStorageService.setStockListSortingDirection(constants.sortingDirection);
+
+			var storedValue = applicationStorageService.getStockListSortingDirection();
+
+			expect(storedValue).toEqual(constants.sortingDirection);
+			expect(typeof storedValue).toEqual('boolean');
 		});
 	});
 });

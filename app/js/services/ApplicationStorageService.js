@@ -33,6 +33,7 @@ angular.module('stockWatcher.Services')
 		};
 
 
+
 		/**
 		 * Gets saved stock symbols.
 		 * @return {Array<Object>} The list of saved stock symbols.
@@ -64,8 +65,83 @@ angular.module('stockWatcher.Services')
 			storageService.setData(key, dataToSave);
 		};
 
+
+
+		/**
+		 * Gets saved Stock List sorting Field.
+		 * @return {string} The Stock List sorting Field.
+		 */
+		var getStockListSortingField = function() {
+			var key = appConfig.StorageKeys.StoredStockListField;
+
+			// Try to retrieve data from cache:
+			var cachedData = _getFromCache(key);
+			if (cachedData) {
+				return cachedData;
+			}
+
+			var savedSortingField = storageService.getData(key);
+			return savedSortingField;
+		};
+
+		/**
+		 * Saves the given Stock List sorting Field.
+		 * @param {string} sortingField The Stock List sorting Field to save.
+		 */
+		var setStockListSortingField = function(sortingField) {
+			var key = appConfig.StorageKeys.StoredStockListField;
+
+			// Save the data to cache:
+			_setCache(key, sortingField);
+
+			storageService.setData(key, sortingField);
+		};
+
+
+		/**
+		 * Gets saved Stock List sorting Direction.
+		 * @return {string} The Stock List sorting Direction.
+		 */
+		var getStockListSortingDirection = function() {
+			var key = appConfig.StorageKeys.StoredStockListOrder;
+
+			// Try to retrieve data from cache:
+			var cachedData = _getFromCache(key);
+			if (cachedData) {
+				return cachedData;
+			}
+
+			var savedSortingDirection = storageService.getData(key);
+			if (savedSortingDirection === 'true' || savedSortingDirection === 1) {
+				return true;
+			}
+			return false;
+		};
+
+		/**
+		 * Saves the given Stock List sorting Direction.
+		 * @param {string} sortingDirection The Stock List sorting Direction to save.
+		 */
+		var setStockListSortingDirection = function(sortingDirection) {
+			var key = appConfig.StorageKeys.StoredStockListOrder;
+			//var dataToSave = (sortingDirection.toString() === 'true');
+			var dataToSave = JSON.parse(sortingDirection);
+
+			// Save the data to cache:
+			_setCache(key, dataToSave);
+
+			storageService.setData(key, dataToSave);
+		};
+
+
 		return {
 			getSavedStockSymbols: getSavedStockSymbols,
-			setSavedStocks: setSavedStocks
+			setSavedStocks: setSavedStocks,
+
+			getStockListSortingField: getStockListSortingField,
+			setStockListSortingField: setStockListSortingField,
+
+			getStockListSortingDirection: getStockListSortingDirection,
+			setStockListSortingDirection: setStockListSortingDirection
 		}
 	}]);

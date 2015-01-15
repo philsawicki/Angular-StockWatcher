@@ -11,7 +11,9 @@ angular.module('stockWatcher.Providers')
 		var appConfig = {
 			JSONPTimeout: 10*1000, // Delay before assuming that a JSONP request failed due to a timeout (in ms)
 			StorageKeys: { // Keys to access stored values (currently serialized to "localStorage")
-				StoredQuotes: storageKeyPrefix + 'storedQuotes' // Quotes saved to localStorage.
+				StoredQuotes: storageKeyPrefix + 'storedQuotes', // Quotes saved to localStorage.
+				StoredStockListField: storageKeyPrefix + 'storedStockListSortingField', // Sorting Field for Stock List
+				StoredStockListOrder: storageKeyPrefix + 'storedStockListSortingDirection' // Sorting Direction for Stock List
 			}
 		};
 

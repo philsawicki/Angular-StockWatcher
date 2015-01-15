@@ -467,6 +467,14 @@ describe('StockService', function() {
 				}
 			},
 		},
+		getDataWithYQLError: {
+			error: 'YQLError',
+			message: 'Check "data" for details',
+			data: {
+				description: 'No definition found for Table fed',
+				lang: 'en-US'
+			}
+		},
 		getCurrentDataWithDetailsWithoutAnyResults: {
 			"query": {
 				"count": 0,
@@ -476,6 +484,37 @@ describe('StockService', function() {
 					"row": {
 						// No data
 					}
+				}
+			}
+		},
+		getNewsFeedForStock: {
+			"query": {
+				"count": 2,
+				"created": "2015-01-15T00:30:52Z",
+				"lang": "en-US",
+				"results": {
+					"item": [
+						{
+							"title": "[$$] Canada's Banks Try to Downplay Exposure to Energy",
+							"link": "http://us.rd.yahoo.com/finance/external/wsj/rss/SIG=12s72krs2/*http://online.wsj.com/articles/canadas-banks-try-to-downplay-exposure-to-energy-1421276192?mod=yahoo_hs",
+							"description": null,
+							"guid": {
+								"isPermaLink": "false",
+								"content": "yahoo_finance/847897861"
+							},
+							"pubDate": "Wed, 14 Jan 2015 22:56:35 GMT"
+						},
+						{
+							"title": "New Issue- TD prices 500 mln stg 2018 FRN",
+							"link": "http://us.rd.yahoo.com/finance/news/rss/story/*http://finance.yahoo.com/news/issue-td-prices-500-mln-145852262.html",
+							"description": "[Reuters] - Following are terms and conditions of a FRN priced on Wednesday. Borrower The Toronto-Dominion Bank Issue Amount 500 million sterling Maturity Date January 19, 2018 Coupon 3-month Libor + 38 basis points ...",
+							"guid": {
+								"isPermaLink": "false",
+								"content": "yahoo_finance/3662427357"
+							},
+							"pubDate": "Wed, 14 Jan 2015 14:58:52 GMT"
+						}
+					]
 				}
 			}
 		}
@@ -1042,6 +1081,121 @@ describe('StockService', function() {
 			expect(errorCallbackReason).toEqual({
 				error: errorMessages.Timeout.Error,
 				message: errorMessages.Timeout.Message.format(appConfig.JSONPTimeout)
+			});
+		});
+	});
+
+
+
+	/** 
+	 * Unit Tests for "getNewsFeedForStock()".
+	 */
+	describe('getNewsFeedForStock', function() {
+		it('should call the expected YQL URL and return the correctly-formatted data', function() {
+			$httpBackend
+				.expectJSONP("http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20feed%20where%20url%3D'http%3A%2F%2Ffeeds.finance.yahoo.com%2Frss%2F2.0%2Fheadline%3Fs%3D" + constants.marketSymbol + "%26region%3DCA'&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&callback=JSON_CALLBACK")
+				.respond(expectedResponses.getNewsFeedForStock);
+        	
+			var resultData = undefined;
+			var resultDataPromise = stockService.getNewsFeedForStock(constants.marketSymbol, constants.interval, constants.period);
+			resultDataPromise.then(function (data) {
+				resultData = data;
+			});
+
+			$httpBackend.flush();
+
+			expect(resultData).toBeDefined();
+			expect(resultData).toEqual(expectedResponses.getNewsFeedForStock.query.results.item);
+		});
+
+		it('should return a "NoData" Error Promise when receiving empty data array', function() {
+			$httpBackend
+				.expectJSONP("http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20feed%20where%20url%3D'http%3A%2F%2Ffeeds.finance.yahoo.com%2Frss%2F2.0%2Fheadline%3Fs%3D" + constants.marketSymbol + "%26region%3DCA'&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&callback=JSON_CALLBACK")
+				.respond(expectedResponses.getDataWithoutAnyResults);
+
+			var resultData = undefined;
+			var errorCallbackFired = false;
+			var errorCallbackReason = undefined;
+			var resultDataPromise = stockService.getNewsFeedForStock(constants.marketSymbol, constants.interval, constants.period);
+			resultDataPromise.then(
+				function (data) {
+					resultData = data;
+				},
+				function (reason) {
+					errorCallbackFired = true;
+					errorCallbackReason = reason;
+				}
+			);
+
+			$httpBackend.flush();
+
+			expect(resultData).toBeUndefined();
+			expect(errorCallbackFired).toBeTruthy();
+			expect(errorCallbackReason).toBeDefined();
+			expect(errorCallbackReason).toEqual({
+				error: errorMessages.NoData.Error,
+				message: errorMessages.NoData.Message
+			});
+		});
+		
+		it('should return a "Timeout" Error Promise when the request takes too long to respond', function() {
+			$httpBackend
+				.expectJSONP("http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20feed%20where%20url%3D'http%3A%2F%2Ffeeds.finance.yahoo.com%2Frss%2F2.0%2Fheadline%3Fs%3D" + constants.marketSymbol + "%26region%3DCA'&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&callback=JSON_CALLBACK")
+				.respond(expectedResponses.getDataWithoutAnyResults);
+
+			var resultData = undefined;
+			var errorCallbackFired = false;
+			var errorCallbackReason = undefined;
+			var resultDataPromise = stockService.getNewsFeedForStock(constants.marketSymbol, constants.interval, constants.period);
+			resultDataPromise.then(
+				function (data) {
+					resultData = data;
+				},
+				function (reason) {
+					errorCallbackFired = true;
+					errorCallbackReason = reason;
+				}
+			);
+
+			$timeout.flush(appConfig.JSONPTimeout + 1);
+
+			expect(resultData).toBeUndefined();
+			expect(errorCallbackFired).toBeTruthy();
+			expect(errorCallbackReason).toBeDefined();
+			expect(errorCallbackReason).toEqual({
+				error: errorMessages.Timeout.Error,
+				message: errorMessages.Timeout.Message.format(appConfig.JSONPTimeout)
+			});
+		});
+
+		it('should return a "YQLError" Error Promise when sending a request with a syntax error', function() {
+			$httpBackend
+				.expectJSONP("http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20feed%20where%20url%3D'http%3A%2F%2Ffeeds.finance.yahoo.com%2Frss%2F2.0%2Fheadline%3Fs%3D" + constants.marketSymbol + "%26region%3DCA'&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&callback=JSON_CALLBACK")
+				.respond(expectedResponses.getDataWithYQLError);
+
+			var resultData = undefined;
+			var errorCallbackFired = false;
+			var errorCallbackReason = undefined;
+			var resultDataPromise = stockService.getNewsFeedForStock(constants.marketSymbol, constants.interval, constants.period);
+			resultDataPromise.then(
+				function (data) {
+					resultData = data;
+				},
+				function (reason) {
+					errorCallbackFired = true;
+					errorCallbackReason = reason;
+				}
+			);
+
+			$httpBackend.flush();
+
+			expect(resultData).toBeUndefined();
+			expect(errorCallbackFired).toBeTruthy();
+			expect(errorCallbackReason).toBeDefined();
+			expect(errorCallbackReason).toEqual({
+				error: errorMessages.YQL.Error,
+				message: errorMessages.YQL.Message,
+				data: 'YQLError'
 			});
 		});
 	});
