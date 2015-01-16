@@ -8,7 +8,7 @@ angular.module('stockWatcher.Controllers')
 		function ($scope, $interval, stockService, errorMessages) {
 
 		// Set the default refresh interval for the table:
-		$scope.refreshInterval = 60;
+		$scope.refreshInterval = 5;
 
 		// Set the default status for the chart initialization flag:
 		$scope.chartIsInitialized = false;
@@ -98,9 +98,9 @@ angular.module('stockWatcher.Controllers')
 				credits: {
 					enabled: false
 				},
-				navigator: {
-					enabled: false
-				},
+				//navigator: {
+				//	enabled: false
+				//},
 				rangeSelector: {
 					buttons: [{
 						type: 'day',
@@ -194,6 +194,7 @@ angular.module('stockWatcher.Controllers')
 					return function (data) {
 						// If data is received, store it to be drawn later:
 						if (data && data.length > 0) {
+
 							if (fetchType === 'init') {
 								// Set data for the stock symbol:
 								marketData[index].data = data;
@@ -269,13 +270,11 @@ angular.module('stockWatcher.Controllers')
 		 */
 		var setGraphData = function(serieIndex, data) {
 			var serie = chart.series[serieIndex];
-			serie.setData(data, true, true, false);
+			serie.setData( marketData[serieIndex].data );
 			
 			if (typeof yesterdayClosePrice !== 'undefined') {
 				drawYesterdayClosePlotLine();
 			}
-
-			chart.redraw();
 		};
 
 		/**
