@@ -172,3 +172,22 @@ body {
 #addStockModal .modal-dialog {
 	z-index: 10000;
 }
+
+
+
+/**
+ * Sparkline Widget.
+ */
+.sparkline {
+	fill: none;
+	stroke: #b3d4fc;
+	stroke-width: 0.5px;
+}
+.sparkcircle.green {
+	fill: #0f0;
+	stroke: none;
+}
+.sparkcircle.red {
+	fill: #f00;
+	stroke: none;
+}

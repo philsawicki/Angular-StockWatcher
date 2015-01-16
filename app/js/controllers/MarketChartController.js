@@ -8,7 +8,7 @@ angular.module('stockWatcher.Controllers')
 		function ($scope, $interval, stockService, errorMessages) {
 
 		// Set the default refresh interval for the table:
-		$scope.refreshInterval = 5;
+		$scope.refreshInterval = 60;
 
 		// Set the default status for the chart initialization flag:
 		$scope.chartIsInitialized = false;
