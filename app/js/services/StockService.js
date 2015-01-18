@@ -531,6 +531,78 @@ angular.module('stockWatcher.Services')
 		};
 
 		/**
+		 * Gets dividend history for the given symbol, between the given dates.
+		 * @param  {string}  stockSymbol The stock quote symbol (eg: "PG").
+		 * @param  {string}  startDate   The start date for historical data (eg: "2014-12-01").
+		 * @param  {string}  endDate     The end date for historical data (eg: "2014-12-07").
+		 * @return {Deferred.promise}    A promise to be resolved when the request is successfully received.
+		 */
+		var getDividendHistoryForStock = function(stockSymbol, startDate, endDate) {
+			var deferred = $q.defer();
+			var timeoutPromise = $q.defer();
+			var requestTimedOut = false;
+			var timeoutCountdown = undefined;
+
+			var query = 'select * from yahoo.finance.dividendhistory where symbol = "' + stockSymbol + '" and startDate = "' + startDate + '" and endDate = "' + endDate + '"';
+			var format = '&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&callback=JSON_CALLBACK';
+			var url = 'http://query.yahooapis.com/v1/public/yql?q=' + encodeURIComponent(query) + format;
+			
+			$http.jsonp(url, { timeout: timeoutPromise.promise })
+				.success(function (data) {
+					// Return YQL error message:
+					if (typeof data.error !== 'undefined') {
+						deferred.reject({
+							error: errorMessages.YQL.Error,
+							message: errorMessages.YQL.Message,
+							data: data.error
+						});
+
+						return;
+					}
+
+					var nbResults = data.query.count;
+
+					// Fail the request, as no data has been received:
+					if (nbResults === 0) {
+						deferred.reject({
+							error: errorMessages.NoData.Error,
+							message: errorMessages.NoData.Message
+						});
+					}
+					
+
+					// Cancel the "timeout" $timeout:
+					$timeout.cancel(timeoutCountdown);
+					// Cancel the "timeout" Promise:
+					timeoutPromise.reject();
+
+					
+					// Resolve the Promise with data:
+					deferred.resolve(data.query.results.quote);
+				})
+				.error(function (data) {
+					if (requestTimedOut) {
+						deferred.reject({
+							error: errorMessages.Timeout.Error,
+							message: errorMessages.Timeout.Message.format(appConfig.JSONPTimeout),
+							data: data
+						});
+					} else {
+						deferred.reject(data);
+					}
+				});
+
+
+			// Start a $timeout which, if resolved, will fail the $http request sent (and assume a timeout):
+			timeoutCountdown = $timeout(function() {
+				requestTimedOut = true;
+				timeoutPromise.resolve();
+			}, appConfig.JSONPTimeout);
+
+			return deferred.promise;
+		};
+
+		/**
 		 * Gets stock symbols matching the given partial name.
 		 * @param  {string} partialStockSymbol The partial stock name to look for (eg: "goog" for "Google");
 		 * @return {Deferred.promise}          A promise to be resolved when the request is successfully received.
@@ -627,6 +699,7 @@ angular.module('stockWatcher.Services')
 			getCurrentData: getCurrentData,
 			getCurrentDataWithDetails: getCurrentDataWithDetails,
 			getStockSymbol: getStockSymbol,
-			getNewsFeedForStock: getNewsFeedForStock
+			getNewsFeedForStock: getNewsFeedForStock,
+			getDividendHistoryForStock: getDividendHistoryForStock
 		};
 	}]);

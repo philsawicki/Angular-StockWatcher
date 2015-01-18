@@ -517,6 +517,27 @@ describe('StockService', function() {
 					]
 				}
 			}
+		},
+		getDividendHistoryForStock: {
+			'query': {
+				'count': 2,
+				'created': '2015-01-18T20:36:47Z',
+				'lang': 'en-US',
+				'results': {
+					'quote': [
+						{
+							'Symbol': constants.symbol,
+							'Date': '2014-11-26',
+							'Dividends': '0.305000'
+						},
+						{
+							'Symbol': constants.symbol,
+							'Date': '2014-09-11',
+							'Dividends': '0.305000'
+						}
+					]
+				}
+			}
 		}
 	};
 
@@ -667,6 +688,10 @@ describe('StockService', function() {
 	});
 
 
+
+
+
+
 	/**
 	 * Unit Tests for "getHistoricalData()".
 	 */
@@ -748,6 +773,10 @@ describe('StockService', function() {
 			});
 		});
 	});
+
+
+
+
 
 
 
@@ -835,6 +864,10 @@ describe('StockService', function() {
 
 
 
+
+
+
+
 	/**
 	 * Unit Tests for "getCurrentDataWithDetails()".
 	 */
@@ -916,6 +949,10 @@ describe('StockService', function() {
 			});
 		});
 	});
+
+
+
+
 
 
 
@@ -1003,6 +1040,10 @@ describe('StockService', function() {
 
 
 
+
+
+
+
 	/** 
 	 * Unit Tests for "getLiveMarketData()".
 	 */
@@ -1084,6 +1125,10 @@ describe('StockService', function() {
 			});
 		});
 	});
+
+
+
+
 
 
 
@@ -1177,6 +1222,125 @@ describe('StockService', function() {
 			var errorCallbackFired = false;
 			var errorCallbackReason = undefined;
 			var resultDataPromise = stockService.getNewsFeedForStock(constants.marketSymbol, constants.interval, constants.period);
+			resultDataPromise.then(
+				function (data) {
+					resultData = data;
+				},
+				function (reason) {
+					errorCallbackFired = true;
+					errorCallbackReason = reason;
+				}
+			);
+
+			$httpBackend.flush();
+
+			expect(resultData).toBeUndefined();
+			expect(errorCallbackFired).toBeTruthy();
+			expect(errorCallbackReason).toBeDefined();
+			expect(errorCallbackReason).toEqual({
+				error: errorMessages.YQL.Error,
+				message: errorMessages.YQL.Message,
+				data: 'YQLError'
+			});
+		});
+	});
+
+
+
+
+
+
+
+	/** 
+	 * Unit Tests for "getDividendHistoryForStock()".
+	 */
+	describe('getDividendHistoryForStock', function() {
+		it('should call the expected YQL URL and return the correctly-formatted data', function() {
+			$httpBackend
+				.expectJSONP("http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20yahoo.finance.dividendhistory%20where%20symbol%20%3D%20%22" + constants.symbol + "%22%20and%20startDate%20%3D%20%22" + constants.startDate + "%22%20and%20endDate%20%3D%20%22" + constants.endDate + "%22&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&callback=JSON_CALLBACK")
+				.respond(expectedResponses.getDividendHistoryForStock);
+
+			var resultData = undefined;
+			var resultDataPromise = stockService.getDividendHistoryForStock(constants.symbol, constants.startDate, constants.endDate);
+			resultDataPromise.then(function (data) {
+				resultData = data;
+			});
+
+			$httpBackend.flush();
+
+			expect(resultData).toBeDefined();
+			expect(resultData).toEqual(expectedResponses.getDividendHistoryForStock.query.results.quote);
+		});
+
+		it('should return a "NoData" Error Promise when receiving empty data array', function() {
+			$httpBackend
+				.expectJSONP("http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20yahoo.finance.dividendhistory%20where%20symbol%20%3D%20%22" + constants.symbol + "%22%20and%20startDate%20%3D%20%22" + constants.startDate + "%22%20and%20endDate%20%3D%20%22" + constants.endDate + "%22&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&callback=JSON_CALLBACK")
+				.respond(expectedResponses.getDataWithoutAnyResults);
+
+			var resultData = undefined;
+			var errorCallbackFired = false;
+			var errorCallbackReason = undefined;
+			var resultDataPromise = stockService.getDividendHistoryForStock(constants.symbol, constants.startDate, constants.endDate);
+			resultDataPromise.then(
+				function (data) {
+					resultData = data;
+				},
+				function (reason) {
+					errorCallbackFired = true;
+					errorCallbackReason = reason;
+				}
+			);
+
+			$httpBackend.flush();
+
+			expect(resultData).toBeUndefined();
+			expect(errorCallbackFired).toBeTruthy();
+			expect(errorCallbackReason).toBeDefined();
+			expect(errorCallbackReason).toEqual({
+				error: errorMessages.NoData.Error,
+				message: errorMessages.NoData.Message
+			});
+		});
+		
+		it('should return a "Timeout" Error Promise when the request takes too long to respond', function() {
+			$httpBackend
+				.expectJSONP("http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20yahoo.finance.dividendhistory%20where%20symbol%20%3D%20%22" + constants.symbol + "%22%20and%20startDate%20%3D%20%22" + constants.startDate + "%22%20and%20endDate%20%3D%20%22" + constants.endDate + "%22&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&callback=JSON_CALLBACK")
+				.respond(expectedResponses.getDataWithoutAnyResults);
+
+			var resultData = undefined;
+			var errorCallbackFired = false;
+			var errorCallbackReason = undefined;
+			var resultDataPromise = stockService.getDividendHistoryForStock(constants.symbol, constants.startDate, constants.endDate);
+			resultDataPromise.then(
+				function (data) {
+					resultData = data;
+				},
+				function (reason) {
+					errorCallbackFired = true;
+					errorCallbackReason = reason;
+				}
+			);
+
+			$timeout.flush(appConfig.JSONPTimeout + 1);
+
+			expect(resultData).toBeUndefined();
+			expect(errorCallbackFired).toBeTruthy();
+			expect(errorCallbackReason).toBeDefined();
+			expect(errorCallbackReason).toEqual({
+				error: errorMessages.Timeout.Error,
+				message: errorMessages.Timeout.Message.format(appConfig.JSONPTimeout)
+			});
+		});
+
+		it('should return a "YQLError" Error Promise when sending a request with a syntax error', function() {
+			$httpBackend
+				.expectJSONP("http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20yahoo.finance.dividendhistory%20where%20symbol%20%3D%20%22" + constants.symbol + "%22%20and%20startDate%20%3D%20%22" + constants.startDate + "%22%20and%20endDate%20%3D%20%22" + constants.endDate + "%22&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&callback=JSON_CALLBACK")
+				.respond(expectedResponses.getDataWithYQLError);
+
+			var resultData = undefined;
+			var errorCallbackFired = false;
+			var errorCallbackReason = undefined;
+			var resultDataPromise = stockService.getDividendHistoryForStock(constants.symbol, constants.startDate, constants.endDate);
 			resultDataPromise.then(
 				function (data) {
 					resultData = data;
