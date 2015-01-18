@@ -29,11 +29,10 @@ angular.module('stockWatcher.Controllers')
 			// Variables:
 			var max = parseFloat($scope.max, 10);
 			var min = parseFloat($scope.min, 10);
-			var current = parseFloat($scope.current, 10);
-			//var middlePoint = min + (max - min) / 2;
+			var current = $scope.current;
 
 			// Prevent unnecessary redraw if data is not available:
-			if (max === 0 && min === 0) {
+			if (max === 0 || min === 0 || isNaN(max) || isNaN(min)) {
 				return;
 			}
 

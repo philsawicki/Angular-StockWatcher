@@ -10,7 +10,18 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta name="description" content="">
 	
-	<title>Angular StockWatcher</title>
+	<title>Stock Watcher</title>
+
+	<style type="text/css">
+	/**
+	 * Allow angular.js to be loaded in body, hiding cloaked elements until 
+	 * templates compile.  The !important is important given that there may be 
+	 * other selectors that are more specific or come later and might alter display. 
+	 */
+	[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+		display: none !important;
+	}
+	</style>
 	
 	<!-- build:css -->
 	<link rel="stylesheet" href="bower_components/html5-boilerplate/css/normalize.css">
@@ -32,7 +43,7 @@
 		
 
 		<!-- Show message is the app is offline (hide container by default): -->
-		<div class="alert alert-warning fade-in fade-out ng-hide" role="alert" ng-hide="applicationIsOnline">
+		<div class="alert alert-warning fade-in fade-out ng-cloak" role="alert" ng-hide="applicationIsOnline">
 			<strong>Application is offline.</strong> Data is not up to date.
 		</div>
 

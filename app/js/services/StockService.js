@@ -292,10 +292,14 @@ angular.module('stockWatcher.Services')
 						
 						// Parse & format the incoming data:
 						if (data.query.count === 1) {
+							data.query.results.row.Change = parseFloat(data.query.results.row.Change, 10);
 							data.query.results.row.ChangeInPercent = parseFloat(data.query.results.row.ChangeInPercent, 10);
+							data.query.results.row.LastTradePriceOnly = parseFloat(data.query.results.row.LastTradePriceOnly, 10);
 						} else {
 							for (var i = 0, nbResults = data.query.count; i < nbResults; i++) {
+								data.query.results.row[i].Change = parseFloat(data.query.results.row[i].Change, 10);
 								data.query.results.row[i].ChangeInPercent = parseFloat(data.query.results.row[i].ChangeInPercent, 10);
+								data.query.results.row[i].LastTradePriceOnly = parseFloat(data.query.results.row[i].LastTradePriceOnly, 10);
 							}
 						}
 					}

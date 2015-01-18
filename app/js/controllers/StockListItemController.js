@@ -36,7 +36,7 @@ angular.module('stockWatcher.Controllers')
 		
 		$scope.isGain = function(input) {
 			if (typeof $scope.quote.liveData.Change !== 'undefined') {
-				var changeIsPositive = $scope.quote.liveData.Change[0] === '+';
+				var changeIsPositive = $scope.quote.liveData.Change > 0;
 				return changeIsPositive;
 			}
 			return false;
@@ -44,7 +44,7 @@ angular.module('stockWatcher.Controllers')
 		
 		$scope.isLoss = function(input) {
 			if (typeof $scope.quote.liveData.Change !== 'undefined') {
-				var changeIsNegative = $scope.quote.liveData.Change[0] === '-';
+				var changeIsNegative = $scope.quote.liveData.Change < 0;
 				return changeIsNegative;
 			}
 			return false;
