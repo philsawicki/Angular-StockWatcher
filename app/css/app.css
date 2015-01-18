@@ -210,7 +210,7 @@ body {
 	fill: brown;
 }
 .sparkline-bar .axis text {
-	font: 10px sans-serif;
+	font: 9px sans-serif;
 }
 .sparkline-bar .axis path,
 .sparkline-bar .axis line {

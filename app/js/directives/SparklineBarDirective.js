@@ -5,7 +5,6 @@ angular.module('stockWatcher.Directives')
 		return {
 			restrict: 'E',
 			scope: {
-				symbol: '@',
 				min: '@',
 				max: '@',
 				current: '@'

@@ -14,7 +14,7 @@
 <td class="text-right">{{ quote.liveData._52WeekHigh | currency }}</td>
 -->
 <td class="col-md-1" style="padding: 0;">
-	<sparkline-bar class="sparkline-bar" id="{{ 'sparklineBar' + quote.yahooSymbol.replace('.', '') }}" symbol="{{ quote.yahooSymbol }}" min="{{ quote.liveData._52WeekLow }}" max="{{ quote.liveData._52WeekHigh }}" current="{{ quote.liveData.LastTradePriceOnly }}"></sparkline-bar>
+	<sparkline-bar class="sparkline-bar" min="{{ quote.liveData._52WeekLow }}" max="{{ quote.liveData._52WeekHigh }}" current="{{ quote.liveData.LastTradePriceOnly }}"></sparkline-bar>
 </td>
 
 <!-- <td>{{ quote.liveData.StockExchange }}</td> -->
