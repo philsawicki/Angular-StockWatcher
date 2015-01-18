@@ -54,8 +54,8 @@ angular.module('stockWatcher.Controllers')
 
 
 
-		function drawSparkline( data) {
-			var width = $(cssID).parent().width();;
+		function drawSparkline(data) {
+			var width = $(cssID).parent().width();
 			var height = 24; //$('#sparkline' + $scope.symbol.replace('.', '')).parent().height();
 
 			var x = d3.scale.linear().range([0, width - 2]);
@@ -79,8 +79,14 @@ angular.module('stockWatcher.Controllers')
 				.select('svg')
 				.remove();
 
-			var circleColor = data[data.length-1].close > $scope.yesterdayClosePrice ?
-				'green' : 'red';
+
+			var todayClose = data[data.length-1].close;
+			var circleColor = 'neutral';
+			if (todayClose > $scope.yesterdayClosePrice) {
+				circleColor = 'up';
+			} else if (todayClose < $scope.yesterdayClosePrice) {
+				circleColor = 'down';
+			}
 
 			svg = d3.select(cssID)
 				.append('svg')

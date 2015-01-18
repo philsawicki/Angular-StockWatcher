@@ -83,11 +83,11 @@
 						<span class="glyphicon-lighter small" ng-class="{'glyphicon glyphicon-chevron-up' : sortOrder === 'liveData.LastTradePriceOnly' && sortReversed === false, 'glyphicon glyphicon-chevron-down' : sortOrder === 'liveData.LastTradePriceOnly' && sortReversed === true}" aria-hidden="true"></span>
 					</th>
 					<th ng-click="sortOrder = 'liveData.Change'; sortReversed = !sortReversed;">
-						Change
+						Chg <small>$</small>
 						<span class="glyphicon-lighter small" ng-class="{'glyphicon glyphicon-chevron-up' : sortOrder === 'liveData.Change' && sortReversed === false, 'glyphicon glyphicon-chevron-down' : sortOrder === 'liveData.Change' && sortReversed === true}" aria-hidden="true"></span>
 					</th>
 					<th ng-click="sortOrder = 'liveData.ChangeInPercent'; sortReversed = !sortReversed;">
-						% Change
+						Chg <small>%</small>
 						<span class="glyphicon-lighter small" ng-class="{'glyphicon glyphicon-chevron-up' : sortOrder === 'liveData.ChangeInPercent' && sortReversed === false, 'glyphicon glyphicon-chevron-down' : sortOrder === 'liveData.ChangeInPercent' && sortReversed === true}" aria-hidden="true"></span>
 					</th>
 					<th ng-click="sortOrder = 'liveData.DividendYield'; sortReversed = !sortReversed;">
@@ -102,13 +102,12 @@
 						EPS
 						<span class="glyphicon-lighter small" ng-class="{'glyphicon glyphicon-chevron-up' : sortOrder === 'liveData.EarningsPerShare' && sortReversed === false, 'glyphicon glyphicon-chevron-down' : sortOrder === 'liveData.EarningsPerShare' && sortReversed === true}" aria-hidden="true"></span>
 					</th>
-					<th colspan="2" ng-click="sortOrder = 'liveData._52WeekLow'; sortReversed = !sortReversed;">
+					<th class="text-center" ng-click="sortOrder = 'liveData._52WeekLow'; sortReversed = !sortReversed;">
 						52 week-Range
 						<span class="glyphicon-lighter small" ng-class="{'glyphicon glyphicon-chevron-up' : sortOrder === 'liveData._52WeekLow' && sortReversed === false, 'glyphicon glyphicon-chevron-down' : sortOrder === 'liveData._52WeekLow' && sortReversed === true}" aria-hidden="true"></span>
 					</th>
-					<th class="text-center" ng-click="sortOrder = 'liveData.StockExchange'; sortReversed = !sortReversed;">
+					<th class="text-center">
 						Prev. Day
-						<span class="glyphicon-lighter small" ng-class="{'glyphicon glyphicon-chevron-up' : sortOrder === 'liveData.StockExchange' && sortReversed === false, 'glyphicon glyphicon-chevron-down' : sortOrder === 'liveData.StockExchange' && sortReversed === true}" aria-hidden="true"></span>
 					</th>
 					<th class="text-center">See more</th>
 				</tr>

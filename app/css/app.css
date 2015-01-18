@@ -176,18 +176,45 @@ body {
 
 
 /**
- * Sparkline Widget.
+ * Sparkline Line Widget.
  */
 .sparkline {
 	fill: none;
 	stroke: #b3d4fc;
 	stroke-width: 0.5px;
 }
-.sparkcircle.green {
+.sparkcircle.neutral {
+	fill: #b3d4fc;
+	stroke: none;
+}
+.sparkcircle.up {
 	fill: #0f0;
 	stroke: none;
 }
-.sparkcircle.red {
+.sparkcircle.down {
 	fill: #f00;
 	stroke: none;
+}
+
+
+
+/**
+ * Sparkline Bar Widget.
+ */
+.sparkline-bar {
+}
+.sparkline-bar .bar.positive {
+	fill: #428bca; /* steelblue; */ /* Use "primary" color from Bootstrap */
+}
+.sparkline-bar .bar.negative {
+	fill: brown;
+}
+.sparkline-bar .axis text {
+	font: 10px sans-serif;
+}
+.sparkline-bar .axis path,
+.sparkline-bar .axis line {
+	fill: none;
+	stroke: #000;
+	shape-rendering: crispEdges;
 }

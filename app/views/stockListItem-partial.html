@@ -8,8 +8,15 @@
 <td class="text-right">{{ quote.liveData.DividendYield | percentage:2 }}</td>
 <td class="text-right">{{ quote.liveData.PERatio }}</td>
 <td class="text-right">{{ quote.liveData.EarningsPerShare | number:2 }}</td>
+
+<!--
 <td class="text-right">{{ quote.liveData._52WeekLow | currency }}</td>
 <td class="text-right">{{ quote.liveData._52WeekHigh | currency }}</td>
+-->
+<td class="col-md-1" style="padding: 0;">
+	<sparkline-bar class="sparkline-bar" id="{{ 'sparklineBar' + quote.yahooSymbol.replace('.', '') }}" symbol="{{ quote.yahooSymbol }}" min="{{ quote.liveData._52WeekLow }}" max="{{ quote.liveData._52WeekHigh }}" current="{{ quote.liveData.LastTradePriceOnly }}"></sparkline-bar>
+</td>
+
 <!-- <td>{{ quote.liveData.StockExchange }}</td> -->
 <td class="col-md-1" style="padding: 0;">
 	<sparkline class="sparkline" id="{{ 'sparkline' + quote.yahooSymbol.replace('.', '') }}" symbol="{{ quote.yahooSymbol }}" exchange="{{ quote.liveData.StockExchange }}" yesterday-close-price="{{ quote.liveData.PreviousClose }}"></sparkline>
