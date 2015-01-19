@@ -1,0 +1,20 @@
+<h3>Dividend History</h3>
+
+<div class="row">
+	<div class="table-responsive">
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th>Ex-Dividend Date</th>
+					<th class="text-right">Amount</th>
+				<tr>
+			</thead>
+			<tbody>
+				<tr class="animate-repeat" ng-repeat="dividendData in dividendHistory track by dividendData.Date">
+					<td class="col-md-6">{{ dividendData.Date }}</td>
+					<td class="col-md-6 text-right">{{ dividendData.Dividends }}</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>

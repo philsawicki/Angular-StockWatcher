@@ -4,8 +4,8 @@
  * Stock Chart Controller
  */
 angular.module('stockWatcher.Controllers')
-	.controller('StockChartController', ['$scope', '$interval', '$timeout', 'stockService', 'errorMessages',
-		function ($scope, $interval, $timeout, stockService, errorMessages) {
+	.controller('StockChartController', ['$scope', '$interval', '$timeout', '$element', '$attrs', 'stockService', 'errorMessages',
+		function ($scope, $interval, $timeout, $element, $attrs, stockService, errorMessages) {
 
 		// Set the default refresh interval for the table:
 		$scope.refreshInterval = 60;
@@ -25,6 +25,9 @@ angular.module('stockWatcher.Controllers')
 
 		// Promise defined when "updateGraph()" fails to receive data:
 		$scope.updateGraphPromise = undefined;
+
+		// Reset the Chart's Range Selector after the next redraw?
+		var resetRangeSelector = false;
 
 
 
@@ -103,7 +106,7 @@ angular.module('stockWatcher.Controllers')
 						count: 7,
 						text: '5d'
 					},
-					/*{
+					{
 						type: 'month',
 						count: 1,
 						text: '1m'
@@ -115,21 +118,83 @@ angular.module('stockWatcher.Controllers')
 						type: 'month',
 						count: 6,
 						text: '6m'
-					}, {
+					}/*, {
 						type: 'ytd',
 						text: 'YTD'
-					}, */{
+					}, {
 						type: 'all',
 						text: 'All'
-					}],
+					}*/],
 					selected: 0,
 					allButtonsEnabled: true
+				},
+				xAxis: {
+					events: {
+						setExtremes: function(e) {
+							if (typeof e.rangeSelectorButton === 'undefined') {
+								return;
+							}
+
+
+							var clickedButtonIndex = undefined;
+							var clickedButtonOptions = undefined;
+							for (var i = 0, nbButtons = $scope.chart.rangeSelector.buttonOptions.length; i < nbButtons; i++) {
+								var button = $scope.chart.rangeSelector.buttonOptions[i];
+								if (button.text === e.rangeSelectorButton.text && button.type === e.rangeSelectorButton.type) {
+									clickedButtonIndex = i;
+									clickedButtonOptions = button;
+
+									break;
+								}
+							}
+
+							if (clickedButtonIndex !== $scope.chart.rangeSelector.selected
+								&& e.trigger === 'rangeSelectorButton') {
+								e.preventDefault();
+
+
+								if (clickedButtonIndex > 2) {
+									var newInterval = undefined;
+									var newPeriod = undefined;
+									switch (clickedButtonOptions.type) {
+										case 'month':
+											newInterval = 60*30;
+											newPeriod = clickedButtonOptions.count + 'M';
+											break;
+
+										case 'ytd':
+											newInterval = 60*60*24;
+											newPeriod = '12M';
+											break;
+									}
+
+									if (typeof newPeriod !== 'undefined') {
+										interval = newInterval;
+										period = newPeriod;
+
+										//$scope.chart.rangeSelector.clickButton(clickedButtonIndex, $scope.chart.rangeSelector.buttonOptions[clickedButtonIndex], true);
+									}
+								} else {
+									interval = 60;
+									period = '10d';
+								}
+
+								// Set the flag to redraw the Chart's RangeSelector after data is received:
+								resetRangeSelector = true;
+
+								// Show a "Loading..." message overlayed on top of the chart:
+								$scope.chart.showLoading();
+
+								$scope.updateGraph();
+							}
+						}
+					}
 				},
 				series: [{
 					name: $scope.symbol,
 					type: 'area',
 					data: dataRows,
-					gapSize: 5,
+					//gapSize: 2,
 					tooltip: {
 						valueDecimals: 2
 					},
@@ -149,6 +214,7 @@ angular.module('stockWatcher.Controllers')
 				}]
 			});
 
+			var chartButtons = $scope.chart.rangeSelector.buttons;
 
 			if (typeof $scope.yesterdayClosePrice !== 'undefined') {
 				drawOpenPlotLine();
@@ -241,13 +307,22 @@ angular.module('stockWatcher.Controllers')
 
 		var setGraphData = function(data) {
 			var serie = $scope.chart.series[0];
-			serie.setData(data);
+			serie.setData(data, !resetRangeSelector);
 			
 			//if (typeof $scope.yesterdayClosePrice !== 'undefined') {
 			//	drawOpenPlotLine();
 			//}
-			
 			//$scope.chart.redraw();
+			
+			if (resetRangeSelector) {
+				$scope.chart.xAxis[0].setExtremes();
+				resetRangeSelector = false;
+
+				$scope.chart.redraw();
+
+				// Hide the "Loading..." message overlayed on top of the chart:
+				$scope.chart.hideLoading();
+			}
 		};
 		
 
