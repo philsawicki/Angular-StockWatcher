@@ -1,0 +1,202 @@
+<h3>Analysts Estimates</h3>
+
+
+<table class="table table-bordered table-condensed">
+	<thead>
+		<tr>
+			<th class="col-md-4 active">Earnings Est</th>
+			<th class="col-md-2 active text-right">Current Qtr.</th>
+			<th class="col-md-2 active text-right">Next Qtr.</th>
+			<th class="col-md-2 active text-right">Current Year</th>
+			<th class="col-md-2 active text-right">Next Year</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<th class="col-md-4 active" scope="row">Avg. Estimate</th>
+			<td class="col-md-2 text-right">{{ ::data.EarningsEst.AvgEstimate.CurrentQtr }}</td>
+			<td class="col-md-2 text-right">{{ ::data.EarningsEst.AvgEstimate.NextQtr }}</td>
+			<td class="col-md-2 text-right">{{ ::data.EarningsEst.AvgEstimate.CurrentYear }}</td>
+			<td class="col-md-2 text-right">{{ ::data.EarningsEst.AvgEstimate.NextYear }}</td>
+		</tr>
+		<tr>
+			<th class="col-md-4 active" scope="row">No. of Analysts</th>
+			<td class="col-md-2 text-right">{{ ::data.EarningsEst.NoofAnalysts.CurrentQtr | number:0 }}</td>
+			<td class="col-md-2 text-right">{{ ::data.EarningsEst.NoofAnalysts.NextQtr | number:0 }}</td>
+			<td class="col-md-2 text-right">{{ ::data.EarningsEst.NoofAnalysts.CurrentYear | number:0 }}</td>
+			<td class="col-md-2 text-right">{{ ::data.EarningsEst.NoofAnalysts.NextYear | number:0 }}</td>
+		</tr>
+		<tr>
+			<th class="col-md-4 active" scope="row">Low Estimate</th>
+			<td class="col-md-2 text-right">{{ ::data.EarningsEst.LowEstimate.CurrentQtr }}</td>
+			<td class="col-md-2 text-right">{{ ::data.EarningsEst.LowEstimate.NextQtr }}</td>
+			<td class="col-md-2 text-right">{{ ::data.EarningsEst.LowEstimate.CurrentYear }}</td>
+			<td class="col-md-2 text-right">{{ ::data.EarningsEst.LowEstimate.NextYear }}</td>
+		</tr>
+		<tr>
+			<th class="col-md-4 active" scope="row">High Estimate</th>
+			<td class="col-md-2 text-right">{{ ::data.EarningsEst.HighEstimate.CurrentQtr }}</td>
+			<td class="col-md-2 text-right">{{ ::data.EarningsEst.HighEstimate.NextQtr }}</td>
+			<td class="col-md-2 text-right">{{ ::data.EarningsEst.HighEstimate.CurrentYear }}</td>
+			<td class="col-md-2 text-right">{{ ::data.EarningsEst.HighEstimate.NextYear }}</td>
+		</tr>
+		<tr>
+			<th class="col-md-4 active" scope="row">Year Ago EPS</th>
+			<td class="col-md-2 text-right">{{ ::data.EarningsEst.YearAgoEPS.CurrentQtr }}</td>
+			<td class="col-md-2 text-right">{{ ::data.EarningsEst.YearAgoEPS.NextQtr }}</td>
+			<td class="col-md-2 text-right">{{ ::data.EarningsEst.YearAgoEPS.CurrentYear }}</td>
+			<td class="col-md-2 text-right">{{ ::data.EarningsEst.YearAgoEPS.NextYear }}</td>
+		</tr>
+	</tbody>
+</table>
+
+
+
+<table class="table table-bordered table-condensed">
+	<thead>
+		<tr>
+			<th class="col-md-4 active">Revenue Est</th>
+			<th class="col-md-2 active text-right">Current Qtr.</th>
+			<th class="col-md-2 active text-right">Next Qtr.</th>
+			<th class="col-md-2 active text-right">Current Year</th>
+			<th class="col-md-2 active text-right">Next Year</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<th class="col-md-4 active" scope="row">Avg. Estimate</th>
+			<td class="col-md-2 text-right">{{ ::data.RevenueEst.AvgEstimate.CurrentQtr }}</td>
+			<td class="col-md-2 text-right">{{ ::data.RevenueEst.AvgEstimate.NextQtr }}</td>
+			<td class="col-md-2 text-right">{{ ::data.RevenueEst.AvgEstimate.CurrentYear }}</td>
+			<td class="col-md-2 text-right">{{ ::data.RevenueEst.AvgEstimate.NextYear }}</td>
+		</tr>
+		<tr>
+			<th class="col-md-4 active" scope="row">No. of Analysts</th>
+			<td class="col-md-2 text-right">{{ ::data.RevenueEst.NoofAnalysts.CurrentQtr }}</td>
+			<td class="col-md-2 text-right">{{ ::data.RevenueEst.NoofAnalysts.NextQtr }}</td>
+			<td class="col-md-2 text-right">{{ ::data.RevenueEst.NoofAnalysts.CurrentYear }}</td>
+			<td class="col-md-2 text-right">{{ ::data.RevenueEst.NoofAnalysts.NextYear }}</td>
+		</tr>
+		<tr>
+			<th class="col-md-4 active" scope="row">Low Estimate</th>
+			<td class="col-md-2 text-right">{{ ::data.RevenueEst.LowEstimate.CurrentQtr }}</td>
+			<td class="col-md-2 text-right">{{ ::data.RevenueEst.LowEstimate.NextQtr }}</td>
+			<td class="col-md-2 text-right">{{ ::data.RevenueEst.LowEstimate.CurrentYear }}</td>
+			<td class="col-md-2 text-right">{{ ::data.RevenueEst.LowEstimate.NextYear }}</td>
+		</tr>
+		<tr>
+			<th class="col-md-4 active" scope="row">High Estimate</th>
+			<td class="col-md-2 text-right">{{ ::data.RevenueEst.HighEstimate.CurrentQtr }}</td>
+			<td class="col-md-2 text-right">{{ ::data.RevenueEst.HighEstimate.NextQtr }}</td>
+			<td class="col-md-2 text-right">{{ ::data.RevenueEst.HighEstimate.CurrentYear }}</td>
+			<td class="col-md-2 text-right">{{ ::data.RevenueEst.HighEstimate.NextYear }}</td>
+		</tr>
+		<tr>
+			<th class="col-md-4 active" scope="row">Year Ago Sales</th>
+			<td class="col-md-2 text-right">{{ ::data.RevenueEst.YearAgoSales.CurrentQtr }}</td>
+			<td class="col-md-2 text-right">{{ ::data.RevenueEst.YearAgoSales.NextQtr }}</td>
+			<td class="col-md-2 text-right">{{ ::data.RevenueEst.YearAgoSales.CurrentYear }}</td>
+			<td class="col-md-2 text-right">{{ ::data.RevenueEst.YearAgoSales.NextYear }}</td>
+		</tr>
+		<tr>
+			<th class="col-md-4 active" scope="row">Sales Growth (year/est)</th>
+			<td class="col-md-2 text-right" ng-class="{ 'text-danger': data.RevenueEst.SalesGrowth.CurrentQtr < 0 }">{{ ::data.RevenueEst.SalesGrowth.CurrentQtr | percentage:2 }}</td>
+			<td class="col-md-2 text-right" ng-class="{ 'text-danger': data.RevenueEst.SalesGrowth.NextQtr < 0 }">{{ ::data.RevenueEst.SalesGrowth.NextQtr | percentage:2 }}</td>
+			<td class="col-md-2 text-right" ng-class="{ 'text-danger': data.RevenueEst.SalesGrowth.CurrentYear < 0 }">{{ ::data.RevenueEst.SalesGrowth.CurrentYear | percentage:2 }}</td>
+			<td class="col-md-2 text-right" ng-class="{ 'text-danger': data.RevenueEst.SalesGrowth.NextYear < 0 }">{{ ::data.RevenueEst.SalesGrowth.NextYear | percentage:2 }}</td>
+		</tr>
+	</tbody>
+</table>
+
+
+<table class="table table-bordered table-condensed">
+	<thead>
+		<tr>
+			<th class="col-md-4 active">Earnings History</th>
+			<th class="col-md-2 active text-right">{{ ::data.EarningsHistory.EPSEst[0].period }}</th>
+			<th class="col-md-2 active text-right">{{ ::data.EarningsHistory.EPSEst[1].period }}</th>
+			<th class="col-md-2 active text-right">{{ ::data.EarningsHistory.EPSEst[2].period }}</th>
+			<th class="col-md-2 active text-right">{{ ::data.EarningsHistory.EPSEst[3].period }}</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<th class="col-md-4 active" scope="row">EPS Est</th>
+			<td class="col-md-2 text-right">{{ ::data.EarningsHistory.EPSEst[0].value | number:2 }}</td>
+			<td class="col-md-2 text-right">{{ ::data.EarningsHistory.EPSEst[1].value | number:2 }}</td>
+			<td class="col-md-2 text-right">{{ ::data.EarningsHistory.EPSEst[2].value | number:2 }}</td>
+			<td class="col-md-2 text-right">{{ ::data.EarningsHistory.EPSEst[3].value | number:2 }}</td>
+		</tr>
+		<tr>
+			<th class="col-md-4 active" scope="row">EPS Actual</th>
+			<td class="col-md-2 text-right">{{ ::data.EarningsHistory.EPSActual[0].value | number:2 }}</td>
+			<td class="col-md-2 text-right">{{ ::data.EarningsHistory.EPSActual[1].value | number:2 }}</td>
+			<td class="col-md-2 text-right">{{ ::data.EarningsHistory.EPSActual[2].value | number:2 }}</td>
+			<td class="col-md-2 text-right">{{ ::data.EarningsHistory.EPSActual[3].value | number:2 }}</td>
+		</tr>
+		<tr>
+			<th class="col-md-4 active" scope="row">Difference</th>
+			<td class="col-md-2 text-right" ng-class="{ 'text-danger': data.EarningsHistory.Difference[0].value < 0 }">{{ ::data.EarningsHistory.Difference[0].value | number:2 }}</td>
+			<td class="col-md-2 text-right" ng-class="{ 'text-danger': data.EarningsHistory.Difference[1].value < 0 }">{{ ::data.EarningsHistory.Difference[1].value | number:2 }}</td>
+			<td class="col-md-2 text-right" ng-class="{ 'text-danger': data.EarningsHistory.Difference[2].value < 0 }">{{ ::data.EarningsHistory.Difference[2].value | number:2 }}</td>
+			<td class="col-md-2 text-right" ng-class="{ 'text-danger': data.EarningsHistory.Difference[3].value < 0 }">{{ ::data.EarningsHistory.Difference[3].value | number:2 }}</td>
+		</tr>
+		<tr>
+			<th class="col-md-4 active" scope="row">Surprise %</th>
+			<td class="col-md-2 text-right" ng-class="{ 'text-danger': data.EarningsHistory.Surprise[0].value < 0 }">{{ ::data.EarningsHistory.Surprise[0].value | percentage:2 }}</td>
+			<td class="col-md-2 text-right" ng-class="{ 'text-danger': data.EarningsHistory.Surprise[1].value < 0 }">{{ ::data.EarningsHistory.Surprise[1].value | percentage:2 }}</td>
+			<td class="col-md-2 text-right" ng-class="{ 'text-danger': data.EarningsHistory.Surprise[2].value < 0 }">{{ ::data.EarningsHistory.Surprise[2].value | percentage:2 }}</td>
+			<td class="col-md-2 text-right" ng-class="{ 'text-danger': data.EarningsHistory.Surprise[3].value < 0 }">{{ ::data.EarningsHistory.Surprise[3].value | percentage:2 }}</td>
+		</tr>
+	</tbody>
+</table>
+
+
+<table class="table table-bordered table-condensed">
+	<thead>
+		<tr>
+			<th class="col-md-4 active">EPS Trends</th>
+			<th class="col-md-2 active text-right">Current Qtr.</th>
+			<th class="col-md-2 active text-right">Next Qtr.</th>
+			<th class="col-md-2 active text-right">Current Year</th>
+			<th class="col-md-2 active text-right">Next Year</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<th class="col-md-4 active" scope="row">Current Estimate</th>
+			<td class="col-md-2 text-right">{{ ::data.EPSTrends.CurrentEstimate[0].value | number:2 }}</td>
+			<td class="col-md-2 text-right">{{ ::data.EPSTrends.CurrentEstimate[1].value | number:2 }}</td>
+			<td class="col-md-2 text-right">{{ ::data.EPSTrends.CurrentEstimate[2].value | number:2 }}</td>
+			<td class="col-md-2 text-right">{{ ::data.EPSTrends.CurrentEstimate[3].value | number:2 }}</td>
+		</tr>
+		<tr>
+			<th class="col-md-4 active" scope="row">7 Days Ago</th>
+			<td class="col-md-2 text-right">{{ ::data.EPSTrends._7DaysAgo[0].value | number:2 }}</td>
+			<td class="col-md-2 text-right">{{ ::data.EPSTrends._7DaysAgo[1].value | number:2 }}</td>
+			<td class="col-md-2 text-right">{{ ::data.EPSTrends._7DaysAgo[2].value | number:2 }}</td>
+			<td class="col-md-2 text-right">{{ ::data.EPSTrends._7DaysAgo[3].value | number:2 }}</td>
+		</tr>
+		<tr>
+			<th class="col-md-4 active" scope="row">30 Days Ago</th>
+			<td class="col-md-2 text-right">{{ ::data.EPSTrends._30DaysAgo[0].value | number:2 }}</td>
+			<td class="col-md-2 text-right">{{ ::data.EPSTrends._30DaysAgo[1].value | number:2 }}</td>
+			<td class="col-md-2 text-right">{{ ::data.EPSTrends._30DaysAgo[2].value | number:2 }}</td>
+			<td class="col-md-2 text-right">{{ ::data.EPSTrends._30DaysAgo[3].value | number:2 }}</td>
+		</tr>
+		<tr>
+			<th class="col-md-4 active" scope="row">60 Days Ago</th>
+			<td class="col-md-2 text-right">{{ ::data.EPSTrends._60DaysAgo[0].value | number:2 }}</td>
+			<td class="col-md-2 text-right">{{ ::data.EPSTrends._60DaysAgo[1].value | number:2 }}</td>
+			<td class="col-md-2 text-right">{{ ::data.EPSTrends._60DaysAgo[2].value | number:2 }}</td>
+			<td class="col-md-2 text-right">{{ ::data.EPSTrends._60DaysAgo[3].value | number:2 }}</td>
+		</tr>
+		<tr>
+			<th class="col-md-4 active" scope="row">90 Days Ago</th>
+			<td class="col-md-2 text-right">{{ ::data.EPSTrends._90DaysAgo[0].value | number:2 }}</td>
+			<td class="col-md-2 text-right">{{ ::data.EPSTrends._90DaysAgo[1].value | number:2 }}</td>
+			<td class="col-md-2 text-right">{{ ::data.EPSTrends._90DaysAgo[2].value | number:2 }}</td>
+			<td class="col-md-2 text-right">{{ ::data.EPSTrends._90DaysAgo[3].value | number:2 }}</td>
+		</tr>
+	</tbody>
+</table>

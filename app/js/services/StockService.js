@@ -603,6 +603,110 @@ angular.module('stockWatcher.Services')
 		};
 
 		/**
+		 * Gets Analyst Estimates for the given symbol.
+		 * @param  {string}  stockSymbol The stock quote symbol (eg: "PG").
+		 * @return {Deferred.promise}    A promise to be resolved when the request is successfully received.
+		 */
+		var getAnalystEstimatesForStock = function(stockSymbol) {
+			var deferred = $q.defer();
+			var timeoutPromise = $q.defer();
+			var requestTimedOut = false;
+			var timeoutCountdown = undefined;
+
+			var query = 'SELECT * FROM yahoo.finance.analystestimate WHERE symbol="' + stockSymbol + '"';
+			var format = '&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&callback=JSON_CALLBACK';
+			var url = 'http://query.yahooapis.com/v1/public/yql?q=' + encodeURIComponent(query) + format;
+			
+			$http.jsonp(url, { timeout: timeoutPromise.promise })
+				.success(function (data) {
+					// Return YQL error message:
+					if (typeof data.error !== 'undefined') {
+						deferred.reject({
+							error: errorMessages.YQL.Error,
+							message: errorMessages.YQL.Message,
+							data: data.error
+						});
+
+						return;
+					}
+
+					var nbResults = data.query.count;
+
+					// Fail the request, as no data has been received:
+					if (nbResults === 0) {
+						deferred.reject({
+							error: errorMessages.NoData.Error,
+							message: errorMessages.NoData.Message
+						});
+					}
+
+
+					// Cancel the "timeout" $timeout:
+					$timeout.cancel(timeoutCountdown);
+					// Cancel the "timeout" Promise:
+					timeoutPromise.reject();
+
+
+					// Format the data:
+					var returnData = data.query.results.results;
+
+					// Format "Revenue History" values:
+					returnData.RevenueEst.SalesGrowth.CurrentQtr = parseFloat(returnData.RevenueEst.SalesGrowth.CurrentQtr, 10);
+					returnData.RevenueEst.SalesGrowth.NextQtr = parseFloat(returnData.RevenueEst.SalesGrowth.NextQtr, 10);
+					returnData.RevenueEst.SalesGrowth.CurrentYear = parseFloat(returnData.RevenueEst.SalesGrowth.CurrentYear, 10);
+					returnData.RevenueEst.SalesGrowth.NextYear = parseFloat(returnData.RevenueEst.SalesGrowth.NextYear, 10);
+					
+					// Format "Earnings History" values:
+					returnData.EarningsHistory.EPSEst = convertQuarterObjectToArray(returnData.EarningsHistory.EPSEst);
+					returnData.EarningsHistory.EPSActual = convertQuarterObjectToArray(returnData.EarningsHistory.EPSActual);
+					returnData.EarningsHistory.Difference = convertQuarterObjectToArray(returnData.EarningsHistory.Difference);
+					returnData.EarningsHistory.Surprise = convertQuarterObjectToArray(returnData.EarningsHistory.Surprise);
+					
+					// Format "EPS Trends" values:
+					returnData.EPSTrends.CurrentEstimate = convertQuarterObjectToArray(returnData.EPSTrends.CurrentEstimate);
+					returnData.EPSTrends._7DaysAgo = convertQuarterObjectToArray(returnData.EPSTrends._7DaysAgo);
+					returnData.EPSTrends._30DaysAgo = convertQuarterObjectToArray(returnData.EPSTrends._30DaysAgo);
+					returnData.EPSTrends._60DaysAgo = convertQuarterObjectToArray(returnData.EPSTrends._60DaysAgo);
+					returnData.EPSTrends._90DaysAgo = convertQuarterObjectToArray(returnData.EPSTrends._90DaysAgo);
+
+					
+					// Resolve the Promise with data:
+					deferred.resolve(returnData);
+				})
+				.error(function (data) {
+					if (requestTimedOut) {
+						deferred.reject({
+							error: errorMessages.Timeout.Error,
+							message: errorMessages.Timeout.Message.format(appConfig.JSONPTimeout),
+							data: data
+						});
+					} else {
+						deferred.reject(data);
+					}
+				});
+
+
+			// Start a $timeout which, if resolved, will fail the $http request sent (and assume a timeout):
+			timeoutCountdown = $timeout(function() {
+				requestTimedOut = true;
+				timeoutPromise.resolve();
+			}, appConfig.JSONPTimeout);
+
+			return deferred.promise;
+		};
+
+		var convertQuarterObjectToArray = function(quarterData) {
+			var earningsHistory = [];
+			for (var key in quarterData) {
+				earningsHistory.push({
+					period: key,
+					value: parseFloat(quarterData[key], 10)
+				});
+			}
+			return earningsHistory;
+		};
+
+		/**
 		 * Gets stock symbols matching the given partial name.
 		 * @param  {string} partialStockSymbol The partial stock name to look for (eg: "goog" for "Google");
 		 * @return {Deferred.promise}          A promise to be resolved when the request is successfully received.
@@ -700,6 +804,7 @@ angular.module('stockWatcher.Services')
 			getCurrentDataWithDetails: getCurrentDataWithDetails,
 			getStockSymbol: getStockSymbol,
 			getNewsFeedForStock: getNewsFeedForStock,
-			getDividendHistoryForStock: getDividendHistoryForStock
+			getDividendHistoryForStock: getDividendHistoryForStock,
+			getAnalystEstimatesForStock: getAnalystEstimatesForStock
 		};
 	}]);
