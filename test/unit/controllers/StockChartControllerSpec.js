@@ -9,6 +9,8 @@ describe('StockChartController', function() {
 	    $interval, 
 	    $timeout, 
 	    $httpBackend,
+	    $element,
+	    $attrs,
 	    injector,
 	    stockService, 
 	    createController;
@@ -28,6 +30,8 @@ describe('StockChartController', function() {
 		$interval = $injector.get('$interval');
 		$timeout = $injector.get('$timeout');
 		$httpBackend = $injector.get('$httpBackend');
+		$element = angular.element('<stock-chart symbol="BNS.TO"></stock-chart>'); // Not sure about this...
+		$attrs = undefined; // Not sure about this...
 		injector = $injector;
 
 		$httpBackend
@@ -45,7 +49,9 @@ describe('StockChartController', function() {
 			return $controller('StockChartController', {
 				'$scope': $scope,
 				'$interval': $interval,
-				'$timeout': $timeout
+				'$timeout': $timeout,
+				'$element': $element,
+				'$attrs': $attrs
 			});
 		};
 	}));
@@ -102,7 +108,9 @@ describe('StockChartController', function() {
 			var controller = injector.get('$controller')('StockChartController', {
 					'$scope': $scope,
 					'$interval': $interval,
-					'$timeout': $timeout
+					'$timeout': $timeout,
+					'$element': $element,
+					'$attrs': $attrs
 				});
 
 			$scope.refreshInterval = 1;

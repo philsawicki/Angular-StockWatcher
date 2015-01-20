@@ -180,11 +180,11 @@ body {
  */
 .sparkline {
 	fill: none;
-	stroke: #b3d4fc;
+	stroke: #000;
 	stroke-width: 0.5px;
 }
 .sparkcircle.neutral {
-	fill: #b3d4fc;
+	fill: #000;
 	stroke: none;
 }
 .sparkcircle.up {

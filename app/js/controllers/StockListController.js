@@ -18,9 +18,9 @@ angular.module('stockWatcher.Controllers')
 		
 
 		// Retrieve the quotes to fetch from storage:
-		//var savedQuotes = applicationStorageService.getSavedStockSymbols();
+		var savedQuotes = applicationStorageService.getSavedStockSymbols();
 
-		$scope.quotesToFetch = /*savedQuotes ||*/ [
+		$scope.quotesToFetch = savedQuotes || [
 			{
 				symbol: 'PG',
 				yahooSymbol: 'PG',
@@ -46,40 +46,46 @@ angular.module('stockWatcher.Controllers')
 				index: 3
 			},
 			{
+				symbol: 'RY',
+				yahooSymbol: 'RY.TO',
+				liveData: {},
+				index: 4
+			},
+			{
 				symbol: 'PWF',
 				yahooSymbol: 'PWF.TO',
 				liveData: {},
-				index: 4
+				index: 5
 			},
 			{
 				symbol: 'FTS',
 				yahooSymbol: 'FTS.TO',
 				liveData: {},
-				index: 5
+				index: 6
 			},
 			{
 				symbol: 'BEP',
 				yahooSymbol: 'BEP-UN.TO',
 				liveData: {},
-				index: 6
+				index: 7
 			},
 			{
 				symbol: 'EMA',
 				yahooSymbol: 'EMA.TO',
 				liveData: {},
-				index: 7
+				index: 8
 			},
 			{
 				symbol: 'XIC',
 				yahooSymbol: 'XIC.TO',
 				liveData: {},
-				index: 8
+				index: 9
 			},
 			{
 				symbol: 'XSP',
 				yahooSymbol: 'XSP.TO',
 				liveData: {},
-				index: 9
+				index: 10
 			}
 		];
 		$scope.stockQuotes = [];
@@ -144,6 +150,14 @@ angular.module('stockWatcher.Controllers')
 
 
 
+
+
+		/**
+		 * Add a listener to the Modal, in order to set the focus on its input field when opened.
+		 */
+		$('#addStockModal').on('shown.bs.modal', function() {
+			$('#addStockName').focus();
+		});
 
 		$scope.selectedStock = undefined;
 		$scope.hasSelectedStock = false;

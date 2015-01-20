@@ -95,7 +95,7 @@ describe('StockListController', function() {
 		var controller = createController();
 
 		expect($rootScope.quotesToFetch).toBeDefined();
-		expect($rootScope.quotesToFetch.length).toBe(10);
+		expect($rootScope.quotesToFetch.length).toBe(11);
 	});
 
 	//it('should fetch things', function() {
