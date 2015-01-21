@@ -274,6 +274,17 @@ angular.module('stockWatcher.Controllers')
 			if (typeof yesterdayClosePrice !== 'undefined') {
 				drawYesterdayClosePlotLine();
 			}
+
+			/*
+			var lastPoint = marketData[serieIndex].data[marketData[serieIndex].data.length - 1];
+			var lastPointDate = lastPoint[0];
+			var todayStart = new Date(lastPointDate);
+			todayStart.setHours(0);
+			todayStart.setMinutes(0);
+			todayStart.setSeconds(0);
+
+			chart.xAxis[0].setExtremes(todayStart.getTime(), lastPointDate.getTime());
+			*/
 		};
 
 		/**

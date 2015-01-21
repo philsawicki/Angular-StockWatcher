@@ -6,7 +6,7 @@
 			<thead>
 			</thead>
 			<tbody>
-				<tr class="animate-repeat" ng-repeat="newsItem in newsItems | reverse track by newsItem.guid.content">
+				<tr class="animate-repeat" ng-repeat="newsItem in newsItems track by newsItem.guid.content">
 					<td class="col-md-4">
 						<p>
 							<a href="{{ newsItem.link }}" target="blank" title="{{ newsItem.title }}">{{ newsItem.title }}</a>

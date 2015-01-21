@@ -7,14 +7,15 @@ angular.module('stockWatcher.Controllers')
 	.controller('StockAnalystsEstimatesController', ['$scope', '$interval', 'stockService', 'errorMessages', 
 		function ($scope, $interval, stockService, errorMessages) {
 
-		// Set the initial list of news items:
-		$scope.data = {};
-
+		// Set the initial data:
+		//$scope.data = {};
 
 		var getAnalystsEstimatesForStock = function() {
 			var promise = stockService.getAnalystEstimatesForStock($scope.symbol);
 			promise.then(
 				function (data) {
+					// Format data:
+
 					$scope.data = data;
 				},
 				function (reason) {
