@@ -200,3 +200,118 @@
 		</tr>
 	</tbody>
 </table>
+
+
+<table class="table table-bordered table-condensed">
+	<thead>
+		<tr>
+			<th class="col-md-4 active">EPS Revisions</th>
+			<th class="col-md-2 active text-right">Current Qtr.</th>
+			<th class="col-md-2 active text-right">Next Qtr.</th>
+			<th class="col-md-2 active text-right">Current Year</th>
+			<th class="col-md-2 active text-right">Next Year</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<th class="col-md-4 active" scope="row">Up Last 7 Days</th>
+			<td class="col-md-2 text-right">{{ ::data.EPSRevisions.UpLast7Days[0].value | number:2 }}</td>
+			<td class="col-md-2 text-right">{{ ::data.EPSRevisions.UpLast7Days[1].value | number:2 }}</td>
+			<td class="col-md-2 text-right">{{ ::data.EPSRevisions.UpLast7Days[2].value | number:2 }}</td>
+			<td class="col-md-2 text-right">{{ ::data.EPSRevisions.UpLast7Days[3].value | number:2 }}</td>
+		</tr>
+		<tr>
+			<th class="col-md-4 active" scope="row">Up Last 30 Days</th>
+			<td class="col-md-2 text-right">{{ ::data.EPSRevisions.UpLast30Days[0].value | number:2 }}</td>
+			<td class="col-md-2 text-right">{{ ::data.EPSRevisions.UpLast30Days[1].value | number:2 }}</td>
+			<td class="col-md-2 text-right">{{ ::data.EPSRevisions.UpLast30Days[2].value | number:2 }}</td>
+			<td class="col-md-2 text-right">{{ ::data.EPSRevisions.UpLast30Days[3].value | number:2 }}</td>
+		</tr>
+		<tr>
+			<th class="col-md-4 active" scope="row">Down Last 30 Days</th>
+			<td class="col-md-2 text-right">{{ ::data.EPSRevisions.DownLast30Days[0].value | number:2 }}</td>
+			<td class="col-md-2 text-right">{{ ::data.EPSRevisions.DownLast30Days[1].value | number:2 }}</td>
+			<td class="col-md-2 text-right">{{ ::data.EPSRevisions.DownLast30Days[2].value | number:2 }}</td>
+			<td class="col-md-2 text-right">{{ ::data.EPSRevisions.DownLast30Days[3].value | number:2 }}</td>
+		</tr>
+		<tr>
+			<th class="col-md-4 active" scope="row">Down Last 90 Days</th>
+			<td class="col-md-2 text-right">{{ ::data.EPSRevisions.DownLast90Days[0].value | number:2 }}</td>
+			<td class="col-md-2 text-right">{{ ::data.EPSRevisions.DownLast90Days[1].value | number:2 }}</td>
+			<td class="col-md-2 text-right">{{ ::data.EPSRevisions.DownLast90Days[2].value | number:2 }}</td>
+			<td class="col-md-2 text-right">{{ ::data.EPSRevisions.DownLast90Days[3].value | number:2 }}</td>
+		</tr>
+	</tbody>
+</table>
+
+
+<table class="table table-bordered table-condensed">
+	<thead>
+		<tr>
+			<th class="col-md-4 active">Growth Est</th>
+			<th class="col-md-2 active text-right">[]</th>
+			<th class="col-md-2 active text-right">Industry</th>
+			<th class="col-md-2 active text-right">Sector</th>
+			<th class="col-md-2 active text-right">S&P 500</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<th class="col-md-4 active" scope="row">Current Qtr.</th>
+			<td class="col-md-2 text-right">{{ ::data.GrowthEst.CurrentQtr[0].value | percentage:2 }}</td>
+			<td class="col-md-2 text-right">{{ ::data.GrowthEst.CurrentQtr[1].value | percentage:2 }}</td>
+			<td class="col-md-2 text-right">{{ ::data.GrowthEst.CurrentQtr[2].value | percentage:2 }}</td>
+			<td class="col-md-2 text-right">{{ ::data.GrowthEst.CurrentQtr[3].value | percentage:2 }}</td>
+		</tr>
+		<tr>
+			<th class="col-md-4 active" scope="row">Next Qtr.</th>
+			<td class="col-md-2 text-right">{{ ::data.GrowthEst.NextQtr[0].value | percentage:2 }}</td>
+			<td class="col-md-2 text-right">{{ ::data.GrowthEst.NextQtr[1].value | percentage:2 }}</td>
+			<td class="col-md-2 text-right">{{ ::data.GrowthEst.NextQtr[2].value | percentage:2 }}</td>
+			<td class="col-md-2 text-right">{{ ::data.GrowthEst.NextQtr[3].value | percentage:2 }}</td>
+		</tr>
+		<tr>
+			<th class="col-md-4 active" scope="row">This Year</th>
+			<td class="col-md-2 text-right">{{ ::data.GrowthEst.ThisYear[0].value | percentage:2 }}</td>
+			<td class="col-md-2 text-right">{{ ::data.GrowthEst.ThisYear[1].value | percentage:2 }}</td>
+			<td class="col-md-2 text-right">{{ ::data.GrowthEst.ThisYear[2].value | percentage:2 }}</td>
+			<td class="col-md-2 text-right">{{ ::data.GrowthEst.ThisYear[3].value | percentage:2 }}</td>
+		</tr>
+		<tr>
+			<th class="col-md-4 active" scope="row">Next Year</th>
+			<td class="col-md-2 text-right">{{ ::data.GrowthEst.NextYear[0].value | percentage:2 }}</td>
+			<td class="col-md-2 text-right">{{ ::data.GrowthEst.NextYear[1].value | percentage:2 }}</td>
+			<td class="col-md-2 text-right">{{ ::data.GrowthEst.NextYear[2].value | percentage:2 }}</td>
+			<td class="col-md-2 text-right">{{ ::data.GrowthEst.NextYear[3].value | percentage:2 }}</td>
+		</tr>
+		<tr>
+			<th class="col-md-4 active" scope="row">Past 5 Years (per annum)</th>
+			<td class="col-md-2 text-right">{{ ::data.GrowthEst.Past5Years[0].value | percentage:2 }}</td>
+			<td class="col-md-2 text-right">{{ ::data.GrowthEst.Past5Years[1].value | percentage:2 }}</td>
+			<td class="col-md-2 text-right">{{ ::data.GrowthEst.Past5Years[2].value | percentage:2 }}</td>
+			<td class="col-md-2 text-right">{{ ::data.GrowthEst.Past5Years[3].value | percentage:2 }}</td>
+		</tr>
+		<tr>
+			<th class="col-md-4 active" scope="row">Next 5 Years (per annum)</th>
+			<td class="col-md-2 text-right">{{ ::data.GrowthEst.Next5Years[0].value | percentage:2 }}</td>
+			<td class="col-md-2 text-right">{{ ::data.GrowthEst.Next5Years[1].value | percentage:2 }}</td>
+			<td class="col-md-2 text-right">{{ ::data.GrowthEst.Next5Years[2].value | percentage:2 }}</td>
+			<td class="col-md-2 text-right">{{ ::data.GrowthEst.Next5Years[3].value | percentage:2 }}</td>
+		</tr>
+		<tr>
+			<th class="col-md-4 active" scope="row">Price/Earnings (avg. for comparison categories)</th>
+			<td class="col-md-2 text-right">{{ ::data.GrowthEst.PriceEarnings[0].value | number:2 }}</td>
+			<td class="col-md-2 text-right">{{ ::data.GrowthEst.PriceEarnings[1].value | number:2 }}</td>
+			<td class="col-md-2 text-right">{{ ::data.GrowthEst.PriceEarnings[2].value | number:2 }}</td>
+			<td class="col-md-2 text-right">{{ ::data.GrowthEst.PriceEarnings[3].value | number:2 }}</td>
+		</tr>
+		<tr>
+			<th class="col-md-4 active" scope="row">PEG Ratio (avg. for comparison categories)</th>
+			<td class="col-md-2 text-right">{{ ::data.GrowthEst.PEGRatio[0].value | number:2 }}</td>
+			<td class="col-md-2 text-right">{{ ::data.GrowthEst.PEGRatio[1].value | number:2 }}</td>
+			<td class="col-md-2 text-right">{{ ::data.GrowthEst.PEGRatio[2].value | number:2 }}</td>
+			<td class="col-md-2 text-right">{{ ::data.GrowthEst.PEGRatio[3].value | number:2 }}</td>
+		</tr>
+	</tbody>
+</table>
+

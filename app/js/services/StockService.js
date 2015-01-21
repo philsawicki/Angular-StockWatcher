@@ -668,6 +668,22 @@ angular.module('stockWatcher.Services')
 					returnData.EPSTrends._30DaysAgo = convertQuarterObjectToArray(returnData.EPSTrends._30DaysAgo);
 					returnData.EPSTrends._60DaysAgo = convertQuarterObjectToArray(returnData.EPSTrends._60DaysAgo);
 					returnData.EPSTrends._90DaysAgo = convertQuarterObjectToArray(returnData.EPSTrends._90DaysAgo);
+					
+					// Format "EPS Revisions" values:
+					returnData.EPSRevisions.UpLast7Days = convertQuarterObjectToArray(returnData.EPSRevisions.UpLast7Days);
+					returnData.EPSRevisions.UpLast30Days = convertQuarterObjectToArray(returnData.EPSRevisions.UpLast30Days);
+					returnData.EPSRevisions.DownLast30Days = convertQuarterObjectToArray(returnData.EPSRevisions.DownLast30Days);
+					returnData.EPSRevisions.DownLast90Days = convertQuarterObjectToArray(returnData.EPSRevisions.DownLast90Days);
+					
+					// Format "Growth Estimates" values:
+					returnData.GrowthEst.CurrentQtr = convertQuarterObjectToArray(returnData.GrowthEst.CurrentQtr);
+					returnData.GrowthEst.NextQtr = convertQuarterObjectToArray(returnData.GrowthEst.NextQtr);
+					returnData.GrowthEst.ThisYear = convertQuarterObjectToArray(returnData.GrowthEst.ThisYear);
+					returnData.GrowthEst.NextYear = convertQuarterObjectToArray(returnData.GrowthEst.NextYear);
+					returnData.GrowthEst.Past5Years = convertQuarterObjectToArray(returnData.GrowthEst.Past5Years);
+					returnData.GrowthEst.Next5Years = convertQuarterObjectToArray(returnData.GrowthEst.Next5Years);
+					returnData.GrowthEst.PriceEarnings = convertQuarterObjectToArray(returnData.GrowthEst.PriceEarnings);
+					returnData.GrowthEst.PEGRatio = convertQuarterObjectToArray(returnData.GrowthEst.PEGRatio);
 
 					
 					// Resolve the Promise with data:
