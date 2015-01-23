@@ -273,6 +273,61 @@ angular.module('stockWatcher.Controllers')
 						console.error(reason);
 					}
 				}
+			).then(
+				function (data) {
+					var now = new Date();
+					var dividendHistoryStartDate = '2014-01-01';
+					var dividendHistoryEndDate = [
+						now.getFullYear(),
+						(now.getMonth() + 1 < 10 ? '0' : '') + (now.getMonth() + 1),
+						(now.getDate() < 10 ? '0' : '') + (now.getDate())
+					].join('-');
+
+					var dividendsPromise = stockService.getDividendHistoryForStock(symbol, dividendHistoryStartDate, dividendHistoryEndDate);
+					dividendsPromise.then(
+						function (dividendData) {
+							var newData = [];
+							var chartExtremes = $scope.chart.xAxis[0].getExtremes();
+							for (var i = 0, nbDividends = dividendData.length; i < nbDividends; i++) {
+								var dividend = dividendData[i];
+
+								var formattedDividendData = {
+									x: dividend.Date, // new Date(new Date().getTime() - 40000000)
+									title: "Dividend:<br />" + parseFloat(dividend.Dividends, 10).toFixed(4) + '$',
+									text: 'Dividend Pay Date'
+								};
+
+								if (formattedDividendData.x > chartExtremes.min && formattedDividendData.x < chartExtremes.max) {
+									newData.push(formattedDividendData);
+								}
+							}
+
+							if (newData.length > 0) {
+								$scope.chart.addSeries({
+									name: 'Dividends',
+									type: 'flags',
+									data: newData,
+									color: Highcharts.getOptions().colors[0], // same as onSeries
+									fillColor: Highcharts.getOptions().colors[0],
+									onSeries: 'dataseries',
+									width: 60,
+									style: { // text style
+										color: 'white'
+									},
+									states: {
+										hover: {
+											fillColor: '#395C84' // darker
+										}
+									}
+								});
+							}
+						},
+
+						function (reason) {
+							// 
+						}
+					);
+				}
 			);
 		};
 		//initGraph();

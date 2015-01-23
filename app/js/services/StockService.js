@@ -289,7 +289,6 @@ angular.module('stockWatcher.Services')
 							message: errorMessages.NoData.Message
 						});
 					} else {
-						
 						// Parse & format the incoming data:
 						if (data.query.count === 1) {
 							data.query.results.row.Change = parseFloat(data.query.results.row.Change, 10);
@@ -575,6 +574,25 @@ angular.module('stockWatcher.Services')
 					$timeout.cancel(timeoutCountdown);
 					// Cancel the "timeout" Promise:
 					timeoutPromise.reject();
+
+
+					// Make sure the data to return is an Array (in case there is only 1 result returned):
+					if (!angular.isArray(data.query.results.quote)) {
+						data.query.results.quote = [data.query.results.quote];
+					}
+
+					for (var i = 0, nbDividends = data.query.results.quote.length; i < nbDividends; i++) {
+						var now = new Date();
+						var dateString = data.query.results.quote[i].Date.split('-');
+						now.setYear(dateString[0]);
+						now.setMonth(dateString[1]-1);
+						now.setDate(dateString[2]);
+						now.setHours(12);
+						now.setMinutes(0);
+						now.setSeconds(0);
+
+						data.query.results.quote[i].Date = now;
+					}
 
 					
 					// Resolve the Promise with data:
