@@ -11,8 +11,8 @@
 			</thead>
 			<tbody>
 				<tr class="animate-repeat" ng-repeat="dividendData in dividendHistory track by dividendData.Date">
-					<td class="col-md-6">{{ dividendData.Date }}</td>
-					<td class="col-md-6 text-right">{{ dividendData.Dividends }}</td>
+					<td class="col-md-6">{{ dividendData.Date | date }}</td>
+					<td class="col-md-6 text-right">{{ dividendData.Dividends | currency:'$':6 }}</td>
 				</tr>
 			</tbody>
 		</table>

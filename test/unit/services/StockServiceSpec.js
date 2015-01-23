@@ -661,7 +661,19 @@ describe('StockService', function() {
 					}
 				}
 			}
-		}
+		},
+		getDividendHistoryForStock: [
+			{
+				'Symbol': constants.symbol,
+				'Date': new Date(1417021200000),
+				'Dividends': '0.305000'
+			},
+			{
+				'Symbol': constants.symbol,
+				'Date': new Date(1410451200000),
+				'Dividends': '0.305000'
+			}
+		]
 	};
 
 	// Set up the module:
@@ -1269,7 +1281,7 @@ describe('StockService', function() {
 			$httpBackend.flush();
 
 			expect(resultData).toBeDefined();
-			expect(resultData).toEqual(expectedResponses.getDividendHistoryForStock.query.results.quote);
+			expect(resultData).toEqual(formattedResponses.getDividendHistoryForStock);
 		});
 
 		it('should return a "NoData" Error Promise when receiving empty data array', function() {

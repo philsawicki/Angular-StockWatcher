@@ -583,15 +583,18 @@ angular.module('stockWatcher.Services')
 
 					for (var i = 0, nbDividends = data.query.results.quote.length; i < nbDividends; i++) {
 						var now = new Date();
-						var dateString = data.query.results.quote[i].Date.split('-');
-						now.setYear(dateString[0]);
-						now.setMonth(dateString[1]-1);
-						now.setDate(dateString[2]);
-						now.setHours(12);
-						now.setMinutes(0);
-						now.setSeconds(0);
+						if (typeof data.query.results.quote[i] !== 'undefined') {
+							var dateString = data.query.results.quote[i].Date.split('-');
+							now.setYear(dateString[0]);
+							now.setMonth(dateString[1]-1);
+							now.setDate(dateString[2]);
+							now.setHours(12);
+							now.setMinutes(0);
+							now.setSeconds(0);
+							now.setMilliseconds(0);
 
-						data.query.results.quote[i].Date = now;
+							data.query.results.quote[i].Date = now;
+						}
 					}
 
 					
