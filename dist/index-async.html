@@ -1,18 +1,4 @@
-<!DOCTYPE html>
-<!--[if lt IE 7]>      <html lang="en" ng-strict-di class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
-<!--[if IE 7]>         <html lang="en" ng-strict-di class="no-js lt-ie9 lt-ie8"> <![endif]-->
-<!--[if IE 8]>         <html lang="en" ng-strict-di class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]><!--> <html lang="en" ng-strict-di class="no-js">
-<!--<![endif]-->
-<head>
-	<meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<meta name="description" content="">
-	
-	<title>Stock Watcher</title>
-
-	<style type="text/css">
+<!DOCTYPE html><!--[if lt IE 7]> <html lang="en" ng-strict-di class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]--><!--[if IE 7]> <html lang="en" ng-strict-di class="no-js lt-ie9 lt-ie8"> <![endif]--><!--[if IE 8]> <html lang="en" ng-strict-di class="no-js lt-ie9"> <![endif]--><!--[if gt IE 8]><!--><html lang="en" ng-strict-di="" class="no-js"><!--<![endif]--><head><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content><title>Stock Watcher</title><style type="text/css">
 	/**
 	 * Allow angular.js to be loaded in body, hiding cloaked elements until 
 	 * templates compile.  The !important is important given that there may be 
@@ -21,43 +7,12 @@
 	[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
 		display: none !important;
 	}
-	</style>
-  
-	<!-- build:css -->
-	<link rel="stylesheet" href="bower_components/html5-boilerplate/css/normalize.css">
-	<link rel="stylesheet" href="bower_components/html5-boilerplate/css/main.css">
-	<link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
-	<link rel="stylesheet" href="css/app.css">
-	<!-- endbuild -->
-</head>
-
-<body role="document" ng-cloak>
-
-	<navigation-bar></navigation-bar>
-
-	
-	<div class="container theme-showcase" role="main">
-		<!--[if lt IE 7]>
+	</style><link rel="stylesheet" href="css/css.css"></head><body role="document" ng-cloak=""><navigation-bar></navigation-bar><div class="container theme-showcase" role="main"><!--[if lt IE 7]>
 			<p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
-		<![endif]-->
-		
-
-		<!-- Show message is the app is offline (hide container by default): -->
-		<div class="alert alert-warning fade-in fade-out ng-cloak" role="alert" ng-hide="applicationIsOnline">
-			<strong>Application is offline.</strong> Data is not up to date.
-		</div>
-
-		<div ng-view></div>
-		<!-- To enable page transitions:
+		<![endif]--><!--Show message is the app is offline (hide container by default):--><div class="alert alert-warning fade-in fade-out ng-cloak" role="alert" ng-hide="applicationIsOnline"><strong>Application is offline.</strong> Data is not up to date.</div><div ng-view=""></div><!--To enable page transitions:
 		<div id="stockwatcher-page-wrapper">
 			<div ng-view id="stockwatcher-page-container" class="at-view-fade-in at-view-fade-out"></div>
-		</div>
-		-->
-	</div>  <!-- /container -->
-	
-	
-	
-	<script>
+		</div>--></div><!--/container--><script>
     // include angular loader, which allows the files to load in any order
     //@@NG_LOADER_START@@
 /*
@@ -100,6 +55,4 @@ b=c(b,"angular",Object);b.$minErr=b.$minErr||d;return c(b,"module",function(){va
 		// when all is done, execute bootstrap angular application
 		angular.bootstrap(document, ['stockWatcher']);
 	});
-	</script>
-</body>
-</html>
+	</script></body></html>

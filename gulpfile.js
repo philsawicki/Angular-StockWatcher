@@ -79,6 +79,16 @@ gulp.task('minify-css', function() {
  * Copy index.html, replacing "<script>" and "<link>" tags to reference production URLs.
  */
 gulp.task('minify-html', function() {
+    // Minify HTML for the "async" JS loader:
+    gulp.src('./app/index-async.html')
+        .pipe(htmlReplace({
+            css: 'css/css.css',
+            js: 'js/scripts.js'
+        }))
+        .pipe(minifyHTML({ conditionals: true, empty: true, quotes: true })) // There is an issue with IE conditionals being removed with "comments: true".
+        .pipe(gulp.dest('./dist/'));
+
+    // Minify HTML for the "sync" JS loader:
     return gulp.src('./app/index.html')
         .pipe(htmlReplace({
             css: 'css/css.css',
