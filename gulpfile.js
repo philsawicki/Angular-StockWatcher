@@ -10,7 +10,7 @@ var gulp = require('gulp'),
     clean = require('gulp-clean'),
     replace = require('gulp-replace'),
     uglify = require('gulp-uglify'),
-    htmlreplace = require('gulp-html-replace'),
+    htmlReplace = require('gulp-html-replace'),
     templateCache = require('gulp-angular-templatecache'),
     minifyCSS = require('gulp-minify-css'),
     minifyHTML = require('gulp-minify-html');
@@ -27,12 +27,12 @@ gulp.task('package-partials', function() {
 });
 
 /**
- * Minify CSS.
+ * Minify JS.
  */
 gulp.task('minify-js', ['package-partials'], function() {
     // Library references (order-dependent):
     var libs = [
-		//'./app/bower_components/html5-boilerplate/js/vendor/modernizr-2.6.2.min.js',
+        //'./app/bower_components/html5-boilerplate/js/vendor/modernizr-2.6.2.min.js',
         //'./app/bower_components/jquery/dist/jquery.js',
         //'./app/bower_components/angular/angular.js',
         //'./app/bower_components/angular-route/angular-route.js',
@@ -41,17 +41,17 @@ gulp.task('minify-js', ['package-partials'], function() {
         //'./app/bower_components/globalize/lib/cultures/globalize.culture.en-GB.js',
         //'./app/bower_components/d3/d3.min.js',
         //'./app/bower_components/jquery-mockjax/jquery.mockjax.js'
-		
-		'./app/js/**/*.js',
-		'./tmp/templates.js'
+        
+        './app/js/**/*.js',
+        './tmp/templates.js'
     ];
-	
+
     var jsStream = cs.create();
-	jsStream.append(gulp.src(libs));
-	
+    jsStream.append(gulp.src(libs));
+
     return jsStream
         .pipe(concat('scripts.js'))
-        .pipe(uglify({ preserveComments: 'some' }))
+        .pipe(uglify())
         .pipe(gulp.dest('./dist/js/'));
 });
 
@@ -61,13 +61,15 @@ gulp.task('minify-js', ['package-partials'], function() {
 gulp.task('minify-css', function() {
     var bowerCss = gulp.src('app/bower_components/bootstrap/dist/css/bootstrap.min.css')
             .pipe(replace(/url\((')?\.\.\/fonts\//g, 'url($1fonts/')),
-        appCss = gulp.src('app/css/*.css').pipe(minifyCSS()),
+        appCss = gulp.src('app/css/*.css'),
         combinedStream = cs.create(),
         fontFiles = gulp.src('./app/bower_components/bootstrap/fonts/*', { base: './app/bower_components/bootstrap/' });
 
     combinedStream.append(bowerCss);
     combinedStream.append(appCss);
-    combinedCss = combinedStream.pipe(concat('css.css'));
+    var combinedCss = combinedStream
+            .pipe(minifyCSS({ cache: true, keepSpecialComments: 0, advanced: true }))
+            .pipe(concat('css.css'));
 
     return es.concat(combinedCss, fontFiles)
         .pipe(gulp.dest('./dist/css/'));
@@ -77,17 +79,17 @@ gulp.task('minify-css', function() {
  * Copy index.html, replacing "<script>" and "<link>" tags to reference production URLs.
  */
 gulp.task('minify-html', function() {
-	return gulp.src('./app/index.html')
-		.pipe(htmlreplace({
-			'css': 'css/css.css',
-			'js': 'js/scripts.js'
-		}))
-		.pipe(minifyHTML({ comments: true, empty: true, quotes: true }))
-		.pipe(gulp.dest('./dist/'));
+    return gulp.src('./app/index.html')
+        .pipe(htmlReplace({
+            css: 'css/css.css',
+            js: 'js/scripts.js'
+        }))
+        .pipe(minifyHTML({ conditionals: true, empty: true, quotes: true })) // There is an issue with IE conditionals being removed with "comments: true".
+        .pipe(gulp.dest('./dist/'));
 });
 
 /**
- * Removes all files from ./dist & ./tmp.
+ * Removes all files from "./dist" & "./tmp".
  */
 gulp.task('clean', function() {
     return gulp.src(['./dist/**/*', './tmp/**/*'], { read: false })
@@ -114,6 +116,6 @@ gulp.task('build', ['minify-html', 'minify-js', 'minify-css'], function() {
 /**
  * Default task (called when running `gulp` from cli).
  */
-gulp.task('default', ['watch'], function(callback) {
+gulp.task('default', ['watch'], function (callback) {
     callback();
 });
