@@ -29,6 +29,7 @@ angular.module('stockWatcher.Controllers')
 			// Variables:
 			var max = parseFloat($scope.max, 10);
 			var min = parseFloat($scope.min, 10);
+			var middle = (min + max) / 2.0;
 			var current = $scope.current;
 
 			// Prevent unnecessary redraw if data is not available:
@@ -42,7 +43,7 @@ angular.module('stockWatcher.Controllers')
 				.scale(x)
 				.orient('top')
 				.tickSize(2)
-				.tickValues([min, max])
+				.tickValues([min, middle, max])
 				.tickFormat(function(d) { return formatValue(d); });
 
 			// Setup/update SVG Graphics:
@@ -87,6 +88,10 @@ angular.module('stockWatcher.Controllers')
 					d3.select(this)
 						.attr('style', 'text-anchor: start;');
 				} else if (childIndex === 1) {
+					// Last Label
+					d3.select(this)
+						.attr('style', 'text-anchor: middle; display: none;');
+				} else if (childIndex === 2) {
 					// Last Label
 					d3.select(this)
 						.attr('style', 'text-anchor: end;');
