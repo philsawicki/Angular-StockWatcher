@@ -175,6 +175,18 @@ angular.module('stockWatcher.Controllers')
 		};
 
 		$scope.saveSelectedStock = function() {
+			// Ensure that there will be no duplicates before saving the new array of quotes:
+			var savedQuotes = applicationStorageService.getSavedStockSymbols();
+			if (savedQuotes !== null) {
+				var matchedSavedQuotes = $.grep(savedQuotes, function (savedQuote) {
+					return savedQuote.yahooSymbol === $scope.selectedStock.symbol;
+				});
+				if (matchedSavedQuotes.length > 0) {
+					return;
+				}
+			}
+
+
 			// Add the selected symbol to the watchlist:
 			$scope.quotesToFetch.push(
 				{

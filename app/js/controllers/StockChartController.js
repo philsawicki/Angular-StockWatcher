@@ -94,8 +94,8 @@ angular.module('stockWatcher.Controllers')
 				},
 				rangeSelector: {
 					buttons: [{
-						type: 'day',
-						count: 1,
+						type: 'hour',
+						count: 12,
 						text: '1d'
 					},{
 						type: 'day',
