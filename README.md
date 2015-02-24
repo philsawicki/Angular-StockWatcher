@@ -1,4 +1,3 @@
-[![Build Status](https://travis-ci.org/philsawicki/Angular-StockWatcher.svg?branch=master)](https://travis-ci.org/philsawicki/Angular-StockWatcher)
 # Angular StockWatcher — Angular Stock Options Watcher
 
 This Angular project is an application which queries the Yahoo! Finance API and Google Finance 
