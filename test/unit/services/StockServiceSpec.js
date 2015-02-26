@@ -665,12 +665,12 @@ describe('StockService', function() {
 		getDividendHistoryForStock: [
 			{
 				'Symbol': constants.symbol,
-				'Date': new Date(/*1417021200000*/"2014-11-26 12:00:00"),
+				'Date': new Date(/*1417021200000*/"Wed Nov 26 2014 12:00:00"),
 				'Dividends': '0.305000'
 			},
 			{
 				'Symbol': constants.symbol,
-				'Date': new Date(/*1410451200000*/"2014-09-11 12:00:00"),
+				'Date': new Date(/*1410451200000*/"Thu Sep 11 2014 12:00:00"),
 				'Dividends': '0.305000'
 			}
 		]
