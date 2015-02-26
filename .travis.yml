@@ -8,7 +8,7 @@ node_js:
 notifications:
   email:
     recipients:
-      secure: dwfWO1pLOB92dVDTkUaRyMTN3eqJSNcdV+4I7A68hyj/QjDxeub9AFioR4waiSOR4q4u5cKe9dIkK8eodE1tGEVco7+MZUIdAc3vMqVgSaaSmwnEu1PsLFhXgIXupncBFzvzTu60xe2M1D8Si72gclUShobVWutnKXa/l1dBrGw=
+      secure: Cc8afTsDQuKZBOP++FDqKFrD51saQnshUPBreTk+MCBQenksf7zq9w2Pt47EWqKKYB7HSKAwyb3EraUfv5UqoEFOm3bqmHSICUY3XOntRx+zBby/mlkvc6Qs67270hk7GqUWlSwX013sHSyqxZADRipAYf/GMfEYsbQ56vEyg8Y=
     on_success: always # change
     on_failure: always
 
