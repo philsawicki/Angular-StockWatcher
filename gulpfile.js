@@ -59,22 +59,27 @@ gulp.task('minify-js', ['package-partials'], function() {
  * Minify CSS files, rewrite relative paths of Bootstrap fonts & copy Bootstrap fonts.
  */
 gulp.task('minify-css', function() {
-    var bowerCss = gulp.src('app/bower_components/bootstrap/dist/css/bootstrap.min.css')
+    var bootstrapBaseCSS = gulp.src('app/bower_components/bootstrap/dist/css/bootstrap.min.css')
             .pipe(replace(/url\((')?\.\.\/fonts\//g, 'url($1fonts/')),
-        appCss = gulp.src('app/css/*.css'),
+        bootstrapThemeCSS = gulp.src('app/bower_components/bootstrap/dist/css/bootstrap-theme.min.css'),
+        applicationCSS = gulp.src('app/css/*.css'),
         combinedStream = cs.create(),
         fontFiles = gulp.src('./app/bower_components/bootstrap/fonts/*', { base: './app/bower_components/bootstrap/' });
 
-    combinedStream.append(bowerCss);
-    combinedStream.append(appCss);
-    var combinedCss = combinedStream
-            .pipe(minifyCSS({ cache: true, keepSpecialComments: 0, advanced: true }))
-            .pipe(concat('css.css'));
+    combinedStream.append(bootstrapBaseCSS);
+    combinedStream.append(bootstrapThemeCSS);
+    combinedStream.append(applicationCSS);
 
-    return es.concat(combinedCss, fontFiles)
+    var combinedCSS = combinedStream
+        //.pipe(uncss({
+        //    html: ['./app/index.html', './app/views/**/*.html']
+        //}))
+        .pipe(minifyCSS({ cache: true, keepSpecialComments: 0, advanced: true }))
+        .pipe(concat('css.css'));
+
+    return es.concat(combinedCSS, fontFiles)
         .pipe(gulp.dest('./dist/css/'));
 });
-
 /**
  * Copy index.html, replacing "<script>" and "<link>" tags to reference production URLs.
  */
