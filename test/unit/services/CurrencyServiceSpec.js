@@ -202,18 +202,18 @@ describe('CurrencyService', function() {
 			}
 		},
 		getCurrencyExchangeRateHistory: [
-			[ new Date("Fri Jan 02 2015 00:00:00 GMT-0500 (EST)"), 1.161695 ],
-			[ new Date("Fri Jan 02 2015 00:01:00 GMT-0500 (EST)"), 1.161885 ],
-			[ new Date("Fri Jan 02 2015 00:02:00 GMT-0500 (EST)"), 1.161860 ],
-			[ new Date("Fri Jan 02 2015 00:03:00 GMT-0500 (EST)"), 1.162050 ],
-			[ new Date("Fri Jan 02 2015 00:04:00 GMT-0500 (EST)"), 1.162050 ],
-			[ new Date("Fri Jan 02 2015 16:39:00 GMT-0500 (EST)"), 1.172165 ],
-			[ new Date("Fri Jan 02 2015 16:40:00 GMT-0500 (EST)"), 1.172400 ],
-			[ new Date("Fri Jan 02 2015 16:41:00 GMT-0500 (EST)"), 1.172400 ],
-			[ new Date("Fri Jan 02 2015 16:42:00 GMT-0500 (EST)"), 1.172885 ],
-			[ new Date("Sat Jan 03 2015 09:19:00 GMT-0500 (EST)"), 1.178500 ],
-			[ new Date("Sat Jan 03 2015 09:21:00 GMT-0500 (EST)"), 1.178500 ],
-			[ new Date("Sat Jan 03 2015 09:23:00 GMT-0500 (EST)"), 1.178500 ]
+			[ new Date("Fri Jan 02 2015 00:00:00"), 1.161695 ],
+			[ new Date("Fri Jan 02 2015 00:01:00"), 1.161885 ],
+			[ new Date("Fri Jan 02 2015 00:02:00"), 1.161860 ],
+			[ new Date("Fri Jan 02 2015 00:03:00"), 1.162050 ],
+			[ new Date("Fri Jan 02 2015 00:04:00"), 1.162050 ],
+			[ new Date("Fri Jan 02 2015 16:39:00"), 1.172165 ],
+			[ new Date("Fri Jan 02 2015 16:40:00"), 1.172400 ],
+			[ new Date("Fri Jan 02 2015 16:41:00"), 1.172400 ],
+			[ new Date("Fri Jan 02 2015 16:42:00"), 1.172885 ],
+			[ new Date("Sat Jan 03 2015 09:19:00"), 1.178500 ],
+			[ new Date("Sat Jan 03 2015 09:21:00"), 1.178500 ],
+			[ new Date("Sat Jan 03 2015 09:23:00"), 1.178500 ]
 		]
 	};
 
