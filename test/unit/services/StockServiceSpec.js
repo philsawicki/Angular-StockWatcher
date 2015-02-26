@@ -543,27 +543,27 @@ describe('StockService', function() {
 
 	var formattedResponses = {
 		getLiveData: [
-			[ new Date("Tue Dec 30 2014 09:30:00 GMT-0500 (EST)"), 92.290 ],
-			[ new Date("Tue Dec 30 2014 09:31:00 GMT-0500 (EST)"), 92.570 ],
-			[ new Date("Tue Dec 30 2014 09:32:00 GMT-0500 (EST)"), 92.658 ],
-			[ new Date("Tue Dec 30 2014 16:00:00 GMT-0500 (EST)"), 92.380 ],
-			[ new Date("Wed Dec 31 2014 09:31:00 GMT-0500 (EST)"), 92.300 ],
-			[ new Date("Wed Dec 31 2014 09:32:00 GMT-0500 (EST)"), 92.170 ],
-			[ new Date("Wed Dec 31 2014 09:33:00 GMT-0500 (EST)"), 92.280 ],
-			[ new Date("Wed Dec 31 2014 16:00:00 GMT-0500 (EST)"), 91.110 ],
-			[ new Date("Fri Jan 02 2015 09:30:00 GMT-0500 (EST)"), 90.840 ],
-			[ new Date("Fri Jan 02 2015 09:31:00 GMT-0500 (EST)"), 90.720 ],
-			[ new Date("Fri Jan 02 2015 09:32:00 GMT-0500 (EST)"), 90.389 ]
+			[ new Date("Tue Dec 30 2014 09:30:00"), 92.290 ],
+			[ new Date("Tue Dec 30 2014 09:31:00"), 92.570 ],
+			[ new Date("Tue Dec 30 2014 09:32:00"), 92.658 ],
+			[ new Date("Tue Dec 30 2014 16:00:00"), 92.380 ],
+			[ new Date("Wed Dec 31 2014 09:31:00"), 92.300 ],
+			[ new Date("Wed Dec 31 2014 09:32:00"), 92.170 ],
+			[ new Date("Wed Dec 31 2014 09:33:00"), 92.280 ],
+			[ new Date("Wed Dec 31 2014 16:00:00"), 91.110 ],
+			[ new Date("Fri Jan 02 2015 09:30:00"), 90.840 ],
+			[ new Date("Fri Jan 02 2015 09:31:00"), 90.720 ],
+			[ new Date("Fri Jan 02 2015 09:32:00"), 90.389 ]
 		],
 		getLiveMarketData: [
-			[ new Date("Wed Dec 31 2014 09:31:00 GMT-0500 (EST)"), 2083.61 ],
-			[ new Date("Wed Dec 31 2014 09:32:00 GMT-0500 (EST)"), 2083.21 ],
-			[ new Date("Wed Dec 31 2014 09:33:00 GMT-0500 (EST)"), 2082.09 ],
-			[ new Date("Wed Dec 31 2014 16:00:00 GMT-0500 (EST)"), 2059.19 ],
-			[ new Date("Fri Jan 02 2015 09:31:00 GMT-0500 (EST)"), 2066.37 ],
-			[ new Date("Fri Jan 02 2015 09:32:00 GMT-0500 (EST)"), 2067.57 ],
-			[ new Date("Fri Jan 02 2015 09:33:00 GMT-0500 (EST)"), 2070.06 ],
-			[ new Date("Fri Jan 02 2015 16:00:00 GMT-0500 (EST)"), 2058.03 ]
+			[ new Date("Wed Dec 31 2014 09:31:00"), 2083.61 ],
+			[ new Date("Wed Dec 31 2014 09:32:00"), 2083.21 ],
+			[ new Date("Wed Dec 31 2014 09:33:00"), 2082.09 ],
+			[ new Date("Wed Dec 31 2014 16:00:00"), 2059.19 ],
+			[ new Date("Fri Jan 02 2015 09:31:00"), 2066.37 ],
+			[ new Date("Fri Jan 02 2015 09:32:00"), 2067.57 ],
+			[ new Date("Fri Jan 02 2015 09:33:00"), 2070.06 ],
+			[ new Date("Fri Jan 02 2015 16:00:00"), 2058.03 ]
 		],
 		getCurrentDataWithDetails: {
 			"query": {
@@ -665,12 +665,12 @@ describe('StockService', function() {
 		getDividendHistoryForStock: [
 			{
 				'Symbol': constants.symbol,
-				'Date': new Date(1417021200000),
+				'Date': new Date(/*1417021200000*/"2014-11-26 12:00:00"),
 				'Dividends': '0.305000'
 			},
 			{
 				'Symbol': constants.symbol,
-				'Date': new Date(1410451200000),
+				'Date': new Date(/*1410451200000*/"2014-09-11 12:00:00"),
 				'Dividends': '0.305000'
 			}
 		]
