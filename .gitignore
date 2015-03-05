@@ -9,3 +9,4 @@ tmp
 npm-debug.log
 Angular-StockWatcher.sublime-project
 Angular-StockWatcher.sublime-workspace
+.coveralls.yml
