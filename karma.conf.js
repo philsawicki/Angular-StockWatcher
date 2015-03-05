@@ -58,7 +58,7 @@ module.exports = function (config) {
             reporters: [
                 // Reporters not supporting the 'file' property:
                 { type: 'html', subdir: 'report-html' },
-                //{ type: 'lcov', subdir: 'report-lcov' },
+                { type: 'lcov', subdir: 'report-lcov' },
                 // Reporter supporting the 'file' property, using 'subdir' 
                 // to directly output them in the 'dir' directory:
                 //{ type: 'cobertura', subdir: '.', file: 'covertura.txt' },
