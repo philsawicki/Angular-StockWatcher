@@ -4,11 +4,23 @@
  * Unit Tests for Stock Watcher App.
  */
 describe('App', function () {
-	var $window;
+	var $window = {
+        addEventListener: /*jasmine.createSpy('addEventListener') */ function (value, callback) {
+			callback();
+		}
+	};
+	var $rootscope = {
+		$apply: function (callback) {
+			callback();
+		}
+	};
 	
 	
 	// Set up the module:
-	beforeEach(module('stockWatcher'));
+	beforeEach(module('stockWatcher'), function ($provide) {
+        $provide.value('$window', $window);
+        $provide.value('$rootscope', rootscope);
+    });
 
 	beforeEach(inject(function ($injector) {
 		// Get hold of a scope (i.e. the root scope):
@@ -19,9 +31,9 @@ describe('App', function () {
 			navigator.onLine = navigator.onLine || function () {};
 		}
 		
-		if (!$window.addEventListener) {
-			$window.addEventListener = function () {};
-		}
+		//if (!$window.addEventListener) {
+		//	$window.addEventListener = function () {};
+		//}
 	}));
 	
 
@@ -41,5 +53,14 @@ describe('App', function () {
 
              expect(output).toEqual('test value {1}');
         }));
+	});
+	
+	
+	xdescribe('test', function () {
+		it('should handle window online/offline', function () {
+			var w = angular.element($window);
+			w.triggerHandler('online');
+			//expect($window.addEventListener).toHaveBeenCalled();
+		});
 	});
 });

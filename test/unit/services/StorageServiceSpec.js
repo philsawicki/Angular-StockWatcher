@@ -99,4 +99,14 @@ describe('StorageService', function() {
 		expect(storedValue).toEqual(undefined);
 		expect(storedJSONValue).toEqual(undefined);
 	});
+	
+	xit('returns "undefined" when localStorage is not supported', function () {
+		$window.localStorage = false;
+		
+		storageService.setData(constants.storageKey, constants.storageValue);
+
+		var storedValue = storageService.getData(constants.storageKey);
+
+		expect(storedValue).toBeUndefined();
+	});
 });
