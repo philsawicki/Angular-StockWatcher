@@ -35,8 +35,8 @@ describe('ApplicationStorageService', function() {
 		storageService = $injector.get('storageService');
 		appConfig = $injector.get('appConfig');
 
-		spyOn(storageService, 'setData').andCallThrough();
-		spyOn(storageService, 'getData').andCallThrough();
+		spyOn(storageService, 'setData').and.callThrough();
+		spyOn(storageService, 'getData').and.callThrough();
 
 		constants.stockData = angular.fromJson(angular.toJson(constants.stockData));
 	}));
@@ -71,12 +71,12 @@ describe('ApplicationStorageService', function() {
 
 				expect(storedValue).toEqual(constants.stockData);
 				expect(storageService.setData).toHaveBeenCalled();
-				expect(storageService.setData.callCount).toEqual(1);
+				expect(storageService.setData.calls.count()).toEqual(1);
 
 				var storedValue = applicationStorageService.getSavedStockSymbols();
 
 				expect(storedValue).toEqual(constants.stockData);
-				expect(storageService.setData.callCount).toEqual(1);
+				expect(storageService.setData.calls.count()).toEqual(1);
 			});
 
 			it('should use the proper cache key', function() {
@@ -86,13 +86,13 @@ describe('ApplicationStorageService', function() {
 
 				expect(storedValue).toEqual(constants.stockData);
 				expect(storageService.setData).toHaveBeenCalled();
-				expect(storageService.setData.callCount).toEqual(1);
+				expect(storageService.setData.calls.count()).toEqual(1);
 
 				var storedValue = applicationStorageService.getSavedStockSymbols();
 
 				expect(storedValue).toEqual(constants.stockData);
-				expect(storageService.setData.callCount).toEqual(1);
-				expect(storageService.setData.mostRecentCall.args[0]).toEqual(appConfig.StorageKeys.StoredQuotes);
+				expect(storageService.setData.calls.count()).toEqual(1);
+				expect(storageService.setData.calls.mostRecent().args[0]).toEqual(appConfig.StorageKeys.StoredQuotes);
 			});
 		});
 
@@ -104,7 +104,7 @@ describe('ApplicationStorageService', function() {
 
 				expect(storedValue).toEqual(constants.stockData);
 				expect(storageService.getData).not.toHaveBeenCalled();
-				expect(storageService.getData.callCount).toEqual(0);
+				expect(storageService.getData.calls.count()).toEqual(0);
 			});
 
 			it('should call the storage service when data is not cached', function() {
@@ -114,7 +114,7 @@ describe('ApplicationStorageService', function() {
 
 				expect(storedValue).toEqual(constants.stockData);
 				expect(storageService.getData).toHaveBeenCalled();
-				expect(storageService.getData.callCount).toEqual(1);
+				expect(storageService.getData.calls.count()).toEqual(1);
 			});
 
 			it('should use the proper cache key', function() {
@@ -124,8 +124,8 @@ describe('ApplicationStorageService', function() {
 
 				expect(storedValue).toEqual(constants.stockData);
 				expect(storageService.getData).toHaveBeenCalled();
-				expect(storageService.getData.callCount).toEqual(1);
-				expect(storageService.getData.mostRecentCall.args[0]).toEqual(appConfig.StorageKeys.StoredQuotes);
+				expect(storageService.getData.calls.count()).toEqual(1);
+				expect(storageService.getData.calls.mostRecent().args[0]).toEqual(appConfig.StorageKeys.StoredQuotes);
 			});
 		});
 	});

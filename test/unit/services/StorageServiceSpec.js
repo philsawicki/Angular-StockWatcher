@@ -3,7 +3,7 @@
 /**
  * Unit Tests for "StorageService".
  */
-describe('StorageService', function() {
+describe('StorageService', function () {
 	var storageService = undefined;
 
 	var constants = {
@@ -25,13 +25,13 @@ describe('StorageService', function() {
 	// Set up the module:
 	beforeEach(module('stockWatcher'));
 
-	beforeEach(inject(function($injector) {
+	beforeEach(inject(function ($injector) {
 		// Get objects to test:
 		storageService = $injector.get('storageService');
 	}));
 
 
-	it('can store data', function() {
+	it('can store data', function () {
 		storageService.setData(constants.storageKey, constants.storageValue);
 
 		var storedValue = storageService.getData(constants.storageKey);
@@ -39,13 +39,13 @@ describe('StorageService', function() {
 		expect(storedValue).toEqual(constants.storageValue);
 	});
 
-	it('returns "undefined" it the requested key does not exist', function() {
+	it('returns "undefined" it the requested key does not exist', function () {
 		var storedValue = storageService.getData('nonExistingStorageKey');
 
-		expect(storedValue).toEqual(undefined);
+		expect(storedValue).toBeNull();
 	});
 
-	it('can overwrite stored data', function() {
+	it('can overwrite stored data', function () {
 		storageService.setData(constants.storageKey, constants.storageValue);
 
 		var originalValue = storageService.getData(constants.storageKey);
@@ -59,7 +59,7 @@ describe('StorageService', function() {
 		expect(modifiedValue).toEqual('TEST');
 	});
 
-	it('can restore JSON-serialized data', function() {
+	it('can restore JSON-serialized data', function () {
 		storageService.setData(constants.storageJSONKey, JSON.stringify(constants.storageJSONValue));
 
 		var storedValue = JSON.parse(storageService.getData(constants.storageJSONKey));
@@ -67,7 +67,7 @@ describe('StorageService', function() {
 		expect(storedValue).toEqual(constants.storageJSONValue);
 	});
 
-	it('can delete data', function() {
+	it('can delete data', function () {
 		storageService.setData(constants.storageKey, constants.storageValue);
 
 		var storedValue = storageService.getData(constants.storageKey);
@@ -78,10 +78,10 @@ describe('StorageService', function() {
 
 		var storedValue = storageService.getData(constants.storageKey);
 
-		expect(storedValue).toEqual(undefined);
+		expect(storedValue).toBeNull();
 	});
 
-	it('can clear all data', function() {
+	it('can clear all data', function () {
 		storageService.setData(constants.storageKey, constants.storageValue);
 		storageService.setData(constants.storageJSONKey, JSON.stringify(constants.storageJSONValue));
 
@@ -96,8 +96,8 @@ describe('StorageService', function() {
 		var storedValue = storageService.getData(constants.storageKey);
 		var storedJSONValue = JSON.parse(storageService.getData(constants.storageJSONKey));
 
-		expect(storedValue).toEqual(undefined);
-		expect(storedJSONValue).toEqual(undefined);
+		expect(storedValue).toBeNull();
+		expect(storedJSONValue).toBeNull();
 	});
 	
 	xit('returns "undefined" when localStorage is not supported', function () {

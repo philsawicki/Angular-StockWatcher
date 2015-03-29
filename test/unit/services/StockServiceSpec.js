@@ -781,7 +781,8 @@ describe('StockService', function() {
 			expect(errorCallbackReason).toBeDefined();
 			expect(errorCallbackReason).toEqual({
 				error: errorMessages.Timeout.Error,
-				message: errorMessages.Timeout.Message.format(appConfig.JSONPTimeout)
+				message: errorMessages.Timeout.Message.format(appConfig.JSONPTimeout),
+				data: undefined
 			});
 		});
 	});
@@ -869,7 +870,8 @@ describe('StockService', function() {
 			expect(errorCallbackReason).toBeDefined();
 			expect(errorCallbackReason).toEqual({
 				error: errorMessages.Timeout.Error,
-				message: errorMessages.Timeout.Message.format(appConfig.JSONPTimeout)
+				message: errorMessages.Timeout.Message.format(appConfig.JSONPTimeout),
+				data: undefined
 			});
 		});
 	});
@@ -957,7 +959,8 @@ describe('StockService', function() {
 			expect(errorCallbackReason).toBeDefined();
 			expect(errorCallbackReason).toEqual({
 				error: errorMessages.Timeout.Error,
-				message: errorMessages.Timeout.Message.format(appConfig.JSONPTimeout)
+				message: errorMessages.Timeout.Message.format(appConfig.JSONPTimeout),
+				data: undefined
 			});
 		});
 	});
@@ -1045,7 +1048,8 @@ describe('StockService', function() {
 			expect(errorCallbackReason).toBeDefined();
 			expect(errorCallbackReason).toEqual({
 				error: errorMessages.Timeout.Error,
-				message: errorMessages.Timeout.Message.format(appConfig.JSONPTimeout)
+				message: errorMessages.Timeout.Message.format(appConfig.JSONPTimeout),
+				data: undefined
 			});
 		});
 	});
@@ -1133,7 +1137,8 @@ describe('StockService', function() {
 			expect(errorCallbackReason).toBeDefined();
 			expect(errorCallbackReason).toEqual({
 				error: errorMessages.Timeout.Error,
-				message: errorMessages.Timeout.Message.format(appConfig.JSONPTimeout)
+				message: errorMessages.Timeout.Message.format(appConfig.JSONPTimeout),
+				data: undefined
 			});
 		});
 	});
@@ -1221,7 +1226,8 @@ describe('StockService', function() {
 			expect(errorCallbackReason).toBeDefined();
 			expect(errorCallbackReason).toEqual({
 				error: errorMessages.Timeout.Error,
-				message: errorMessages.Timeout.Message.format(appConfig.JSONPTimeout)
+				message: errorMessages.Timeout.Message.format(appConfig.JSONPTimeout),
+				data: undefined
 			});
 		});
 
@@ -1340,7 +1346,8 @@ describe('StockService', function() {
 			expect(errorCallbackReason).toBeDefined();
 			expect(errorCallbackReason).toEqual({
 				error: errorMessages.Timeout.Error,
-				message: errorMessages.Timeout.Message.format(appConfig.JSONPTimeout)
+				message: errorMessages.Timeout.Message.format(appConfig.JSONPTimeout),
+				data: undefined
 			});
 		});
 

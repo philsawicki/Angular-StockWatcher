@@ -10,7 +10,7 @@ angular.module('stockWatcher.Services')
 		 * @param {string} key   The key uniquely identifying the value to store.
 		 * @param {*}      value The value to save to storage.
 		 */
-		var setData = function(key, value) {
+		var setData = function (key, value) {
 			var storage = $window.localStorage;
 			if (storage) {
 				storage.setItem(key, value);
@@ -23,7 +23,7 @@ angular.module('stockWatcher.Services')
 		 * @return {*}          The value matching the given key, or "undefined" if nothing found 
 		 *                      or if localStorage is not supported.
 		 */
-		var getData = function(key) {
+		var getData = function (key) {
 			var storage = $window.localStorage;
 			if (storage) {
 				return storage.getItem(key);
@@ -36,7 +36,7 @@ angular.module('stockWatcher.Services')
 		 * @param  {string} key The key uniquerly identifying the value to remove.
 		 * @return {void}
 		 */
-		var deleteData = function(key) {
+		var deleteData = function (key) {
 			var storage = $window.localStorage;
 			if (storage) {
 				storage.removeItem(key);
@@ -47,7 +47,7 @@ angular.module('stockWatcher.Services')
 		 * Removes all data store in localStorage.
 		 * @return {void}
 		 */
-		var deleteAllData = function() {
+		var deleteAllData = function () {
 			var storage = $window.localStorage;
 			if (storage) {
 				storage.clear();

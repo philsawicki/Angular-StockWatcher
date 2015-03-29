@@ -83,7 +83,7 @@ describe('CurrencyChartController', function () {
 	
 	describe('$scope destruction', function () {
 		it('should call the "destroyRefreshed" method', function () {
-			spyOn($scope, 'destroyRefresher').andCallThrough();
+			spyOn($scope, 'destroyRefresher').and.callThrough();
 			
 			$scope.$destroy();
 			
@@ -94,8 +94,8 @@ describe('CurrencyChartController', function () {
 	
 	describe('$interval change', function () {
 		it('should destroy then create a new Refresher', function () {
-			spyOn($scope, 'destroyRefresher').andCallThrough();
-			spyOn($scope, 'createRefresher').andCallThrough();
+			spyOn($scope, 'destroyRefresher').and.callThrough();
+			spyOn($scope, 'createRefresher').and.callThrough();
 			
 			$scope.refreshIntervalChanged();
 			

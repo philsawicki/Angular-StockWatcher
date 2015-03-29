@@ -115,7 +115,7 @@ describe('StockChartController', function() {
 
 			$scope.refreshInterval = 1;
 
-			spyOn($scope, 'createRefresher').andCallThrough();
+			spyOn($scope, 'createRefresher').and.callThrough();
 			$scope.$apply();
 
 			setTimeout(function() {
@@ -145,8 +145,8 @@ describe('StockChartController', function() {
 		it('should call "create" and "destroy" methods upon "refresher" value changes', function() {
 			var controller = createController();
 
-			spyOn($scope, 'createRefresher').andCallThrough();
-			spyOn($scope, 'destroyRefresher').andCallThrough();
+			spyOn($scope, 'createRefresher').and.callThrough();
+			spyOn($scope, 'destroyRefresher').and.callThrough();
 
 			expect($scope.refresher).toBeDefined();
 
@@ -179,7 +179,7 @@ describe('StockChartController', function() {
 		xit('should create an $interval after calling "create"', function() {
 			var controller = createController();
 
-			spyOn($window, '$interval').andCallThrough();
+			spyOn($window, '$interval').and.callThrough();
 
 			expect($scope.refresher).toBeDefined();
 
@@ -192,7 +192,7 @@ describe('StockChartController', function() {
 		it('should set the "Refresher" to undefined when calling "destroy"', function() {
 			var controller = createController();
 
-			spyOn($interval, 'cancel').andCallThrough();
+			spyOn($interval, 'cancel').and.callThrough();
 
 			expect($scope.refresher).toBeDefined();
 
@@ -205,7 +205,7 @@ describe('StockChartController', function() {
 		it('should set the "Previous Close Refresher" to undefined when calling "destroy"', function() {
 			var controller = createController();
 
-			spyOn($interval, 'cancel').andCallThrough();
+			spyOn($interval, 'cancel').and.callThrough();
 
 			expect($scope.previousCloseRefresher).toBeDefined();
 
@@ -221,8 +221,8 @@ describe('StockChartController', function() {
 			runs(function() {
 				var controller = createController();
 
-				spyOn($scope, 'refreshIntervalChanged').andCallThrough();
-				spyOn($scope, 'updateGraph').andCallThrough();
+				spyOn($scope, 'refreshIntervalChanged').and.callThrough();
+				spyOn($scope, 'updateGraph').and.callThrough();
 
 				$scope.refreshInterval = 0;
 				$scope.refreshIntervalChanged();
@@ -269,7 +269,7 @@ describe('StockChartController', function() {
 		it('should destroy the "Refresher"', function() {
 			var controller = createController();
 
-			spyOn($scope, 'destroyRefresher').andCallThrough();
+			spyOn($scope, 'destroyRefresher').and.callThrough();
 
 			$scope.$destroy();
 
@@ -283,7 +283,7 @@ describe('StockChartController', function() {
 			expect($scope.chart).toBeUndefined();
 			$scope.chart = { destroy: function() {} };
 
-			spyOn($scope.chart, 'destroy').andCallThrough();
+			spyOn($scope.chart, 'destroy').and.callThrough();
 
 			$scope.$destroy();
 
@@ -294,7 +294,7 @@ describe('StockChartController', function() {
 			xit('should cancel the "initGraph" Promise', function() {
 				var controller = createController();
 
-				spyOn($timeout, 'cancel').andCallThrough();
+				spyOn($timeout, 'cancel').and.callThrough();
 
 				$scope.$destroy();
 
