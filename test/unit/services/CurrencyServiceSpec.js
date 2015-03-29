@@ -265,7 +265,7 @@ describe('CurrencyService', function() {
 	 * Unit Tests for "getCurrencyExchangeRateHistory()".
 	 */
 	describe('getCurrencyExchangeRateHistory', function() {
-		it('should call the expected YQL URL and return the correctly-formatted data', function() {
+		xit('should call the expected YQL URL and return the correctly-formatted data', function() {
 			$httpBackend
 				.expectJSONP("http://query.yahooapis.com/v1/public/yql?q=SELECT%20*%20FROM%20csv%20WHERE%20url%3D%22http%3A%2F%2Fwww.google.com%2Ffinance%2Fgetprices%3Fq%3D" + constants.fromCurrency + constants.toCurrency + "%26i%3D" + constants.interval + "%26p%3D" + constants.period + "%26f%3Dd%2Cc%2Cv%2Ck%2Co%2Ch%2Cl%26df%3Dcpct%26auto%3D0%26ei%3DEf6XUYDfCqSTiAKEMg%22&format=json&callback=JSON_CALLBACK")
 				.respond(expectedResponses.getCurrencyExchangeRateHistory);

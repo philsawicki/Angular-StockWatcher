@@ -1,8 +1,8 @@
 {
-	"name": "angular-seed",
-	"description": "A starter project for AngularJS",
-	"version": "0.0.0",
-	"homepage": "https://github.com/angular/angular-seed",
+	"name": "angular-stockwatcher",
+	"description": "A live, auto-refreshing Stock Market Watcher built with AngularJS",
+	"version": "0.0.1",
+	"homepage": "https://github.com/philsawicki/Angular-StockWatcher",
 	"license": "MIT",
 	"private": true,
 	"dependencies": {
@@ -11,10 +11,7 @@
 		"angular-animate": "1.3.x",
 		"angular-loader": "1.3.x",
 		"angular-mocks": "~1.3.x",
-		"bootstrap": "~3.2",
+		"bootstrap": "~3.2.x",
 		"html5-boilerplate": "~4.3.0"
-	},
-	"resolutions": {
-		"angular": "~1.3.9"
 	}
 }
