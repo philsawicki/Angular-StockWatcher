@@ -202,18 +202,18 @@ describe('CurrencyService', function() {
 			}
 		},
 		getCurrencyExchangeRateHistory: [
-			[ new Date("Fri Jan 02 2015 00:00:00"), 1.161695 ],
-			[ new Date("Fri Jan 02 2015 00:01:00"), 1.161885 ],
-			[ new Date("Fri Jan 02 2015 00:02:00"), 1.161860 ],
-			[ new Date("Fri Jan 02 2015 00:03:00"), 1.162050 ],
-			[ new Date("Fri Jan 02 2015 00:04:00"), 1.162050 ],
-			[ new Date("Fri Jan 02 2015 16:39:00"), 1.172165 ],
-			[ new Date("Fri Jan 02 2015 16:40:00"), 1.172400 ],
-			[ new Date("Fri Jan 02 2015 16:41:00"), 1.172400 ],
-			[ new Date("Fri Jan 02 2015 16:42:00"), 1.172885 ],
-			[ new Date("Sat Jan 03 2015 09:19:00"), 1.178500 ],
-			[ new Date("Sat Jan 03 2015 09:21:00"), 1.178500 ],
-			[ new Date("Sat Jan 03 2015 09:23:00"), 1.178500 ]
+			[ new Date("Fri Jan 01 2015 23:00:00"), 1.161695 ],
+			[ new Date("Fri Jan 01 2015 23:01:00"), 1.161885 ],
+			[ new Date("Fri Jan 01 2015 23:02:00"), 1.161860 ],
+			[ new Date("Fri Jan 01 2015 23:03:00"), 1.162050 ],
+			[ new Date("Fri Jan 01 2015 23:04:00"), 1.162050 ],
+			[ new Date("Fri Jan 02 2015 15:39:00"), 1.172165 ],
+			[ new Date("Fri Jan 02 2015 15:40:00"), 1.172400 ],
+			[ new Date("Fri Jan 02 2015 15:41:00"), 1.172400 ],
+			[ new Date("Fri Jan 02 2015 15:42:00"), 1.172885 ],
+			[ new Date("Sat Jan 03 2015 08:19:00"), 1.178500 ],
+			[ new Date("Sat Jan 03 2015 08:21:00"), 1.178500 ],
+			[ new Date("Sat Jan 03 2015 08:23:00"), 1.178500 ]
 		]
 	};
 
@@ -265,7 +265,7 @@ describe('CurrencyService', function() {
 	 * Unit Tests for "getCurrencyExchangeRateHistory()".
 	 */
 	describe('getCurrencyExchangeRateHistory', function() {
-		xit('should call the expected YQL URL and return the correctly-formatted data', function() {
+		it('should call the expected YQL URL and return the correctly-formatted data', function() {
 			$httpBackend
 				.expectJSONP("http://query.yahooapis.com/v1/public/yql?q=SELECT%20*%20FROM%20csv%20WHERE%20url%3D%22http%3A%2F%2Fwww.google.com%2Ffinance%2Fgetprices%3Fq%3D" + constants.fromCurrency + constants.toCurrency + "%26i%3D" + constants.interval + "%26p%3D" + constants.period + "%26f%3Dd%2Cc%2Cv%2Ck%2Co%2Ch%2Cl%26df%3Dcpct%26auto%3D0%26ei%3DEf6XUYDfCqSTiAKEMg%22&format=json&callback=JSON_CALLBACK")
 				.respond(expectedResponses.getCurrencyExchangeRateHistory);

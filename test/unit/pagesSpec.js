@@ -16,9 +16,9 @@ describe('PageController', function () {
 						result.pass = (typeof actual === 'boolean');
 
 						if (result.pass) {
-							result.message = "Expected " + actual + " is boolean";
+							result.message = '"' + actual + '" is boolean';
 						} else {
-							result.message = "Expected " + actual + " is not boolean";
+							result.message = 'Expected "' + actual + '" to be boolean';
 						}
 
 						return result;
