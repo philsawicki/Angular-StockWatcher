@@ -1,0 +1,65 @@
+# Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.
+version: v1.10.2
+ignore: {}
+# patches apply the minimum changes required to fix a vulnerability
+patch:
+  'npm:debug:20170905':
+    - karma > connect > connect-timeout > debug:
+        patched: '2018-03-15T04:18:27.982Z'
+    - karma > connect > express-session > debug:
+        patched: '2018-03-15T04:18:27.982Z'
+    - karma > connect > body-parser > debug:
+        patched: '2018-03-15T04:18:27.982Z'
+    - karma > connect > compression > debug:
+        patched: '2018-03-15T04:18:27.982Z'
+    - karma > connect > serve-index > debug:
+        patched: '2018-03-15T04:18:27.982Z'
+    - karma > connect > serve-static > send > debug:
+        patched: '2018-03-15T04:18:27.982Z'
+    - karma > connect > morgan > debug:
+        patched: '2018-03-15T04:18:27.982Z'
+  'npm:minimatch:20160620':
+    - karma-coverage > ibrik > istanbul > fileset > minimatch:
+        patched: '2018-03-15T04:18:27.982Z'
+    - gulp > vinyl-fs > glob-stream > minimatch:
+        patched: '2018-03-15T04:18:27.982Z'
+    - karma-coverage > ibrik > fileset > minimatch:
+        patched: '2018-03-15T04:18:27.982Z'
+    - gulp > vinyl-fs > glob-watcher > gaze > globule > minimatch:
+        patched: '2018-03-15T04:18:27.982Z'
+    - gulp > vinyl-fs > glob-watcher > gaze > globule > glob > minimatch:
+        patched: '2018-03-15T04:18:27.982Z'
+    - karma-coverage > ibrik > fileset > glob > minimatch:
+        patched: '2018-03-15T04:18:27.982Z'
+  'npm:ms:20170412':
+    - karma > connect > connect-timeout > ms:
+        patched: '2018-03-15T04:18:27.982Z'
+    - karma > connect > connect-timeout > debug > ms:
+        patched: '2018-03-15T04:18:27.982Z'
+    - karma > connect > express-session > debug > ms:
+        patched: '2018-03-15T04:18:27.982Z'
+    - karma > connect > morgan > debug > ms:
+        patched: '2018-03-15T04:18:27.982Z'
+    - karma > connect > body-parser > debug > ms:
+        patched: '2018-03-15T04:18:27.982Z'
+    - karma > connect > compression > debug > ms:
+        patched: '2018-03-15T04:18:27.982Z'
+    - karma > connect > serve-index > debug > ms:
+        patched: '2018-03-15T04:18:27.982Z'
+    - karma > connect > serve-static > send > ms:
+        patched: '2018-03-15T04:18:27.982Z'
+    - karma > connect > serve-static > send > debug > ms:
+        patched: '2018-03-15T04:18:27.982Z'
+    - karma > connect > serve-favicon > ms:
+        patched: '2018-03-15T04:18:27.982Z'
+  'npm:negotiator:20160616':
+    - karma > connect > compression > accepts > negotiator:
+        patched: '2018-03-15T04:18:27.982Z'
+    - karma > connect > serve-index > accepts > negotiator:
+        patched: '2018-03-15T04:18:27.982Z'
+  'npm:tough-cookie:20170905':
+    - gulp-uncss > uncss > request > tough-cookie:
+        patched: '2018-03-15T04:18:27.982Z'
+  'npm:ws:20160920':
+    - karma > socket.io > socket.io-client > ws:
+        patched: '2018-03-15T04:18:27.982Z'
