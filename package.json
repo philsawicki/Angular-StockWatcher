@@ -10,7 +10,7 @@
     "chalk": "~1.0.0",
     "combined-stream": "^0.0.7",
     "coveralls": "^2.11.2",
-    "event-stream": "~3.3.0",
+    "event-stream": "3.3.0",
     "gulp": "^3.8.11",
     "gulp-angular-templatecache": "^1.6.0",
     "gulp-clean": "~0.3.1",
