@@ -1,0 +1,80 @@
+# Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.
+version: v1.13.3
+ignore: {}
+# patches apply the minimum changes required to fix a vulnerability
+patch:
+  'npm:debug:20170905':
+    - karma > connect > body-parser > debug:
+        patched: '2019-04-18T00:16:00.066Z'
+    - karma > connect > compression > debug:
+        patched: '2019-04-18T00:16:00.066Z'
+    - karma > connect > express-session > debug:
+        patched: '2019-04-18T00:16:00.066Z'
+    - karma > connect > morgan > debug:
+        patched: '2019-04-18T00:16:00.066Z'
+    - karma > connect > serve-index > debug:
+        patched: '2019-04-18T00:16:00.066Z'
+    - karma > connect > serve-static > send > debug:
+        patched: '2019-04-18T00:16:00.066Z'
+    - karma > connect > connect-timeout > debug:
+        patched: '2019-04-18T00:16:00.066Z'
+  'npm:hoek:20180212':
+    - gulp-uncss > uncss > request > hawk > sntp > hoek:
+        patched: '2019-04-18T00:16:00.066Z'
+    - gulp-uncss > uncss > request > hawk > boom > hoek:
+        patched: '2019-04-18T00:16:00.066Z'
+    - gulp-uncss > uncss > request > hawk > cryptiles > boom > hoek:
+        patched: '2019-04-18T00:16:00.066Z'
+    - gulp-uncss > uncss > request > hawk > hoek:
+        patched: '2019-04-18T00:16:00.066Z'
+  'npm:mime:20170907':
+    - karma > connect > serve-static > send > mime:
+        patched: '2019-04-18T00:16:00.066Z'
+  'npm:minimatch:20160620':
+    - gulp > vinyl-fs > glob-stream > minimatch:
+        patched: '2019-04-18T00:16:00.066Z'
+    - karma-coverage > ibrik > istanbul > fileset > minimatch:
+        patched: '2019-04-18T00:16:00.066Z'
+    - gulp > vinyl-fs > glob-watcher > gaze > globule > minimatch:
+        patched: '2019-04-18T00:16:00.066Z'
+    - gulp > vinyl-fs > glob-watcher > gaze > globule > glob > minimatch:
+        patched: '2019-04-18T00:16:00.066Z'
+    - karma-coverage > ibrik > fileset > glob > minimatch:
+        patched: '2019-04-18T00:16:00.066Z'
+    - karma-coverage > ibrik > fileset > minimatch:
+        patched: '2019-04-18T00:16:00.066Z'
+  'npm:ms:20170412':
+    - karma > connect > serve-static > send > debug > ms:
+        patched: '2019-04-18T00:16:00.066Z'
+    - karma > connect > connect-timeout > ms:
+        patched: '2019-04-18T00:16:00.066Z'
+    - karma > connect > express-session > debug > ms:
+        patched: '2019-04-18T00:16:00.066Z'
+    - karma > connect > compression > debug > ms:
+        patched: '2019-04-18T00:16:00.066Z'
+    - karma > connect > serve-index > debug > ms:
+        patched: '2019-04-18T00:16:00.066Z'
+    - karma > connect > body-parser > debug > ms:
+        patched: '2019-04-18T00:16:00.066Z'
+    - karma > connect > connect-timeout > debug > ms:
+        patched: '2019-04-18T00:16:00.066Z'
+    - karma > connect > serve-static > send > ms:
+        patched: '2019-04-18T00:16:00.066Z'
+    - karma > connect > morgan > debug > ms:
+        patched: '2019-04-18T00:16:00.066Z'
+    - karma > connect > serve-favicon > ms:
+        patched: '2019-04-18T00:16:00.066Z'
+  'npm:negotiator:20160616':
+    - karma > connect > compression > accepts > negotiator:
+        patched: '2019-04-18T00:16:00.066Z'
+    - karma > connect > serve-index > accepts > negotiator:
+        patched: '2019-04-18T00:16:00.066Z'
+  'npm:tough-cookie:20170905':
+    - gulp-uncss > uncss > request > tough-cookie:
+        patched: '2019-04-18T00:16:00.066Z'
+  'npm:tunnel-agent:20170305':
+    - gulp-uncss > uncss > request > tunnel-agent:
+        patched: '2019-04-18T00:16:00.066Z'
+  'npm:ws:20160920':
+    - karma > socket.io > socket.io-client > ws:
+        patched: '2019-04-18T00:16:00.066Z'
