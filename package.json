@@ -22,7 +22,7 @@
     "gulp-requirejs-bundler": "^0.1.1",
     "gulp-uglify": "~1.1.0",
     "gulp-uncss": "^1.0.1",
-    "http-server": "^0.8.0",
+    "http-server": "^0.13.0",
     "istanbul": "^0.3.11",
     "jasmine-core": "^2.2.0",
     "karma": "~0.12.31",
