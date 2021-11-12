@@ -20,7 +20,7 @@
     "gulp-minify-html": "^1.0.1",
     "gulp-replace": "~0.5.3",
     "gulp-requirejs-bundler": "^0.1.1",
-    "gulp-uglify": "~1.1.0",
+    "gulp-uglify": "~3.0.0",
     "gulp-uncss": "^1.0.1",
     "http-server": "^0.8.0",
     "istanbul": "^0.3.11",
